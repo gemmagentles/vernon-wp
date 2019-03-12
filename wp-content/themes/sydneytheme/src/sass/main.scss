@@ -1,0 +1,278 @@
+/* Theme Name: Sydney Theme */
+
+@import 'pixel-to-em.scss';
+@import 'forms.scss';
+@import 'header.scss';
+@import 'slider.scss';
+@import 'generic-hero.scss';
+@import 'download-list.scss';
+@import 'centered-text.scss';
+@import 'filter-widget-area.scss';
+@import 'product-grid.scss';
+@import 'thumbnail-product-swatches.scss';
+@import 'card-grid.scss';
+@import 'product-hero.scss';
+@import 'products.scss';
+@import 'pdf-block.scss';
+@import 'related-products.scss';
+@import 'newsletter-signup.scss';
+@import 'text-box-image.scss';
+@import 'contact-enquiry-columns.scss';
+@import 'contact-form.scss';
+@import 'dealer-locator.scss';
+@import 'footer.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: white;
+    // stop horizontal scrolling 
+    overflow-x: hidden;
+    // to account for the fixed nav bar 
+    @include breakpoint(tablet) {
+        margin-top: 98px;
+    }
+
+    @include breakpoint(desktop) {
+        margin-top: 124px;
+    }
+}
+
+section {
+    position: relative;
+}
+
+// style page not found
+#post-404 {
+    max-width: $site-width;
+    margin: 0 auto;
+    text-align: center;
+    padding: 100px;
+
+    h1 {
+        padding-bottom: 32px;
+    }
+
+    h1,
+    a {
+        font-weight: 300;
+        color: $font-color;
+        line-height: 37px;
+    }
+    
+    a {
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}
+
+// Listen to tab events to enable outlines (accessibility improvement) there is js to detect this too to add it in for tab users in the app.js file.
+body:not(.user-is-tabbing) button:focus,
+body:not(.user-is-tabbing) input:focus,
+body:not(.user-is-tabbing) select:focus,
+body:not(.user-is-tabbing) textarea:focus {
+  outline: none;
+}
+
+/*********************
+TYPOGRAPHY
+*********************/
+
+:root {
+    font-size: em(16);
+}
+
+.subtitle {
+    color: $primary-color;
+    text-transform: uppercase;
+    font-family: $secondary-font-family;
+    font-size: 10px;
+    position: relative;
+    letter-spacing: 1px;
+    
+    @include breakpoint(tablet) {
+        font-size: 14px;
+    }
+
+    @include breakpoint(desktop) {
+        font-size: 1em; // 16px
+    }
+
+    @include breakpoint(largedesktop) {
+        font-size: 1.125em; // 18px
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        border-bottom: 1px solid $primary-color;
+        width: 100%;
+        top: 8px;
+        left: 100%;
+        margin-left: 20px;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: $font-color;
+    font-family: $primary-font-family;
+    font-weight: bold;
+}
+
+h2, h1 {
+    font-size: 1.500em; // 24px
+    font-family: $primary-font-family;
+
+    @include breakpoint(tablet) {
+        font-size: 2em; // 32px
+    }
+
+    @include breakpoint(desktop) {
+        font-size: 46px;
+    }
+
+    @include breakpoint(largedesktop) {
+        font-size: 3.250em; // 52px
+    }
+}
+
+h3 {
+    font-weight: 400;
+    letter-spacing: 1.36px;
+    line-height: 35px;
+
+    @include breakpoint(tablet) {
+      font-size: 1.5em; // 24px
+    }
+
+    @include breakpoint(desktop) {
+      font-size: 1.875em; // 30px
+    }
+}
+
+h4 {
+    padding: 20px 0 10px;
+}
+
+p {
+    color: $font-color;
+    font-family: $primary-font-family;
+    font-size: 0.75em; // 12px
+    line-height: 1.6;
+    font-weight: 300;
+
+    @include breakpoint(tablet) {
+        font-size: 1em; // 16px
+    }
+
+    @include breakpoint(desktop) {
+        font-size: 1.125em; // 18px
+    }
+
+    @include breakpoint(largedesktop) {
+        font-size: 1.25em; // 20px
+    }
+}
+
+/*********************
+BUTTONS
+*********************/
+
+.sydney-button {
+    margin-left: -5px;
+    background: $primary-color;
+    color: white;
+    padding: 14px;
+    width: 30%;
+    transition: background-color 0.7s ease;
+    letter-spacing: 1px;
+    font-size: 0.75em; // 12px
+    line-height: 1.6;
+    font-weight: 300;
+
+    @include breakpoint(tablet) {
+        padding: 16px;
+        font-size: 1em; // 16px
+    }
+
+    @include breakpoint(desktop) {
+        font-size: 1.125em; // 18px
+    }
+
+    @include breakpoint(largedesktop) {
+        padding: 19px;
+        font-size: 19px;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: darken( $primary-color, 10% );
+        cursor: pointer;
+    }
+}
+
+.sydney-button__with-icon {
+    margin-bottom: 36px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background: $primary-color;
+    transition: background-color 0.7s ease;
+    color: white;
+    padding: 14px 48px 14px 36px;
+    letter-spacing: 1.2px;
+    border: none;
+    font-size: 0.75em; // 12px
+    line-height: 1.6;
+    font-weight: 300;
+
+    @include breakpoint(tablet) {
+        margin-bottom: 100px;
+        padding: 20px 52px 20px 46px;
+        font-size: 1em; // 16px
+        letter-spacing: 2.2px;
+    }
+
+    @include breakpoint(desktop) {
+        padding: 22px 74px 22px 62px;
+        font-size: 1.125em; // 18px
+    }
+
+    @include breakpoint(largedesktop) {
+        font-size: 1.25em; // 20px
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: darken( $primary-color, 10% );
+        cursor: pointer;
+    }
+
+    &--icon {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        max-width: 7px;
+
+        @include breakpoint(tablet) {
+            max-width: 12px;
+            right: 26px;
+        }
+    }
+}

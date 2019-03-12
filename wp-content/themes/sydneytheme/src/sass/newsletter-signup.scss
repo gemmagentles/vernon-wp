@@ -1,0 +1,140 @@
+.left-full-width-bg,
+.right-full-width-bg {
+
+    @include breakpoint(desktop) {
+        width: 50%;
+        position: absolute;
+        z-index: -1;
+    }
+}
+
+.left-full-width-bg {
+
+    @include breakpoint(desktop) {
+        background: $secondary-color;
+        height: 100%;
+        left: 0;
+    }
+}
+
+.right-full-width-bg {
+
+    @include breakpoint(desktop) {
+        background: $quaternary-color;
+        height: calc(100% - 88px);
+        top: 88px;
+        right: 0;
+    }
+}
+
+.newsletter-signup {
+    &__wrapper {
+        position: relative;
+        margin-top: 40px;
+        
+        @include breakpoint(tablet) {
+            margin-top: 110px;
+        }
+    }
+
+    &__container {
+        max-width: $site-width;
+        margin: 0 auto;
+
+        @include breakpoint(tablet) {
+            display: grid;
+            grid-template-columns: auto auto;
+        }
+    }
+
+    &__heading {
+        margin: 15px 0 16px;
+
+        @include breakpoint(tablet) {
+            margin: 17px 0 36px;
+        }
+    }
+}
+
+.box {
+    &__left {
+        background: $secondary-color;
+        padding: 56px 30px 0;
+
+        @include breakpoint(tablet) {
+            padding: 20px;
+            padding: 62px 34px 62px 70px;
+        }
+
+        @include breakpoint(smalldesktop) {
+            padding: 112px 64px 112px 90px;
+        }
+
+        @include breakpoint(largedesktop) {
+            padding: 162px 94px 162px 170px;
+        }
+
+        &--content {
+            @include breakpoint(tablet) {
+                max-width: 230px;
+            }
+
+            @include breakpoint(smalldesktop) {
+                max-width: 365px;
+            }
+
+            @include breakpoint(desktop) {
+                max-width: 522px;    
+            }        
+        }
+    }
+
+    &__right {
+        background: $secondary-color;
+        padding: 28px 30px 68px 30px;
+
+        @include breakpoint(tablet) {
+            background: $quaternary-color;
+            margin-top: 68px;
+            padding: 124px 70px 82px 54px;
+        }
+
+        @include breakpoint(desktop) {
+            padding: 158px 54px 122px 74px;
+        }
+
+        @include breakpoint(largedesktop) {
+            padding: 172px 104px 172px 124px;
+            margin-top: 88px;
+        }
+
+        .input {
+            width: 70%;
+            border: 3px solid $form-fields-border;
+            color: $tertiary-color;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-family: $primary-font-family;
+
+            font-size: 12px;
+            line-height: 1.6;
+            font-weight: 300;
+        
+            @include breakpoint(tablet) {
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            @include breakpoint(desktop) {
+                font-size: 18px;
+            }
+
+            @include breakpoint(largedesktop) {
+                padding: 19px;
+                font-size: 19px;
+            }
+        }
+
+        
+    }
+}

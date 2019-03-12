@@ -1,0 +1,42 @@
+.thumbnail-product-swatches {
+    &__wrapper {
+        margin-top: -20px;
+        margin-bottom: 50px;
+        float: left;
+        clear: both;
+    }
+
+    &__image {
+        width: 25px;
+        height: 25px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-right: 10px;
+        float: left;
+
+        @include breakpoint(smalldesktop) {
+            width: 30px;
+            height: 30px;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        span {
+            display: none;
+        }
+    }
+}
+
+.related-products__wrapper {
+    .thumbnail-product-swatches {
+        &__wrapper {
+            margin-top: -37px;
+
+            @include breakpoint(tablet) {
+                margin-top: -72px;
+            }
+        }
+    }
+}

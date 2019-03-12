@@ -1,0 +1,241 @@
+.sv-wrapper {
+
+    // related product box start
+    .wrps_related_products.wrps_theme_box .wpb-wrps-item {
+        background: none;
+    }
+
+    .wrps_related_products .wpb-wrps-item {
+        margin: 0;
+    }
+
+    .wrps_related_products.wrps_theme_box figure {
+        padding: 0;
+    }
+
+    .owl-item {
+        padding: 0 15px;
+    }
+
+    .wpb_wrps_price {
+        display: none;
+        visibility: hidden;
+    }
+
+    // next and prev buttons start
+    .wrps_related_products_area .owl-buttons {
+        position: absolute;
+        top: calc(50% - 92px);
+        transform: translateY(-50%);
+        height: 42px;
+
+        @include breakpoint(tablet) {
+            top: calc(50% - 100px);
+            height: 66px;
+        }
+
+        .owl-prev {
+            display: none;
+            visibility: hidden;
+        }
+
+        .owl-next {
+            position: absolute;
+            right: -10px;
+
+            @include breakpoint(tablet) {
+                right: -26px;
+            }
+        }
+    }
+
+    .wrps_related_products_area .owl-theme .owl-controls .owl-buttons div {
+        background-color: $primary-color !important;
+        border: none;
+        padding: 10px 18px;
+
+        @include breakpoint(tablet) {
+            padding: 20px 27px;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: darken( $primary-color, 10% ) !important;
+        }
+    }
+
+    .wrps_related_products_area .owl-theme .owl-controls .owl-buttons i {
+        color: white;
+        font-size: 20px;
+
+        @include breakpoint(tablet) {
+            font-size: 30px;
+        }
+    }
+    // next and prev buttons end
+
+
+    .related-products__wrapper {
+        position: relative;
+
+        // background pattern
+        &::after {
+            content: "";
+            background-color: $secondary-color;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            right: 0;
+            z-index: 0;
+
+            @include breakpoint(tablet) {
+                width: 60%;
+            }
+        }
+
+        .products__subheading {
+            text-align: left;
+        }
+
+        .wrps_related_products_area {
+            margin: 0 auto;
+            padding: 60px 60px 110px 60px;
+            z-index: 2;
+
+            @include breakpoint(tablet) {
+                max-width: $site-width;
+                padding: 140px 60px 120px 60px;
+            }
+    
+            @include breakpoint(smalldesktop) {
+                padding: 140px 80px 120px 80px;
+            }
+
+            &::before {
+                content: "Products";
+                position: absolute;
+                top: 95px;
+                left: 61px;
+                color: $primary-color;
+                font-family: $secondary-font-family;
+                font-size: em(14);
+                text-transform: uppercase;
+                letter-spacing: 2.2px;
+    
+                @include breakpoint(tablet) {
+                    top: 95px;
+                    left: 62px;
+                    font-size: em(16);
+                }
+
+                @include breakpoint(smalldesktop) {
+                    left: 83px;
+                    font-size: em(18);
+                }
+            }
+    
+            // line
+            &::after {
+                content: "";
+                position: absolute;
+                height: 3px;
+                border-bottom: 1px solid $primary-color;
+                width: 70px;
+                top: 100px;
+                left: 152px;
+                max-width: 100px;
+    
+                @include breakpoint(tablet) {
+                    top: 102px;
+                    left: 164px;
+                }
+
+                @include breakpoint(smalldesktop) {
+                    top: 100px;
+                    left: 193px;
+                }
+            }
+    
+            h2 {
+                font-weight: normal;
+                padding: 68px 0 42px;
+                text-transform: capitalize;
+                margin-left: 0;
+    
+                @include breakpoint(tablet) {
+                    padding: 0 0 42px;
+                }
+
+                @include breakpoint(smalldesktop) {
+                    padding: 0 0 82px;
+                }
+            }
+        }
+
+        .wpb_wrps_title {
+            padding: 0 0 42px;
+            font-family: $primary-font-family;
+            text-transform: capitalize;
+            font-size: 18px;	
+            letter-spacing: 0.97px;	
+            line-height: 28px;
+            font-weight: 500;
+            color: $font-color;
+            text-align: left;
+
+            @include breakpoint(tablet) {
+                padding: 0 0 82px;
+                font-size: 24px;	
+            }
+        }
+
+        // progress bar 
+
+        .owl-page {
+            @include breakpoint(laptop) {
+                width: 33.33%;
+            }
+
+            @include breakpoint(largedesktop) {
+                width: 50%;
+            }
+        }
+
+        .wrps_related_products_area .owl-theme .owl-controls .owl-page span {
+            
+            @include breakpoint(laptop) {
+                background-color: $tertiary-color;
+                width: 0;
+                height: 3px;
+                margin: 0;
+            }
+        }
+
+        .owl-pagination {
+            @include breakpoint(laptop) {
+                text-align: left;
+            }
+        }
+        // active bar
+        .owl-theme .owl-controls .owl-page span {
+            border-radius: 0;
+        }
+
+        .owl-page,
+        .owl-page span,
+        .owl-page.active {
+            @include breakpoint(laptop) {
+                background-color: $primary-color !important;
+            }
+        }
+
+        .owl-page.active ~ .owl-page  {
+            @include breakpoint(laptop) {
+                background-color: $tertiary-color !important;
+                opacity: 0.4;
+            }
+        }
+    }
+}

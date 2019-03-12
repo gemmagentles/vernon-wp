@@ -1,0 +1,104 @@
+.text-box-image {
+
+    &__wrapper {
+        margin-top: 20px;
+        position: relative;
+
+        @include breakpoint(tablet) {
+            margin-top: 110px;
+        }
+    }
+    
+    &__container {
+        max-width: $site-width;
+        margin: 0 auto;
+    }
+
+    &__content {
+        padding: 30px;
+        background: white;
+
+        @include breakpoint(tablet) {
+            position: absolute;
+            max-width: 320px;
+            height: 100%;
+        }
+
+        @include breakpoint(smalldesktop) {
+            left: 50px;
+            max-width: 352px;
+            padding: 40px;
+            height: auto;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @include breakpoint(desktop) {
+            max-width: 520px;
+        }
+
+        @include breakpoint(largedesktop) {
+            padding: 65px;
+            max-width: 620px;
+        }
+
+        @include breakpoint(xlargedesktop) {
+            left: 150px;
+        }
+
+        .sydney-button__with-icon {
+            left: 0;
+            transform: none;
+            margin-bottom: 0;
+            padding: 14px 38px 14px 22px;
+
+            @include breakpoint(tablet) {
+                padding: 16px 48px 16px 26px;
+            }
+
+            @include breakpoint(desktop) {
+                padding: 22px 60px 22px 34px;
+            }
+        }
+    }
+
+    &__logo {
+        max-width: 108px;
+        width: 100%;
+
+        @include breakpoint(largedesktop) {
+            max-width: 158px;
+        }
+    }
+
+    &__heading {
+        padding: 20px 0;
+        letter-spacing: 1px;
+        line-height: 28px;
+        font-size: em(18);
+
+        @include breakpoint(desktop) {
+            padding: 32px 0;
+            font-size: em(22);
+            line-height: 34px;
+        }
+
+        @include breakpoint(largedesktop) {
+            padding: 40px 0;
+            font-size: em(32);
+            line-height: 44px;
+        }
+    }
+
+    &__paragraph {
+        padding-bottom: 20px;
+
+        @include breakpoint(desktop) {
+            padding-bottom: 40px;
+        }
+    }
+
+    &__background-image {
+        width: 100%;
+    }
+}

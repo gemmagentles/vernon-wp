@@ -1,0 +1,106 @@
+.product-grid {
+    margin-bottom: 50px;
+    background: $secondary-color;
+    overflow: hidden;
+    position: relative;
+ 
+    @include breakpoint(tablet) {
+        margin-bottom: 130px;
+    }
+
+    &::after {
+        @include breakpoint(desktop) {
+            content: "Products";
+            text-transform: uppercase;
+            transform: rotate(90deg) translateX(50%);
+            transform-origin: right top 0;
+            font-size: em(264);
+            font-family: $primary-font-family;
+            color: $font-color;
+            opacity: 0.03;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            right: 0;
+            line-height: 0.7;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        @include breakpoint(xlargedesktop) {
+            font-size: em(296);
+        }
+    }
+
+    &__mobile {
+        display: block;
+        visibility: visible;
+
+        @include breakpoint(tablet) {
+            display: none;
+            visibility: hidden;
+        }
+    }
+
+    &__desktop {
+        display: none;
+        visibility: hidden;
+
+        @include breakpoint(tablet) {
+            display: block;
+            visibility: visible;
+        }
+    }
+
+    &__inner {
+        margin: 0 auto;
+        max-width: $site-width;
+        position: relative;
+        z-index: 3;
+    }
+
+    &__heading {
+        padding: 60px 20px 45px;
+        font-weight: 300;
+        text-align: center;
+
+        @include breakpoint(tablet) {
+            padding: 82px 20px 72px;
+        }
+
+        @include breakpoint(desktop) {
+            padding: 140px 20px 110px;
+        }
+    }
+
+    &__products {
+        list-style: none;
+        margin: 0 auto;
+        padding: 0 30px;
+        max-width: 370px;
+        justify-content: center;
+        display: grid;
+
+        @include breakpoint(tablet) {
+            max-width: 100%;
+            margin: 0 30px 50px 30px;
+            grid-template-columns: auto auto;
+            grid-gap: 20px;
+        }
+
+        @include breakpoint(laptop) {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            grid-gap: 30px;
+        }
+
+        @include breakpoint(dekstop) {
+            margin: 0 30px 100px 30px;
+        }
+
+        @include breakpoint(largedesktop) {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+        }
+    }
+}

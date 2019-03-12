@@ -1,0 +1,18 @@
+.generic-hero {
+
+    &__wrapper {
+        background: $primary-color;
+    }
+
+    &__container {
+        max-width: $site-width;
+        margin: 0 auto;
+    }
+
+    &__heading {
+        color: white;
+        text-align: center;
+        padding: 120px 30px;
+        font-weight: 300;
+    }    
+}

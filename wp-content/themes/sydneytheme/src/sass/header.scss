@@ -1,0 +1,305 @@
+@import 'breakpoints.scss';
+@import 'vars.scss';
+
+.header {
+    font-size: 0.875em;
+    font-family: $secondary-font-family;
+    box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.3);
+    letter-spacing: 0.8px;
+    background: white;
+    padding: 20px;
+
+    // only have a fixed nav when there is no mobile hamburger menu
+    @include breakpoint(tablet) {
+        overflow: hidden;
+        transition: 0.4s; /* Adds a transition effect when the padding is decreased */
+        position: fixed; 
+        width: 100%;
+        top: 0;
+        z-index: 99; 
+    }
+
+    @include breakpoint(smalldesktop) {
+        padding: 20px 40px;
+    }
+
+    @include breakpoint(desktop) {
+        padding: 20px 60px;
+        font-size: 1em;
+    }
+
+    &.sticky {
+
+        @include breakpoint(tablet) {
+            padding: 10px 26px;
+        }
+
+        @include breakpoint(smalldesktop) {
+            padding: 10px 40px;
+        }
+    
+        @include breakpoint(desktop) {
+            padding: 10px 60px;
+            font-size: 1em;
+        }
+
+        .logo {
+            @include breakpoint(tablet) {
+                padding: 5px;
+            }
+
+            @include breakpoint(desktop) {
+                padding: 10px;
+            }
+        }
+
+    }
+
+    &__wrapper {
+        display: flex;
+        max-width: $site-width;
+        margin: 0 auto;
+    }
+}
+
+.logo {
+    color: $primary-color;
+    max-width: 51px;
+    width: 100%;
+    transition: 0.4s;
+
+    @include breakpoint(desktop) {
+        max-width: 75px;
+    }
+}
+
+.nav {
+    display: none;
+    visibility: hidden;
+    background: $secondary-color;
+    width: 100%;
+
+    @include breakpoint(tablet) {
+        visibility: visible;
+        display: flex;
+        padding-bottom: 0;
+        align-items: center;
+        background: none;
+    }
+
+    &__list {
+        padding: 28px 10px 10px;
+
+        @include breakpoint(tablet) {
+            display: flex;
+            margin: 0 5px;
+            padding: 10px;
+        }
+
+        @include breakpoint(tablet) {
+            padding: 10px;
+        }
+
+        @include breakpoint(desktop) {
+            margin: 0 20px;
+        }
+    }
+    
+    &__item {
+        list-style-type: none; 
+        margin: 10px;
+        position: relative;
+        white-space: nowrap;
+
+        @include breakpoint(tablet) {
+            margin: 10px 12px;
+
+            &:hover,
+            &:focus,
+            &:active {
+        
+                &::after {
+                    content: "";
+                    position: absolute;
+                    height: 5px;
+                    border-bottom: 2px solid $primary-color;
+                    width: 100%;
+                    top: 16px;
+                    left: 0;
+                }
+            }
+        }
+
+        @include breakpoint(laptop) {
+            margin: 10px 15px;
+        }
+
+        @include breakpoint(desktop) {
+            margin: 15px;
+        }
+    }
+
+    .current-menu-item {
+        @include breakpoint(tablet) {
+            &::after {
+                content: "";
+                position: absolute;
+                height: 5px;
+                border-bottom: 2px solid $primary-color;
+                width: 100%;
+                top: 16px;
+                left: 0;
+            }
+        }
+    }
+
+    a {
+      color: $font-color;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
+
+.social {
+    padding: 0 20px;
+
+    @include breakpoint(tablet) {
+        padding: 0;
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .line {
+        background: $primary-color;
+        width: 100%;
+        height: 2px;
+        margin: 12px 0 20px;
+
+        @include breakpoint(tablet) {
+            display: none;
+            visibility: hidden;
+        }
+
+        @include breakpoint(smalldesktop) {
+            margin: 13px 25px 0 0;
+            display: block;
+            visibility: visible;
+        }
+
+        @include breakpoint(desktop) {
+            margin: 18px 40px 0 0;
+        }
+    }
+
+    .nav__link {
+        padding: 10px;
+
+        @include breakpoint(tablet) {
+            padding: 6px;
+        }
+
+        @include breakpoint(desktop) {
+            padding: 10px;
+        }
+
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+
+    .nav__icon {
+        width: 20px;
+        height: 20px;
+        fill: $primary-color;
+        transition: fill 0.7s ease;
+
+        @include breakpoint(tablet) {
+            width: 16px;
+            height: 16px;
+        }
+
+        @include breakpoint(desktop) {
+            width: 20px;
+            height: 20px;
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            fill: darken( $primary-color, 15% );
+        }
+    }
+}
+
+/* styles only for mobile and tablet when menu is a hamburger */
+.nav__hamburger-icon {
+    display: inline-block;
+    cursor: pointer;
+    z-index: 100;
+    position: absolute;
+    top: 30px;
+    right: 20px;
+
+    .hamburger-bar1, 
+    .hamburger-bar2, 
+    .hamburger-bar3 {
+        width: 30px;
+        height: 5px;
+        background-color: $primary-color;
+        margin: 6px 0;
+        transition: 0.4s;
+    }
+
+    @include breakpoint(tablet) {
+        display: none;
+        visibility: hidden;
+    }
+}
+
+ /* style the hamburger menu icon to transition into a cross when clicked */
+
+.nav__open {
+
+  .hamburger-bar1 {
+    transform: rotate(-45deg) translate(-9px, 6px);
+  }
+
+  .hamburger-bar2 { opacity: 0; }
+
+  .hamburger-bar3 {
+    transform: rotate(45deg) translate(-9px, -7px);
+  }  
+}
+
+ /* inside the hamburger menu once opened */
+.nav__open + .nav {
+  display: block;
+  visibility: visible;
+  background: $secondary-color;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-name: slidein;
+  animation-duration: 0.3s;
+  width: 100%;
+  height: 100%;
+  z-index: 99;
+  opacity: 1;
+  
+  @keyframes slidein {
+    from {left: -100%;}
+  }
+}
+
+// to make space for where the nav bar should be once you click on the top button at the bottom
+#top::before { 
+    @include breakpoint(tablet) {
+        display: block; 
+        content: " "; 
+        margin-top: -125px;
+        height: 110px;
+        visibility: hidden; 
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,29 @@
+/*********************
+COLOURS
+*********************/
+
+$primary-color: #EB0029; /* red */
+$secondary-color: #F7F7F7; /* extra light grey */
+$tertiary-color: #807C7C; /* light grey */
+$quaternary-color: #E9E9E9; /* grey */
+$quinary-color: #C7C7C7; /* grey */
+$font-color: #424445; /* dark grey */
+$font-color-secondary: #767676; /* light grey */
+$form-fields-border: #DEDEDE; /* grey */
+$progress-bar: #B1B1B1;
+
+/*********************
+SIZES
+*********************/
+
+$site-width: 1552px;
+$filter-width: 1387px;
+
+/*********************
+TYPOGRAPHY
+*********************/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i');
+
+$primary-font-family: 'Roboto', sans-serif;
+$secondary-font-family: 'Roboto Condensed', sans-serif;

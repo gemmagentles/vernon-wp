@@ -1,0 +1,268 @@
+.filter-widget {
+    &__accordion-wrapper {
+        @include breakpoint(tablet) {
+            padding: 0 60px;
+        }
+    }
+    
+    &__accordion-btn {
+        // transition-delay: 0 !important;
+        font-size: em(14);
+        letter-spacing: 1px;
+        font-family: $primary-font-family;
+        color: white;
+        background: $primary-color;
+        border: none;
+        padding: 18px 28px;
+        border-bottom: 1.5px solid $primary-color;
+        width: 100%;
+        text-align: left;
+        cursor: pointer;
+        text-transform: uppercase;
+        position: relative;
+        max-width: 302px;
+        transform: translateX(-50%);
+        left: 50%;
+        border-radius: 84px;
+
+        @include breakpoint(tablet) {
+            max-width: 100%;
+        }
+
+        &.active {
+            border-radius: 30px 30px 0 0;
+            
+            + .filter-widget__wrapper .filter-widget__inner {
+                border-radius: 0 0 30px 30px;
+                padding: 0 18px 28px 18px;
+            }
+        }
+
+        @include breakpoint(laptop) {
+            display: none;
+            visibility: hidden;
+        } 
+
+        &:after {
+            /* "plus" sign (+) */
+            content: " ";
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='22px' height='23px' viewBox='0 0 22 23' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3E+%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Product' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' font-family='Roboto-Regular, Roboto' font-size='42' font-weight='normal' letter-spacing='2.079'%3E%3Cg id='Sydney_the-Product_V3' transform='translate(-718.000000, -1532.000000)' fill='%23ffffff'%3E%3Cg id='Download_accordion' transform='translate(264.000000, 1518.000000)'%3E%3Ctext id='+'%3E%3Ctspan x='453' y='39'%3E+%3C/tspan%3E%3C/text%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            width: 14px;
+            height: 15px;
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            @include breakpoint(smalldesktop) {
+                width: 16px;
+                height: 17px;
+            }
+
+            @include breakpoint(desktop) {
+                width: 22px;
+                height: 23px;
+            }
+        }
+
+        &.active:after {
+            /* "minus" sign (-) */
+            content: " ";
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='29px' height='3px' viewBox='0 0 29 3' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3ERectangle 3%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Product' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Sydney_the-Product_Downloads' transform='translate(-725.000000, -1545.000000)' fill='%23ffffff'%3E%3Cg id='Download_accordion' transform='translate(264.000000, 1526.000000)'%3E%3Crect id='Rectangle-3' x='461' y='19' width='29' height='3'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            width: 20px;
+            height: 3px;
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background-repeat: no-repeat;
+
+            @include breakpoint(desktop) {
+                width: 29px;
+                height: 3px;
+                top: 14px;
+                right: 30px;
+            }
+        }
+    }
+
+    &__wrapper {
+        // for accordion on mobile only 
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        
+        // default styles
+        font-family: $primary-font-family;
+
+        @include breakpoint(laptop) {
+            // remove accordion
+            max-height: 100%;
+            overflow: visible;
+        }
+    }
+
+    &__inner {
+        background: $primary-color;
+        margin: 0 auto;
+        max-width: 302px;
+        border-radius: 0 0 30px 30px;
+        padding: 0 18px 28px 18px;
+
+        @include breakpoint(tablet) {
+            max-width: 100%;
+        }
+
+        @include breakpoint(laptop) {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            grid-gap: 12px;
+            padding: 18px 18px 21px 18px;
+            border-radius: 100px;
+            max-width: $filter-width;
+            
+            @include breakpoint(smalldesktop) {
+                grid-gap: 22px;
+                padding: 32px;
+            }
+        }
+    }
+
+    &__title {
+        display: none;
+        visibility: hidden;
+    }
+
+    &__dropdown {
+            margin-bottom: 18px;
+
+        @include breakpoint(laptop) {
+            margin-bottom: 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// woocommerce plugin overrides
+
+.filter-widget__inner {
+
+    // placeholder text
+    .select2-container--default .select2-selection--single .select2-selection__rendered .select2-selection__placeholder {
+        font-family: $secondary-font-family;
+        letter-spacing: 1px;
+        color: $font-color;
+        font-size: 14px;
+
+        @include breakpoint(desktop) {
+            font-size: 16px;
+        }
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        padding: 10px 14px;
+        font-size: 14px;
+        font-family: $secondary-font-family;
+        letter-spacing: 1px;
+
+        @include breakpoint(smalldesktop) {
+            padding: 10px 25px;
+        }
+
+        @include breakpoint(desktop) {
+            font-size: 16px;
+        }
+    }
+
+    // arrow
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 10px;
+        right: 25px;
+
+        @include breakpoint(laptop) {
+            right: 15px;
+        }
+
+        @include breakpoint(smalldesktop) {
+            right: 25px;
+        }
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        border: none;
+        margin: 0;
+        
+        &::after {
+            content: " ";
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='10px' height='9px' viewBox='0 0 25 12' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3EStroke 1 Copy 7%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Symbols' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg id='Footer' transform='translate(-887.000000, -22.000000)' stroke='%23424445' stroke-width='2'%3E%3Cg id='Stroke-1-Copy-7'%3E%3Cpolyline transform='translate(899.500000, 28.000000) rotate(-90.000000) translate(-899.500000, -28.000000) ' points='895 17 904 28 895 39'%3E%3C/polyline%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            position: absolute;
+            top: 50%;
+            height: 9px;
+            width: 10px;
+            background-repeat: no-repeat;
+            transform: translateY(-50%) rotate(180deg);
+
+            @include breakpoint(smalldesktop) {
+                background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='15px' height='12px' viewBox='0 0 25 12' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3C!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch --%3E%3Ctitle%3EStroke 1 Copy 7%3C/title%3E%3Cdesc%3ECreated with Sketch.%3C/desc%3E%3Cg id='Symbols' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round'%3E%3Cg id='Footer' transform='translate(-887.000000, -22.000000)' stroke='%23424445' stroke-width='2'%3E%3Cg id='Stroke-1-Copy-7'%3E%3Cpolyline transform='translate(899.500000, 28.000000) rotate(-90.000000) translate(-899.500000, -28.000000) ' points='895 17 904 28 895 39'%3E%3C/polyline%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                height: 12px;
+                width: 15px;
+            }
+        }
+    }
+}
+
+// dropdown box needs important as it is outside of any of the custom classes on its own.
+.select2-container--open .select2-dropdown {
+    left: 25px !important;
+    top: 3px;
+}
+
+.select2-dropdown {
+    border: 1px solid $quaternary-color !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option--highlighted[data-selected] {
+    background-color: $quaternary-color !important;
+    padding: 15px 25px !important;
+}
+
+.select2-results__option[aria-selected], .select2-results__option[data-selected] {
+    padding: 15px 25px !important;
+}
+
+.select2-results__option {
+    color: $font-color !important;
+    font-family: $secondary-font-family !important;
+    letter-spacing: 1px;
+    font-size: em(14);
+
+    @include breakpoint(desktop) {
+        font-size: em(16);
+    }
+}
+
+.select2-container--default .select2-selection--single {
+    border-radius: 100px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 48px !important;
+}
+
+// search box inside drop down
+input[type=text].select2-search__field {
+    font-family: $secondary-font-family;
+    letter-spacing: 1px;
+    color: $font-color;
+    // needs to be pixels so it doesnt use em of parent font and reduce font size twice
+    font-size: 14px;
+
+    @include breakpoint(desktop) {
+        font-size: 16px;
+    }
+}

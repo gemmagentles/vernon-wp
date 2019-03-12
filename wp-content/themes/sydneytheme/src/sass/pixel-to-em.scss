@@ -1,0 +1,27 @@
+// Sass function technique taken from - https://css-tricks.com/snippets/sass/px-to-em-functions/
+// What is this = a function that calculates and changes the value of pixels to ems. 
+// Reason we need this = to be able to set font size easier and quicker in em value, instead of calculating it manually everytime. It will also make it easier to amend the code when the pixel value is there. We need the output font size to be in em so it renders the font clearly even when a user zooms in. 
+
+$browser-context: 16; // Default
+
+@function em($pixels, $context: $browser-context) {
+  @return #{$pixels/$context}em;
+}
+
+/************************
+
+Example Usage:
+
+SCSS =
+
+h1 {
+    font-size: em(32);
+}
+
+Output CSS = 
+
+h1 {
+    font-size: 2em;
+}
+
+************************/

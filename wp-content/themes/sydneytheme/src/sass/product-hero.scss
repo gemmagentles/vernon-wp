@@ -1,0 +1,217 @@
+.sv-wrapper {
+
+    // woocommerce style overrides
+
+    .product-hero {
+        &__wrapper {
+            background-color: $secondary-color;
+        }
+
+        &__inner {
+            max-width: $site-width;
+            margin: 0 auto;
+
+            @include breakpoint(smalldesktop) {
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-around;
+                padding: 0 80px;
+            }
+        }
+    }
+
+    .woocommerce-product-gallery__wrapper {
+        text-align: center;
+        background-color: white;
+
+        @include breakpoint(smalldesktop) {
+            margin: 80px 0 80px 80px;
+            text-align: right;
+            background-color: $secondary-color;
+        }
+        
+        @include breakpoint(desktop) {
+            margin: 80px 0 80px 100px;
+        }
+
+        @include breakpoint(xlargedesktop) {
+            margin: 80px 0 80px 80px;
+        }
+    }
+
+    .woocommerce-product-gallery {
+        text-align: right;
+        padding: 30px;
+
+        @include breakpoint(tablet) {
+            padding: 40px;
+        }
+
+        @include breakpoint(smalldesktop) {
+            padding: 0;
+        }
+
+        .wp-post-image {
+            width: 100%;
+            height: auto;
+            padding: 30px;
+
+            @include breakpoint(tablet) {  
+                max-width: 480px;
+                padding: 40px;
+            }
+
+            @include breakpoint(smalldesktop) {
+                padding: 0;
+                max-width: 100%;
+            }
+
+            @include breakpoint(largedesktop) {
+                width: 36vw;
+            }
+        }
+    }
+}
+
+.sv-product-hero-content {
+
+    &__inner {
+        position: relative;
+        padding: 0 30px 60px 30px;
+        min-width: 300px;
+
+        @include breakpoint(tablet) {
+            padding: 42px 42px 50px 50px;
+
+        }
+
+        @include breakpoint(smalldesktop) {
+            padding: 80px 0;
+        }
+
+        @include breakpoint(xlargedesktop) {
+            padding: 100px 105px 120px 20px;
+        }
+    }
+
+    .products__subheading {
+        padding: 18px 0;
+        color: $primary-color;
+        text-transform: uppercase;
+        font-family: $secondary-font-family;
+        font-size: 14px;
+        position: relative;
+        font-weight: normal;
+        letter-spacing: 1.5px;
+    
+        @include breakpoint(tablet) {
+            font-size: 16px;
+        }
+    
+        @include breakpoint(desktop) {
+            font-size: 18px;
+        }
+    
+        @include breakpoint(largedesktop) {
+            font-size: 20px;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            height: 3px;
+            border-bottom: 1px solid $primary-color;
+            width: 100%;
+            top: 30px;
+            margin-left: 20px;
+            max-width: 85px;
+        }
+    }
+
+    .product_title {
+        font-weight: normal;
+        text-transform: uppercase;
+    }
+
+    .woocommerce-product-details__short-description {
+        max-width: 514px;
+        border-bottom: 1px solid $font-color;
+        padding: 35px 0 42px;
+        font-size: 1.000em; // 16px
+    }
+
+    .variations {
+        .label {
+            color: $primary-color;
+            font-size: 1.000em; // 16px
+            font-family: $primary-font-family;
+            padding: 38px 0 10px;
+            font-weight: normal;
+            display: block;
+        }
+        
+        .value {
+            display: block;
+        }
+    }
+
+    .variable-items-wrapper [data-wvstooltip] {
+        &:before {
+            background: $primary-color;
+            border-radius: 8px;
+            font-family: $primary-font-family;
+            letter-spacing: 0.8px;
+            font-weight: 300;
+        }
+        &:after {
+            border-top: 5px solid $primary-color;
+        }
+    }
+
+    // js is injecting html to add initials of each finish attribute, style them here. 
+    .image-variable-item {
+
+        &-polished-chrome,
+        &-brushed-nickel,     
+        &-oil-rubbed-bronze,     
+        &-matte-black {     
+
+            p {
+                color: $font-color;
+                font-size: em(16);
+                font-family: $secondary-font-family;
+                position: absolute;
+                top: 60px;
+                font-weight: 400;
+            }
+            
+        }
+    }
+
+    .sv-product-specs {
+        &__title {
+            color: $primary-color;
+            font-size: 1.000em; // 16px
+            padding: 30px 0 6px;
+            font-weight: normal;
+
+            // make space for the injected initials under each finish attribute
+            &:first-child {
+                padding-top: 65px;
+            }
+        }
+
+        &__model,
+        &__size,
+        &__specs {
+            color: $font-color;
+            font-family: $primary-font-family;
+            font-size: 1.000em; // 16px
+            max-width: 360px;
+
+            @include breakpoint(desktop) {
+                max-width: 460px;
+            }
+        }
+    }
+}

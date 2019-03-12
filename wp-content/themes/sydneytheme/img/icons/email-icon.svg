@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="13px" viewBox="0 0 19 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>002-close-envelope</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Contact" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Sydney_Contact_V2" transform="translate(-1097.000000, -1437.000000)" fill-rule="nonzero" stroke="#EA0029" stroke-width="0.7">
+            <g id="Contact-info" transform="translate(1095.000000, 1227.000000)">
+                <g id="002-close-envelope" transform="translate(3.000000, 211.000000)">
+                    <path d="M8.59371429,7.8192 L6.36685714,6 L0,11.094 C0.231428571,11.2944 0.543857143,11.4192 0.888428571,11.4192 L16.299,11.4192 C16.6422857,11.4192 16.9534286,11.2944 17.1835714,11.094 L10.8205714,6 L8.59371429,7.8192 Z" id="Shape"></path>
+                    <path d="M17.1848571,0.3252 C16.9534286,0.1236 16.6422857,0 16.2964286,0 L0.885857143,0 C0.542571429,0 0.231428571,0.1248 0,0.3276 L8.59114286,7.2 L17.1848571,0.3252 Z" id="Shape"></path>
+                    <polygon id="Shape" points="0 1 0 10.9696 6.21385714 6.0412"></polygon>
+                    <polygon id="Shape" points="11 6.0448 17.2138571 10.9732 17.2138571 1"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

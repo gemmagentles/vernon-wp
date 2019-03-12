@@ -1,0 +1,44 @@
+{
+  "name": "domar",
+  "version": "2.0.0",
+  "description": "domar wordpress theme package",
+  "main": "index.js",
+  "browserslist": [
+    "> 1%",
+    "ie > 10"
+  ],
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "scripts": {
+    "build": "webpack --mode development",
+    "dist": "webpack --mode production",
+    "watch": "webpack --watch --mode development"
+  },
+  "author": "Luka Omrčen (%lukaomi)",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "css-loader": "^0.28.11",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^4.0.2",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.0.1",
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^2.1.4",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "dependencies": {
+    "autoprefixer": "^9.4.8",
+    "browser-sync": "^2.26.3",
+    "postcss-cli": "^6.1.1",
+    "style-loader": "^0.23.1"
+  }
+}

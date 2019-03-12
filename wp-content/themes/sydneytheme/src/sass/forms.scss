@@ -1,0 +1,234 @@
+@import 'vars.scss';
+@import 'breakpoints.scss';
+
+// if user clicks private page (documents) but not looged in, style the must log in message.
+.swpm-post-not-logged-in-msg {
+    text-align: center;
+    padding: 150px 30px;
+    font-family: $primary-font-family;
+    color: $font-color;
+    font-size: em(16);
+    line-height: 1.6;
+    font-weight: 300;
+
+    @include breakpoint(desktop) {
+        font-size: em(18);
+    }
+
+    @include breakpoint(largedesktop) {
+        font-size: em(20);
+    }
+
+    .swpm-login-link {
+        color: $primary-color;
+    }
+}
+
+.sv-forms {
+    &__wrapper {
+        max-width: $site-width;
+        margin: 140px auto 0;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    &__container {
+
+        h1 {
+            font-weight: lighter;
+
+            &::after {
+                content: " ";
+                background: $primary-color;
+                width: 80px;
+                height: 3px;
+                display: block;
+                margin: 40px auto;
+            }
+        }
+
+        a {
+            color: $primary-color;
+        }
+
+        .swpm-login-widget-form,
+        .swpm-pw-reset-widget-form {
+            width: 100vw;
+            background: $secondary-color;
+            margin-top: 80px;
+            padding: 80px 30px 135px 30px;
+        }
+
+        .swpm-login-action-msg {
+            padding-top: 30px;
+        }
+        
+        .swpm-login-widget-action-msg {
+            font-family: $primary-font-family;
+            color: $font-color;
+        }
+
+        .swpm-login-form-inner,
+        .swpm-pw-reset-widget-inside {
+            max-width: 470px;
+            margin: 0 auto;
+        }
+
+        .swpm-username-label,
+        .swpm-password-label,
+        .swpm-pw-reset-email {
+            text-align: left;
+            font-family: $primary-font-family;
+            color: lighten($font-color, 30%);
+            padding-bottom: 15px;
+        }
+
+        .swpm-text-field {
+            height: 60px;
+            margin-bottom: 24px;
+            width: 100%;
+            color: lighten($font-color, 30%);
+            border: 3px solid $form-fields-border;
+            padding: 16px;
+            font-size: em(16);
+
+            @include breakpoint(tablet) {
+                height: 75px;
+            }
+        }
+
+        .swpm-username-input,
+        .swpm-password-input {
+            /* Change Autocomplete styles in Chrome*/
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover, 
+            input:-webkit-autofill:focus
+            textarea:-webkit-autofill,
+            textarea:-webkit-autofill:hover
+            textarea:-webkit-autofill:focus,
+            select:-webkit-autofill,
+            select:-webkit-autofill:hover,
+            select:-webkit-autofill:focus {
+              -webkit-text-fill-color: lighten($font-color, 30%);
+              -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+              transition: background-color 5000s ease-in-out 0s;
+            }
+        }
+
+        .swpm-remember-me {
+            text-align: left;
+            position: relative;
+            margin-bottom: 30px;
+
+            // hide default styled checkbox but keep the functionality of it for a11y
+            input[type=checkbox] {
+                opacity: 0;
+                position: relative;
+                z-index: 2;
+                cursor: pointer;
+            }
+        
+            // checkbox is NOT selected
+            input[type=checkbox] ~ .swpm-rember-label::after {
+                content: none;
+            }
+        
+            // checkbox is selected 
+            input[type=checkbox]:checked ~ .swpm-rember-label::after {
+                content: "";
+            }
+        
+            // checkbox on focus using tab key
+            input[type=checkbox]:focus ~ .swpm-rember-label::before {
+                outline: rgb(59, 153, 252) auto 5px;
+            }
+            
+            .swpm-rember-label {
+                font-family: $primary-font-family;
+                color: lighten($font-color, 30%);
+                position: relative;
+                left: -17px;
+                padding-left: 30px;
+
+                &::before,
+                &::after {
+                    position: absolute;
+                }
+
+                &::before {
+                    content: " ";
+                    display: inline-block;
+                    top: 2px;
+                    left: 0;
+                    height: 16px;
+                    width: 16px;
+                    border: 1px solid;   
+                }
+
+                &::after {
+                    content: " ";
+                    display: inline-block;
+                    height: 6px;
+                    width: 9px;
+                    border-left: 2px solid;
+                    border-bottom: 2px solid;
+                    left: 4px;
+                    top: 6px;
+                    transform: rotate(-45deg);
+                }
+            }        
+        }
+
+        .swpm-login-form-submit,
+        .swpm-pw-reset-submit {
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: $primary-color;
+            color: white;
+            padding: 14px;
+            transition: background-color 0.7s ease;
+            letter-spacing: 1px;
+            font-size: em(12);
+            line-height: 1.6;
+            font-weight: 300;
+
+            @include breakpoint(tablet) {
+                padding: 16px;
+                font-size: em(16);
+            }
+
+            @include breakpoint(desktop) {
+                font-size: em(18);
+            }
+
+            @include breakpoint(largedesktop) {
+                padding: 19px;
+                font-size: 19px;
+            }
+
+            &:hover,
+            &:focus,
+            &:active {
+                background-color: darken( $primary-color, 10% );
+                cursor: pointer;
+            }
+        }
+
+        .swpm-forgot-pass-link {
+            margin-top: 80px;
+        }
+
+        .swpm-login-form-pw-reset-link {
+            color: $primary-color;
+            font-family: $primary-font-family;
+        }
+
+        .swpm-join-us-link {
+            display: none;
+            visibility: hidden;
+        }
+    }
+}
