@@ -1,2 +1,1 @@
-# sydney-wp
-# Phase 1
+# vernon-wp
