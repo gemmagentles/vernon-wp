@@ -13,7 +13,7 @@
 
 if ( function_exists('acf_add_options_page') ) {
     acf_add_options_page();
-    acf_set_options_page_menu('Sydney Options');
+    acf_set_options_page_menu('Vernon Options');
     acf_add_options_sub_page('Global Site Options');
     acf_add_options_sub_page('Partner Site Options');
 }
