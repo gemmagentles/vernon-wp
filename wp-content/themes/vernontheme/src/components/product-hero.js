@@ -12,6 +12,7 @@
                 $( ".image-variable-item-matte-black" ).append( "<p>MB</p>" );
                 $( ".image-variable-item-brushed-nickel" ).append( "<p>BN</p>" );
                 $( ".image-variable-item-oil-rubbed-bronze" ).append( "<p>ORB</p>" );
+                $( ".image-variable-item-polished-nickel" ).append( "<p>PN</p>" );
 
             }
         });

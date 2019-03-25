@@ -1410,7 +1410,7 @@ input[type=text].select2-search__field {
 .sv-product-hero-content .variable-items-wrapper [data-wvstooltip]:after {
   border-top: 5px solid #EB0029; }
 
-.sv-product-hero-content .image-variable-item-polished-chrome p, .sv-product-hero-content .image-variable-item-brushed-nickel p, .sv-product-hero-content .image-variable-item-oil-rubbed-bronze p, .sv-product-hero-content .image-variable-item-matte-black p {
+.sv-product-hero-content .image-variable-item-polished-chrome p, .sv-product-hero-content .image-variable-item-brushed-nickel p, .sv-product-hero-content .image-variable-item-oil-rubbed-bronze p, .sv-product-hero-content .image-variable-item-matte-black p, .sv-product-hero-content .image-variable-item-polished-nickel p {
   color: #424445;
   font-size: 1em;
   font-family: "Roboto Condensed", sans-serif;
