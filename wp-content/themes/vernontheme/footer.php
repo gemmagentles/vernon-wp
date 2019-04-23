@@ -29,21 +29,6 @@
 							</div>
 						</div>
 						<div class="logos">
-							<div class ="social">
-								<div class="line"></div>
-
-								<a class="social__link" title="Facebook" href="<?php the_field('facebook_url', 'option'); ?>" target="_blank">
-									<svg class="social__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook"/></svg>
-								</a>
-
-								<a class="social__link" title="Twitter" href="<?php the_field('twitter_url', 'option'); ?>" target="_blank">
-									<svg class="social__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter"/></svg>
-								</a>
-
-								<a class="social__link" title="Instagram" href="<?php the_field('instagram_url', 'option'); ?>" target="_blank">
-									<svg class="social__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram"/></svg>
-								</a>
-							</div>
 							<div class="parent-company">
 								<p>Proudly distributed by Kartners</p>
 								<img class="kartners-logo" src="<?php echo get_template_directory_uri(); ?>/img/icons/kartners.svg" alt="Kartners">

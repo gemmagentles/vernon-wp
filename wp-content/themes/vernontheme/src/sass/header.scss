@@ -174,21 +174,25 @@
         background: $primary-color;
         width: 100%;
         height: 2px;
-        margin: 12px 0 20px;
+        // margin: 12px 0 20px;
+        display: none;
+        visibility: hidden;
+        // @TODO once client gives social media info re add icons and margin, plus display on mobile just not tablet.
 
-        @include breakpoint(tablet) {
-            display: none;
-            visibility: hidden;
-        }
+        // @include breakpoint(tablet) {
+        //     display: none;
+        //     visibility: hidden;
+        // }
 
         @include breakpoint(smalldesktop) {
-            margin: 13px 25px 0 0;
+            // margin: 13px 25px 0 0;
+            margin: 0;
             display: block;
             visibility: visible;
         }
 
         @include breakpoint(desktop) {
-            margin: 18px 40px 0 0;
+            // margin: 18px 40px 0 0;
         }
     }
 
