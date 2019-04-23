@@ -254,12 +254,15 @@
         @include breakpoint(tablet) {
             text-align: right;
             max-width: 100%;
-            margin: 26px 0 0;
+            // margin: 26px 0 0;
+            margin: 0;
+            // @TODO once client gives social media info re add margin.
         }
 
         p {
             font-size: 0.875em;
-            margin: 14px 0;
+            // margin: 14px 0;
+            margin: 0 0 14px 0;
             text-align: left;
 
             @include breakpoint(tablet) {
