@@ -202,7 +202,7 @@
             padding-bottom: 30px;
 
             &::after {
-                top: 4px;
+                top: 6px;
                 max-width: 86px;
             }
         }
@@ -229,26 +229,24 @@
         }
 
         &--paragraph {
-            padding-bottom: 20px;
             font-size: 0.875em;
             line-height: 1.8;
-
-            @include breakpoint(tablet) {
-                padding-bottom: 30px;
-                max-width: 310px;
-            }
-
-            @include breakpoint(largedesktop) {
-                padding-bottom: 65px;
-            }
         }
 
         // overwrite some of main default styles to be custom to this component
         .sydney-button__with-icon {
             left: 0;
             transform: none;
-            margin: 0 0 10px;
+            margin: 20px 0 10px;
             padding: 20px 48px 20px 36px;
+
+            @include breakpoint(tablet) {
+                margin: 30px 0 10px;
+            }
+
+            @include breakpoint(largedesktop) {
+                margin: 65px 0 10px;
+            }
         }
     }  
 
