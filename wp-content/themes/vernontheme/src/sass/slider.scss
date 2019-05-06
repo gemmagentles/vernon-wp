@@ -202,7 +202,7 @@
             padding-bottom: 30px;
 
             &::after {
-                top: 4px;
+                top: 6px;
                 max-width: 86px;
             }
         }
@@ -231,10 +231,6 @@
         &--paragraph {
             font-size: 0.875em;
             line-height: 1.8;
-
-            @include breakpoint(tablet) {
-                max-width: 310px;
-            }
         }
 
         // overwrite some of main default styles to be custom to this component

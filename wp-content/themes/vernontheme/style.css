@@ -612,7 +612,7 @@ TYPOGRAPHY
       font-size: 0.875em;
       padding-bottom: 30px; }
       .slider__content-box-inner .subtitle::after {
-        top: 4px;
+        top: 6px;
         max-width: 86px; }
     .slider__content-box-inner--heading {
       text-transform: uppercase;
@@ -633,9 +633,6 @@ TYPOGRAPHY
     .slider__content-box-inner--paragraph {
       font-size: 0.875em;
       line-height: 1.8; }
-      @media (min-width: 48em) {
-        .slider__content-box-inner--paragraph {
-          max-width: 310px; } }
     .slider__content-box-inner .sydney-button__with-icon {
       left: 0;
       transform: none;
@@ -2800,6 +2797,66 @@ body {
 
 section {
   position: relative; }
+
+.custom-wysiwyg__wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 150px 20px; }
+  .custom-wysiwyg__wrapper a {
+    text-decoration: underline;
+    color: #EB0029; }
+    .custom-wysiwyg__wrapper a:hover, .custom-wysiwyg__wrapper a:focus {
+      text-decoration: none; }
+  .custom-wysiwyg__wrapper ol,
+  .custom-wysiwyg__wrapper ul {
+    margin-left: 22px; }
+  .custom-wysiwyg__wrapper li {
+    color: #424445;
+    font-family: "Roboto", sans-serif;
+    font-size: 0.75em;
+    line-height: 1.6;
+    font-weight: 300; }
+    @media (min-width: 48em) {
+      .custom-wysiwyg__wrapper li {
+        font-size: 1em; } }
+    @media (min-width: 70em) {
+      .custom-wysiwyg__wrapper li {
+        font-size: 1.125em; } }
+    @media (min-width: 87em) {
+      .custom-wysiwyg__wrapper li {
+        font-size: 1.25em; } }
+  .custom-wysiwyg__wrapper h1,
+  .custom-wysiwyg__wrapper h2,
+  .custom-wysiwyg__wrapper h3,
+  .custom-wysiwyg__wrapper h4,
+  .custom-wysiwyg__wrapper h5 {
+    color: #424445;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300; }
+  .custom-wysiwyg__wrapper h2, .custom-wysiwyg__wrapper h1 {
+    font-size: 1.500em;
+    font-family: "Roboto", sans-serif; }
+    @media (min-width: 48em) {
+      .custom-wysiwyg__wrapper h2, .custom-wysiwyg__wrapper h1 {
+        font-size: 2em; } }
+    @media (min-width: 70em) {
+      .custom-wysiwyg__wrapper h2, .custom-wysiwyg__wrapper h1 {
+        font-size: 46px; } }
+    @media (min-width: 87em) {
+      .custom-wysiwyg__wrapper h2, .custom-wysiwyg__wrapper h1 {
+        font-size: 3.250em; } }
+  .custom-wysiwyg__wrapper h3 {
+    font-weight: 400;
+    letter-spacing: 1.36px;
+    line-height: 35px; }
+    @media (min-width: 48em) {
+      .custom-wysiwyg__wrapper h3 {
+        font-size: 1.5em; } }
+    @media (min-width: 70em) {
+      .custom-wysiwyg__wrapper h3 {
+        font-size: 1.875em; } }
+  .custom-wysiwyg__wrapper h4 {
+    padding: 20px 0 10px; }
 
 #post-404 {
   max-width: 1552px;
