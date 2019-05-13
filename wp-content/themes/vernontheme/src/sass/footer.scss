@@ -190,6 +190,7 @@
             padding: 0;
             display: flex;
             width: 100%;
+            align-items: center;
         }
     
         .line {
@@ -202,7 +203,7 @@
                 background: $primary-color;
                 width: 100%;
                 height: 2px;
-                margin: 12px 0 0;
+                margin: -22px 0 0;
             }
         }
     
@@ -254,14 +255,12 @@
         @include breakpoint(tablet) {
             text-align: right;
             max-width: 100%;
-            // margin: 26px 0 0;
-            margin: 0;
-            // @TODO once client gives social media info re add margin.
+            margin: 26px 0 0;
         }
 
         p {
             font-size: 0.875em;
-            // margin: 14px 0;
+            margin: 14px 0;
             margin: 0 0 14px 0;
             text-align: left;
 
