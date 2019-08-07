@@ -28,6 +28,11 @@
         font-size: 1em;
     }
 
+    &__logo {
+        display: flex;
+        align-items: center;
+    }
+
     &.sticky {
 
         @include breakpoint(tablet) {
@@ -47,10 +52,6 @@
             @include breakpoint(tablet) {
                 padding: 5px;
             }
-
-            @include breakpoint(desktop) {
-                padding: 10px;
-            }
         }
 
     }
@@ -69,7 +70,7 @@
     transition: 0.4s;
 
     @include breakpoint(desktop) {
-        max-width: 75px;
+        max-width: 56px;
     }
 }
 
