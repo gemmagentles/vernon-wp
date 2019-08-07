@@ -38,7 +38,7 @@ jQuery(function($) {
 		this.loadGoogleMap();
 		
 		if(options)
-			this.setOptions(options);
+			this.setOptions(options, true);
 
 		google.maps.event.addListener(this.googleMap, "click", function(event) {
 			var wpgmzaEvent = new WPGMZA.Event("click");
@@ -116,15 +116,21 @@ jQuery(function($) {
 			this.enableTrafficLayer(true);
 		if(this.settings.transport == 1)
 			this.enablePublicTransportLayer(true);
-		this.showPointsOfInterest(this.settings.show_points_of_interest);
+		this.showPointsOfInterest(this.settings.show_point_of_interest);
 		
 		// Move the loading wheel into the map element (it has to live outside in the HTML file because it'll be overwritten by Google otherwise)
 		$(this.engineElement).append($(this.element).find(".wpgmza-loader"));
 	}
 	
-	WPGMZA.GoogleMap.prototype.setOptions = function(options)
+	WPGMZA.GoogleMap.prototype.setOptions = function(options, initializing)
 	{
 		Parent.prototype.setOptions.call(this, options);
+		
+		if(!initializing)
+		{
+			this.googleMap.setOptions(options);
+			return;
+		}
 		
 		var converted = $.extend(options, this.settings.toGoogleMapsOptions());
 		
@@ -136,6 +142,24 @@ jQuery(function($) {
 				lat: parseFloat(clone.center.lat),
 				lng: parseFloat(clone.center.lng)
 			};
+		
+		if(this.settings.hide_point_of_interest == "1")
+		{
+			var noPoi = {
+				featureType: "poi",
+				elementType: "labels",
+				stylers: [
+					{
+						visibility: "off"
+					}
+				]
+			};
+			
+			if(!clone.styles)
+				clone.styles = [];
+			
+			clone.styles.push(noPoi);
+		}
 		
 		this.googleMap.setOptions(clone);
 	}
@@ -284,7 +308,7 @@ jQuery(function($) {
 		if(isNaN(value))
 			throw new Error("Value must not be NaN");
 		
-		return this.googleMap.setZoom(value);
+		return this.googleMap.setZoom(parseInt(value));
 	}
 	
 	/**

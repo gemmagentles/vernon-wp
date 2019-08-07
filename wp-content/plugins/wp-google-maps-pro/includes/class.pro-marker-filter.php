@@ -2,10 +2,10 @@
 
 namespace WPGMZA;
 
-$dir = preg_replace('/wp-google-maps-pro/', 'wp-google-maps', __DIR__);
+$dir = wpgmza_get_basic_dir();
 
-require_once(plugin_dir_path($dir) . 'includes/class.factory.php');
-require_once(plugin_dir_path($dir) . 'includes/class.marker-filter.php');
+wpgmza_require_once($dir . 'includes/class.factory.php');
+wpgmza_require_once($dir . 'includes/class.marker-filter.php');
 
 class ProMarkerFilter extends MarkerFilter
 {
@@ -14,10 +14,19 @@ class ProMarkerFilter extends MarkerFilter
 	protected $_map_id;
 	protected $_mashupIDs;
 	protected $_customFields;
+	protected $_includeUnapproved;
 	
 	public function __construct($options=null)
 	{
 		MarkerFilter::__construct($options);
+	}
+	
+	public function __get($name)
+	{
+		if(property_exists($this, "_$name"))
+			return $this->{"_$name"};
+		
+		return $this->{$name};
 	}
 	
 	public function __set($name, $value)
@@ -28,6 +37,11 @@ class ProMarkerFilter extends MarkerFilter
 		{
 			case "map_id":
 				$this->loadMap();
+				break;
+			
+			case "includeUnapproved":
+				if(!current_user_can('administrator'))
+					throw new \Exception('Permission denied');
 				break;
 		}
 	}
@@ -85,6 +99,14 @@ class ProMarkerFilter extends MarkerFilter
 			$query->where['map_id'] = 'map_id = %d';
 			$query->params[] = $this->_map_id;
 		}
+	}
+	
+	protected function applyApprovedClause($query)
+	{
+		if($this->_includeUnapproved)
+			return;
+		
+		$query->where['approved'] = 'approved = 1';
 	}
 	
 	/*protected function applyKeywordsClause($query)
@@ -233,6 +255,7 @@ class ProMarkerFilter extends MarkerFilter
 		$query = MarkerFilter::getQuery();
 		
 		$this->applyMapIDClause($query);
+		$this->applyApprovedClause($query);
 		$this->applyKeywordsClause($query);
 		$this->applyCategoriesClause($query);
 		$this->applyCustomFieldClause($query);

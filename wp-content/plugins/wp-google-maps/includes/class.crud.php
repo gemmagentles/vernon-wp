@@ -2,6 +2,9 @@
 
 namespace WPGMZA;
 
+if(!defined('ABSPATH'))
+	return;
+
 /**
  * The CRUD class is a base class which acts as an interface between any
  * objects which are stored on in the database and represented in server
@@ -18,6 +21,7 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 	private $id;
 	private $table_name;
 	private $fields;
+	private $overrides;
 	private $modified;
 	
 	private $trashed = false;
@@ -32,11 +36,17 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 		global $wpdb;
 		
 		$this->fields = array();
+		$this->overrides = array();
 		
 		if(is_object($id_or_fields) || is_array($id_or_fields))
 		{
 			foreach($id_or_fields as $key => $value)
+			{
+				if($key == "id")
+					continue;
+				
 				$this->fields[$key] = $value;
+			}
 			
 			if($read_mode == Crud::BULK_READ)
 			{
@@ -45,7 +55,7 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 				if(!isset($obj->id))
 					throw new \Exception('Cannot bulk read without ID');
 				
-				$this->id = $obj->id;
+				$id = $this->id = $obj->id;
 			}
 				
 			if($read_mode != Crud::BULK_READ)
@@ -366,7 +376,7 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 		
 		$arbitrary_data_column_name = $this->get_arbitrary_data_column_name();
 		
-		if($arbitrary_data_column_name && isset($this->fields->arbitrary_data_column_name))
+		if($arbitrary_data_column_name && isset($this->fields[$arbitrary_data_column_name]))
 		{
 			$this->parse_arbitrary_data($this->fields[$arbitrary_data_column_name]);
 			unset($this->fields[$arbitrary_data_column_name]);
@@ -500,6 +510,18 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 	}
 	
 	/**
+	 * Sets a variable on the object without writing to the database. Useful for overriding properties
+	 */
+	public function override($key, $value)
+	{
+		$this->assert_not_trashed();
+		
+		$this->overrides[$key] = $value;
+		
+		return $this;
+	}
+	
+	/**
 	 * Get's the iterator for iterating over map object properties
 	 * @throws \Exception The object has been trashed
 	 * @return \ArrayIterator
@@ -604,7 +626,8 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 		
 		$stmt = $wpdb->prepare("SELECT $arbitrary_data_column_name FROM {$this->table_name} WHERE id=%d", array($this->id));
 		
-		$data = maybe_unserialize($wpdb->get_var());
+		$raw = $wpdb->get_var($stmt);
+		$data = maybe_unserialize($raw);
 		
 		if(empty($data))
 			$data = array();
@@ -628,7 +651,7 @@ class Crud extends Factory implements \IteratorAggregate, \JsonSerializable
 		$column_names = $this->get_column_names();
 		
 		if(array_search($name, $column_names) !== false)
-			throw \Exception('Only arbitrary data can be unset. Columns must be set to NULL instead');
+			throw new \Exception('Only arbitrary data can be unset. Columns must be set to NULL instead');
 		
 		unset($this->fields[$name]);
 		

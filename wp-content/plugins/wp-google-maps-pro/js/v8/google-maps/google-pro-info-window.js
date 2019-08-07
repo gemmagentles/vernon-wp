@@ -29,7 +29,12 @@ jQuery(function($) {
 				break;
 			
 			default:
-				return WPGMZA.GoogleInfoWindow.prototype.open.call(this, map, mapObject);
+				var result = WPGMZA.GoogleInfoWindow.prototype.open.call(this, map, mapObject);
+				
+				if(this.maxWidth && this.googleInfoWindow) // There will be no Google InfoWindow with Modern style marker listing selected
+					this.googleInfoWindow.setOptions({maxWidth: this.maxWidth});
+				
+				return result;
 				break;
 		}
 	}

@@ -19,36 +19,47 @@ class ACFTCP_Flexible_Content_Layout {
 	public $indent_count;
 	public $field_location;
 
-	/**
-	* Constructor
-	*
-	* @param string	$name
-	* @param int 	$nesting_level
-	* @param int 	$indent_count
-	* @param string $field_location
-	* @param strong	$layout_key			Used to get sub fields (ACF PRO)
-	* @param int	$parent_field_id	Used to get sub fields (ACF PRO)
-	* @param array 	$sub_fields			Used to get sub fields (Flexi add on)
-	*/
-	function __construct( $name, $nesting_level = 0, $indent_count = 0, $field_location = '', $layout_key = null, $parent_field_id = null, $sub_fields = null ) {
+	private $exclude_html_wrappers = false;
 
-		$this->name = $name;
-		$this->nesting_level = $nesting_level;
-		$this->indent_count = $indent_count;
-		$this->field_location = $field_location;
+	/**
+	 * Constructor
+	 *
+	 * @param array $args Array of arguments.
+	 */
+	function __construct( $args = array() ) {
+
+		$default_args = array(
+			'name' => '', // TODO Check this default is appropriate
+			'nesting_level' => 0,
+			'indent_count' => 0,
+			'field_location' => '',
+			'layout_key' => null, // Used to get sub fields (ACF PRO)
+			'parent_field_id' => null, // Used to get sub fields (ACF PRO)
+			'sub_fields' => null, // Used to get sub fields (Flexi add on)
+			'exclude_html_wrappers' => false // Change to true for debug
+		);
+
+		$args = array_merge( $default_args, $args ); 
+
+		$this->name = $args['name'];
+		$this->nesting_level = $args['nesting_level'];
+		$this->indent_count = $args['indent_count'];
+		$this->field_location = $args['field_location'];
 
 		// If flexi add on is used
 		if ( 'postmeta' == ACFTCP_Core::$db_table ) {
 
-			$this->sub_fields = $sub_fields;
+			$this->sub_fields = $args['sub_fields'];
 
 		}
 		// Else ACF PRO is used
 		elseif ( 'posts' == ACFTCP_Core::$db_table ) {
 
-			$this->sub_fields = $this->get_sub_fields_from_posts_table( $layout_key, $parent_field_id );
+			$this->sub_fields = $this->get_sub_fields_from_posts_table( $args['layout_key'], $args['parent_field_id'] );
 
 		}
+
+		$this->exclude_html_wrappers = $args['exclude_html_wrappers'];
 
 	}
 
@@ -91,19 +102,33 @@ class ACFTCP_Flexible_Content_Layout {
 
 	}
 
-	// Renders theme PHP for layout sub fields
-	public function render_sub_fields() {
+	/**
+	 * Get HTML for sub fields
+	 *
+	 * @return string
+	 **/
+	public function get_sub_fields_html() {
+
+		$sub_fields_html = ''; 
 
 		// loop through sub fields
 		foreach ( $this->sub_fields as $sub_field ) {
 
-			$field_location = ''; // TODO: Is this needed?
+			$args = array(
+				'nesting_level' => $this->nesting_level,
+				'indent_count' => $this->indent_count,
+				'location_val' => '',
+				'field_data_obj' => $sub_field,
+				'exclude_html_wrappers' => $this->exclude_html_wrappers
+			);
 
-			$acftc_field = new ACFTCP_Field( $this->nesting_level, $this->indent_count, $field_location, $sub_field );
+			$acftc_field = new ACFTCP_Field( $args );
 
-			$acftc_field->render_field();
+			$sub_fields_html .= $acftc_field->get_field_html();
 
 		}
+
+		return $sub_fields_html;
 
 	}
 

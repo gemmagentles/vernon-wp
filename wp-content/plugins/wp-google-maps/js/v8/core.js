@@ -49,7 +49,7 @@ jQuery(function($) {
 		 * @return {number} The scroll offset
 		 */
 		getScrollAnimationOffset: function() {
-			return (WPGMZA.settings.scroll_animation_offset || 0);
+			return (WPGMZA.settings.scroll_animation_offset || 0) + $("#wpadminbar").height();
 		},
 		
 		/**
@@ -75,6 +75,15 @@ jQuery(function($) {
 			$("html, body").animate({
 				scrollTop: $(element).offset().top - offset
 			}, milliseconds);
+			
+		},
+		
+		extend: function(child, parent) {
+			
+			var constructor = child;
+			
+			child.prototype = Object.create(parent.prototype);
+			child.prototype.constructor = constructor;
 			
 		},
 		
@@ -248,13 +257,22 @@ jQuery(function($) {
 			var img = document.createElement("img");
 			img.onload = function(event) {
 				var result = {
-					width: image.width,
-					height: image.height
+					width: img.width,
+					height: img.height
 				};
 				WPGMZA.imageDimensionsCache[src] = result;
 				callback(result);
 			};
 			img.src = src;
+		},
+		
+		decodeEntities: function(input)
+		{
+			return input.replace(/&(nbsp|amp|quot|lt|gt);/g, function(m, e) {
+				return m[e];
+			}).replace(/&#(\d+);/gi, function(m, e) {
+				return String.fromCharCode(parseInt(e, 10));
+			});
 		},
 		
 		/**
@@ -265,7 +283,7 @@ jQuery(function($) {
 		 */
 		isDeveloperMode: function()
 		{
-			return this.developer_mode || (window.Cookies && window.Cookies.get("wpgmza-developer-mode"));
+			return this.settings.developer_mode || (window.Cookies && window.Cookies.get("wpgmza-developer-mode"));
 		},
 		
 		/**
@@ -459,14 +477,15 @@ jQuery(function($) {
 			
 			if(WPGMZA.isProVersion())
 				return MYMAP[id].map;
+			
 			return MYMAP.map;
 			
-			for(var i = 0; i < WPGMZA.maps.length; i++) {
+			/*for(var i = 0; i < WPGMZA.maps.length; i++) {
 				if(WPGMZA.maps[i].id == id)
 					return WPGMZA.maps[i];
 			}
 			
-			return null;
+			return null;*/
 		},
 		
 		/**
@@ -529,7 +548,20 @@ jQuery(function($) {
 			
 			);
 			
+		},
+		
+		getQueryParamValue: function(name) {
+			
+			var regex = new RegExp(name + "=([^&]*)");
+			var m;
+			
+			if(!(m = window.location.href.match(regex)))
+				return null;
+			
+			return m[1];
+			
 		}
+		
 	};
 	
 	if(window.WPGMZA)
@@ -571,6 +603,13 @@ jQuery(function($) {
 	
 	$(window).on("load", function(event) {
 		
+		// Array incorrectly extended warning
+		var test = [];
+		for(var key in test) {
+			console.warn("The Array object has been extended incorrectly by your theme or another plugin. This can cause issues with functionality.");
+			break;
+		}
+		
 		// Geolocation warnings
 		if(window.location.protocol != 'https:')
 		{
@@ -582,7 +621,5 @@ jQuery(function($) {
 		}
 		
 	});
-	
-	
 	
 });

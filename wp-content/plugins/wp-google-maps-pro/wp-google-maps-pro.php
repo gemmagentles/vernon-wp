@@ -3,12 +3,259 @@
 Plugin Name: WP Google Maps - Pro Add-on
 Plugin URI: http://www.wpgmaps.com
 Description: This is the Pro add-on for WP Google Maps. The Pro add-on enables you to add descriptions, pictures, links and custom icons to your markers as well as allows you to download your markers to a CSV file for quick editing and re-upload them when complete.
-Version:  7.11.08
+Version:  7.11.49
 Author: WP Google Maps
 Author URI: http://www.wpgmaps.com
 */
 
 /*
+ * 7.11.49 :- 2019-07-30 :- Medium priority
+ * Added nonce check to duplicate map function
+ * Fixed map type setting not "live" in map editor
+ * Fixed map type setting not initially reflected in map editor
+ *
+ * 7.11.48 :- 2019-07-29 :- Medium priority
+ * Fixed store locator not working in OpenLayers since 7.11.47 due to missing nonce
+ *
+ * 7.11.47 :- 2019-07-29 :- Medium priority
+ * REST API security enhanced with additional per-route nonces
+ * getScrollAnimationOffset now accounts for WP admin bar height
+ * removeMarker now closes marker InfoWindow before removing it
+ * Fixed advanced table search having no effect when used in conjunction with a store locator search
+ * Fixed markers not removed from map panel following bulk delete
+ * Fixed notice when entry already exists in category import
+ *
+ * 7.11.46 :- 2019-07-23 :- Medium priority
+ * Fixed marker library not saving icon on category page
+ * Fixed duplicate primary key notice when saving categories
+ *
+ * 7.11.45 :- 2019-07-22 :- Low priority
+ * Added infowindowopen event for Modern style infowindows
+ * Added new filter wpgmza_legacy_localize_polygon_data
+ * Altered wpgmza_get_category_data to respect category priority
+ * Fixed category priority not respected by marker category icon in map panel
+ *
+ * 7.11.44 :- 2019-07-11 :- High priority
+ * Closed potential security vulnerabilities
+ * Added console warning when older version of dataTables is loaded
+ * Fixed category filtering not working with legacy style store locator
+ * Fixed click event for map firing when a marker is clicked
+ * Re-added AJAX fallback for setups with REST API blocking
+ *
+ * 7.11.43 :- 2019-07-05 :- Medium priority
+ * Fixed category filtering not working with modern style store locator
+ * Fixed marker links being stripped of percent encoded characters
+ *
+ * 7.11.42 :- 2019-07-02 :- Low priority
+ * Added admin-ajax fallback for when REST API is blocked
+ *
+ * 7.11.41 :- 2019-06-25 :- Low priority
+ * Mappity (Marker Library) loading deferred until dialog opens
+ *
+ * 7.11.40 :- 2019-06-24 :- Medium priority
+ * Added new event userlocationmarkerplaced.wpgmza
+ * Fixed advanced table marker listing stuck on "Processing..." when no results are found
+ * Fixed "Get directions" in InfoWindow not working
+ * Fixed checkbox category filtering not triggering filter update
+ * Fixed REST API warning persisting after dismissal
+ *
+ * 7.11.39 :- 2019-06-21 :- Medium priority
+ * Fixed marker listing category filter not triggering filtering update since last update
+ * Fixed marker listing directions link not working
+ *
+ * 7.11.38 :- 2019-06-19 :- Medium priority
+ * Fixed store locator category checkboxes triggering marker filter to update before any buttons were pressed
+ * Fixed undefined variable notice in class.pro-admin-marker-table.php
+ * Fixed clicking advanced table marker listing list item not updating map panel
+ *
+ * 7.11.37 :- 2019-06-18 :- Low priority
+ * Added checkbox to disable Autoptimize workaround for setups where the workaround prevents CSS aggregation
+ * Performance for filtering and marker listings significantly improved when using REST caching / CDN and experimental compressed request setting
+ * Fixed issues with Safari and modern style store locator radius, check now added to ProStoreLocator module
+ * 
+ * 7.11.36 :- 2019-06-12 :- Low priority
+ * Improved handling of invalid JSON data in custom fields attribute column
+ * Fixed ambiguous column `active` in page.categories.php
+ * Fixed store locator center point icon not respected
+ *
+ * 7.11.35 :- 2019-06-06 :- Low priority
+ * Added experimental setting "Use compressed path variables" to enable CDN's and JSON caching plugins to cache REST responses
+ * Added notice when PHP version is 5.4.45 in which a PHP bug causes localization to fail
+ * Fixed custom field ID's being writable
+ *
+ * 7.11.34 :- 2019-06-03 :- Medium priority
+ * Added nonce to settings form on admin post action
+ * Attempting to set a custom field which does not exist will now create the field
+ * Changed background to background-image in data_table_front.css to allow more flexible control over table headings in Advanced Table marker listing
+ * Fixed error in class.pro-marker-filter.php when Basic has non-standard folder name
+ *
+ * 7.11.33 :- 2019-05-29 :- Medium priority
+ * Added properties category and categories to ProMarker
+ * ProMarker categories can now be set as an array or as a comma separated string through new properties
+ * JSON importer now uses CRUD classes
+ * Fixed lat and lng shortcode attributes not working
+ * Fixed "can't use method return value in write context" on PHP <= 5.4
+ * Fixed "no results found" not showing when new MarkerFilter returns zero results
+ *
+ * 7.11.32 :- 2019-05-23 :- Medium priority
+ * Tested with WordPress 5.2.1
+ * Fixed Modern Store locator title search not working
+ * Removed !important from CSS for border on .wpgmza-basic-listing-image-holder img
+ *
+ * 7.11.31 :- 2019-05-21 :- Medium priority
+ * Fixed $ is undefined in legacy-map-edit-page.js
+ * Fixed store locator category filter triggering marker listing category filter update mechanism
+ * Fixed google maps check in core.js
+ * Fixed ProMarkerFilter update not working with hide all
+ * Add support for Google MyMaps KML polygon style (normal/highlight) imports
+ * Add support for Custom Field importing via marker CSV imports
+ *
+ * 7.11.30 :- 2019-05-20 :- Medium priority
+ * Added checks for non-standard basic directory name causing errors in class.pro-map.php
+ * Added new settings WPGMZA.settings.forceNativeDirections
+ * Fixed polygons and polylines not visible when engine is undefined (checks now assume Google by default)
+ * Fixed "Hide all markers until a search is done" revealing all markers when a not found location is entered
+ * Relaxed MIME type checking for JSON in scheduled imports (pending fix on a WordPress issue)
+ *
+ * 7.11.29 :- 2019-05-13 :- Low priority
+ * Tested with WordPress 5.2
+ * Added more robust error handling for missing files and failed initialisations (when NOT in developer mode)
+ * Added more robust checks for Custom Fields tables in CustomFields::installed()
+ * Fixed notice in legacy-core.php
+ *
+ * 7.11.28 :- 2019-05-08 :- Low priority
+ * Fixed REST API endpoint / map editor not retreving a ProMarker, causing custom fields to be blank in editor
+ * Added the ability to toggle auto night mode as well as a theme
+ * Added a min height to bakend map so that it does not break when height is set to 100%
+ * Added alt attribute to all marker listing styles
+ * Added shift-click range selection to admin marker table
+ * XML URL's are now protocol-less, solving issues when migrating to a secure site
+ *
+ * 7.11.27 :- 2019-04-16 :- Medium priority
+ * Added categories JS module
+ * Fixed incorrect value being interpreted as "yes" for the setting "store_locator_hide_before_search"
+ * Fixed search not working for admin marker DataTable
+ * Re-allowed iframe, input, select, option and img in description for users below administrator
+ *
+ * 7.11.26 :- 2019-04-12 :- Medium priority
+ * Fixed "wpgmaps_localize" is undefined on map edit page when default marker is applied
+ *
+ * 7.11.25 :- 2019-04-10 :- Medium priority
+ * Fixed markers disappearing after adding or editing marker following XML pull fix
+ * Fixed memory leak on map edit page when adding, editing or removing markers
+ * Corrected store locator circle covers polygons making them unclickable
+ *
+ * 7.11.24 :- 2019-04-09 :- Medium priority
+ * Prevented reading $_GET['id'] in map setting overrides, this is now ignored, as it was causing conflicts on some setups
+ * Re-implemented search for string in category and custom field data for admin marker table and Advanced style marker listing
+ * Fixed undefined variable notice in class.category.php
+ * Fixed infowindow displaying incorrect marker data on map edit page when using XML pull method
+ * Fixed country restriction not respected by OpenLayers
+ * Fixed Exporter where the deleted maps shows in the JSON file
+ * Added Automatically Pan to user location setting
+ *
+ * 7.11.23 :- 2019-04-03 :- Medium priority
+ * Re-implemented behaviour to hide all markers on store locator reset when "Hide all markers before a search is done" is selected
+ * Fixed custom field filters not showing following Gutenberg Custom CSS fix (7.11.22)
+ * Fixed wpgmaps-admin.css being enqueued on the front end
+ *
+ * 7.11.22 :- 2019-04-02 :- Low priority
+ * Relaxed importer security restrictions to allow importing PHP over URLs (currently assumes JSON)
+ * Added shortcode attribute classname
+ * Added missing custom fields in modern infowindows feature
+ * Fixed Custom CSS classes in Gutenberg editor not being applied
+ *
+ * 7.11.21 :- 2019-03-28 :- Low priority
+ * Added "Hide points of interest"
+ * Fixed infowindow opening on store locator center marker
+ * Fixed animation and infowindow dropdowns blank when editing marker
+ * Fixed SEO tools reporting 404 on Print Directions link
+ *
+ * 7.11.20 :- 2019-03-20 :- Medium priority
+ * Improved performance on saving markers and maps, rebuildTableFromLegacyField only performs operation on relevant object
+ * Marker description no longer passed through KSES function for administrators
+ * Moved code to initially add markers to clusterer into onMarkersPlaced in ProMap
+ * Fixed "cat" shortcode attribute not being applied when no category filtering UI controls are present
+ * Fixed develoer mode checkbox not reflecting setting when developer mode is enabled
+ * Fixed "hide all markers until a search is done" causing only markers in the first search radius to appear on the map
+ * Fixed clusters appearing before a search is done when "hide all markers until a search is done" is selected
+ *
+ * 7.11.19 :- 2019-03-18 :- Medium priority
+ * Fixed GDPR notice not displayed when it should be, when Google Translate JS API is loaded
+ * Fixed emojis in description field breaking marker add/save mechanism
+ * Fixed incorrect logic causing unapproved markers to appear in marker listing
+ * Fixed store locator marker not cleared after resetting store locator search
+ * Fixed store locator circle not cleared after resetting store locator search
+ * Disabled infowindow on store locator center point marker
+ *
+ * 7.11.18 :- 2019-03-15 :- Medium priority
+ * Prevented iterateOverMarkerData being called more than once per map, fixing filtering and clustering inconsistencies
+ * Performance improved by only allowing iterateOverMarkerData to be called on initialisation
+ *
+ * 7.11.17 :- 2019-03-14 :- Medium priority
+ * Changed isset check to empty check on developer_mode
+ * Fixed developer mode being checked when developer_mode is false in memory
+ *
+ * 7.11.16 :- 2019-03-13 :- Low priority
+ * Fixed markerid URL logic sometimes failing
+ * Fixed mzoom ignored on URL
+ * Fixed Google / Apple / Maps App directions link opening on current location due to lack of GPS coordinates on Modern infowindows
+ *
+ * 7.11.15 :- 2019-03-11 :- Low priority
+ * Added try/catch around legacy core.js marker add code to catch invalid marker data and issue console warning
+ * Fixed "Hide address column" hiding title instead of address for Basic Table style marker listing
+ * Fixed calling setZoom immediately after panTo on OpenLayers map cancelling pan animation
+ *
+ * 7.11.14 :- 2019-03-08 :- Low priority
+ * Fixed modern marker listing marker view not working correctly with mashups
+ * Fixed full width button container on modern marker listing obscuring close buttons
+ *
+ * 7.11.13 :- 2019-03-07 :- Low priority
+ * Fixed store locator search creating duplicate markers
+ * Fixed "Use My Location" button not appearing in Modern style store locator
+ * Re-added "Use my location" button to store locator
+ *
+ * 7.11.12 :- 2019-03-05 :- Medium priority
+ * Changed "Gold is not compatible with OpenLayers" notice to advise useres to update to Gold 4.11 or above to use Gold with OpenLayers
+ * Changed Google Maps API error handler to render in a panel rather than in a modal dialog
+ * Fixed jQuery shorthand in legacy-map-edit-page.js preventing marker edit on some installations
+ * Fixed Circle.createInstance returning OLCircle by default where engine is undefined (the default engine is Google)
+ * Fixed inconsistent behaviour with "Hide fields" settings in Maps -> Settings -> Marker Listings, code is now implemented in MarkerListing::removeHiddenFields
+ * Fixed some columns missing in various marker listing styles
+ * Re-added Link column to Advanced Table
+ *
+ * 7.11.11 :- 2019-03-01 :- Medium priority
+ * Changed pointer cursor to default cursor when hovering a marker with "disable infowindows" set
+ * Improved store locator UX - address and title search no longer cleared by resetting
+ * Stopped markers being removed by InitMap following recent filtering optimizations
+ * Fixed InfoWindow title not displayed in default style infowindow
+ * Fixed global "disable infowindows" not respected
+ * Fixed ProInfoWindow not detecting empty fields correctly and omitting corresponding elements
+ * Fixed buttons missing from modern style infowindows
+ * 
+ * 7.11.10 :- 2019-02-28 :- Medium priority
+ * Moved "User location marker" code to ProMarker, ProMap and ProInfoWindow
+ * Moved wpgmaps_lang_my_location from global scope to WPGMZA.localized_strings
+ * Moved check for modern marker listing style above check for native style infowindow, fixing both styles opening
+ * Moved infowindow starts open, click opens link, shortcode to open marker and GET to open marker infowindow to ProMarker module
+ * Re-factored and moved code to build default style infowindow to ProInfoWindow module
+ * Removed "User location marker" code from core.js
+ * Dropped !important from default InfoWindow image max width
+ * Improved JavaScript performance by deferring InfoWindow HTML creation until needed
+ * Non-standard jQuery versions now issue console warning rather than cancelling map initialisation
+ * Fixed "Get directions" from marker listing not populating "To" field in modern style marker listing
+ * Fixed mashups preventing marker listing from being displayed
+ * Fixed Modern style marker listing trying to open on user location marker
+ * Fixed Modern style marker listing trying to open on store locator center marker
+ * Fixed marker filter affecting user location marker
+ * Fixed "undefined" infowindow over user location marker
+ *
+ * 7.11.09 :- 2019-02-25 :- Low priority
+ * Custom field filter reset button now sets dropdowns to their placeholder, as opposed to none / the first item
+ * Fixed both style infowindows opening when map has never been saved
+ * Fixed max infowindow width not being respected for default style infowindows
+ * Fixed infowindow close event firing after infowindow element removed
+ *
  * 7.11.08 :- 2019-02-22 :- Medium priority
  * Added try/catch in legacy-map-edit-page.js to catch bad latitude and longitude, issue warning and continue execution
  * Fixed bad marker ID in ProInfoWindow.open preventing modern style infowindows from opening in some circumstances
@@ -1317,24 +1564,87 @@ if(!function_exists('wpgmza_show_dom_document_error'))
 	}
 }
 
+function wpgmza_show_php_5_4_45_error()
+{
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php
+			_e('<strong>WP Google Maps:</strong> Due to a known issue with PHP 5.4.45 and JSON serialization, the Pro add-on cannot function correctly. We strongly recommend you switch to more up to date version of PHP.', 'wp-google-maps');
+			?>
+		</p>
+	</div>
+	<?php
+}
+
+global $wpgmza_cached_basic_dir;
+
+function wpgmza_get_basic_dir()
+{
+	global $wpgmza_cached_basic_dir;
+	
+	if($wpgmza_cached_basic_dir)
+		return $wpgmza_cached_basic_dir;
+	
+	if(defined('WPGMZA_DIR_PATH'))
+		return WPGMZA_DIR_PATH;
+	
+	$plugin_dir = plugin_dir_path(__DIR__);
+	
+	// Try default folder name first
+	$file = $plugin_dir . 'wp-google-maps/wpGoogleMaps.php';
+	
+	if(file_exists($file))
+	{
+		$wpgmza_cached_basic_dir = plugin_dir_path($file);
+		return $wpgmza_cached_basic_dir;
+	}
+	
+	// Scan plugins
+	$plugins = get_option('active_plugins');
+	foreach($plugins as $slug)
+	{
+		if(preg_match('/wpGoogleMaps\.php$/', $slug))
+		{
+			$file = $plugin_dir . $slug;
+			
+			if(!file_exists($file))
+				return null;
+			
+			$wpgmza_cached_basic_dir = plugin_dir_path($file);
+			return $wpgmza_cached_basic_dir;
+		}
+	}
+	
+	return null;
+}
+
 function wpgmza_get_basic_version()
 {
 	global $wpgmza_version;
 	
+	// Try already loaded
 	if($wpgmza_version)
 		return trim($wpgmza_version);
 	
 	if(defined('WPGMZA_VERSION'))
 		return trim(WPGMZA_VERSION);
 	
-	$file = plugin_dir_path(__DIR__) . 'wp-google-maps/wpGoogleMaps.php';
-	if(file_exists($file))
-	{
-		$contents = file_get_contents($file);
+	$dir = wpgmza_get_basic_dir();
+	
+	if(!$dir)
+		return null;
+	
+	$file = $dir . 'wpGoogleMaps.php';
+	
+	if(!file_exists($file))
+		return null;
+	
+	// Read version strintg
+	$contents = file_get_contents($file);
 		
-		if(preg_match('/Version:\s*(.+)/', $contents, $m))
-			return trim($m[1]);
-	}
+	if(preg_match('/Version:\s*(.+)/', $contents, $m))
+		return trim($m[1]);
 	
 	return null;
 }
@@ -1379,9 +1689,28 @@ function wpgmza_show_basic_incompatible_notice()
 	echo $notice;
 }
  
+function wpgmza_pro_preload_is_in_developer_mode()
+{
+	$globalSettings = get_option('wpgmza_global_settings');
+		
+	if(empty($globalSettings))
+		return !empty($_COOKIE['wpgmza-developer-mode']);
+	
+	if(!($globalSettings = json_decode($globalSettings)))
+		return false;
+	
+	return isset($globalSettings->developer_mode) && $globalSettings->developer_mode == true;
+}
+ 
 if(version_compare(phpversion(), '5.3', '<'))
 {
 	add_action('admin_notices', 'wpgmza_show_php_version_error');
+	return;
+}
+
+if(version_compare(phpversion(), '5.4.45', '=='))
+{
+	add_action('admin_notices', 'wpgmza_show_php_5_4_45_error');
 	return;
 }
 
@@ -1397,4 +1726,44 @@ if(!wpgmza_is_basic_compatible())
 	return;
 }
 
-require_once(plugin_dir_path(__FILE__) . 'legacy-core.php');
+if(wpgmza_pro_preload_is_in_developer_mode())
+	require_once(plugin_dir_path(__FILE__) . 'legacy-core.php');
+else
+{
+	try{
+		require_once(plugin_dir_path(__FILE__) . 'legacy-core.php');
+	}catch(Exception $e) {
+		add_action('admin_notices', function() use ($e) {
+			
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p>
+					<strong>
+					<?php
+					_e('WP Google Maps', 'wp-google-maps');
+					?>:</strong>
+					
+					<?php
+					_e('The Pro add-on cannot be loaded due to a fatal error. This is usually due to missing files. Please re-install the Pro add-on. Technical details are as follows: ', 'wp-google-maps');
+					echo $e->getMessage();
+					?>
+				</p>
+			</div>
+			<?php
+			
+		});
+	}
+}
+
+// Adds filter to stop loading datatables from class.script-loader.php line 106
+add_filter('wpgmza-get-library-dependencies', 'wpgmza_do_not_load_datatables', 10, 1);
+		
+function wpgmza_do_not_load_datatables($dep){
+	$wpgmza_settings = get_option("WPGMZA_OTHER_SETTINGS");
+	 if (!empty($wpgmza_settings['wpgmza_do_not_enqueue_datatables'])) {
+		if (isset($dep['datatables'])) {
+			unset($dep['datatables']);
+		}
+	}
+	return $dep;
+}

@@ -2,6 +2,9 @@
 
 namespace WPGMZA;
 
+if(!defined('ABSPATH'))
+	return;
+
 // TODO: Remove, autoloaders are now used
 require_once(plugin_dir_path(__FILE__) . '/class.crud.php');
 
@@ -12,6 +15,7 @@ class Marker extends Crud implements \JsonSerializable
 {
 	const DEFAULT_ICON = "//maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png";
 	
+	private static $columns;
 	protected $custom_fields;
 	
 	/**
@@ -24,8 +28,22 @@ class Marker extends Crud implements \JsonSerializable
 		
 		Crud::__construct("{$wpdb->prefix}wpgmza", $id_or_fields);
 		
+		// TODO: Why is this happening here and not in the ProMarker module? Keep the filter, but move this
 		if(class_exists('WPGMZA\\CustomMarkerFields'))
 			$this->custom_fields = apply_filters('wpgmza_get_marker_custom_fields', $this->id);
+	}
+	
+	public static function getColumns()
+	{
+		global $wpdb;
+		global $WPGMZA_TABLE_NAME_MARKERS;
+		
+		if(Marker::$columns)
+			return Marker::$columns;
+		
+		Marker::$columns = $wpdb->get_results('SHOW COLUMNS FROM ' . $WPGMZA_TABLE_NAME_MARKERS);
+		
+		return Marker::$columns;
 	}
 	
 	/**
@@ -52,8 +70,6 @@ class Marker extends Crud implements \JsonSerializable
 		$json = Crud::jsonSerialize();
 		
 		unset($json['latlng']);
-		
-		$json['custom_field_data'] = $this->custom_fields;
 		
 		return $json;
 	}
@@ -139,6 +155,11 @@ class Marker extends Crud implements \JsonSerializable
 				$this->update_latlng();
 				break;
 		}
+	}
+	
+	public function getPosition()
+	{
+		return new LatLng($this->lat, $this->lng);
 	}
 }
 

@@ -28,14 +28,14 @@ class Category
 				category_id int(11) NOT NULL,
 				PRIMARY KEY  (marker_id, category_id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-		");		
+		");
 	}
 	
 	/**
 	 * This function completely rebuilds the markers-has-categories table
 	 * from the legacy marker "category" field
 	 */
-	public static function rebuildTableFromLegacyField()
+	public static function rebuildTableFromLegacyField($options=null)
 	{
 		global $wpdb;
 		global $wpgmza_tblname;
@@ -44,9 +44,42 @@ class Category
 		
 		Category::installMarkerHasCategoriesTable();
 		
-		$wpdb->query("DELETE FROM $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES");
+		if(!$options)
+			$options = array();
 		
-		$markers = $wpdb->get_results("SELECT id, category FROM $wpgmza_tblname");
+		$map_id = null;
+		$marker_id = null;
+		
+		if(!empty($options['map']))
+			$map_id = $options['map']->id;
+		
+		if(!empty($options['marker']))
+			$marker_id = $options['marker']->id;
+		
+		if(!empty($options['marker_id']))
+			$marker_id = $options['marker_id'];
+		
+		// Delete old relationships
+		if($map_id)
+			$where = " WHERE marker_id IN (SELECT id FROM $wpgmza_tblname WHERE map_id=" . (int)$map_id . ")";
+		else if($marker_id)
+			$where = " WHERE marker_id=" . (int)$marker_id;
+		else
+			$where = "";
+		
+		$qstr = "DELETE FROM $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES $where";
+		
+		$wpdb->query($qstr);
+		
+		// Rebuild relationships
+		if($map_id)
+			$where = " WHERE map_id=" . (int)$map_id;
+		else if($marker_id)
+			$where = " WHERE id=" . (int)$marker_id;
+		
+		$qstr = "SELECT id, category FROM $wpgmza_tblname $where";
+		
+		$markers = $wpdb->get_results($qstr);
 		
 		foreach($markers as $marker)
 		{
@@ -60,7 +93,7 @@ class Category
 				if(array_search($category_id, $categories) === false)
 					continue;
 				
-				$qstr = "INSERT INTO $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES (marker_id, category_id) VALUES (%d, %d)";
+				$qstr = "INSERT INTO $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES (marker_id, category_id) VALUES (%d, %d) ON DUPLICATE KEY UPDATE marker_id=marker_id";
 				
 				$stmt = $wpdb->prepare($qstr, array($marker->id, $category_id));
 				
@@ -76,9 +109,18 @@ add_action('init', function() {
 		Category::rebuildTableFromLegacyField();
 }, 100);
 
-add_action('wpgmza_map_saved', 			array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));
-add_action('wpgmza_marker_saved', 		array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));	// TODO: Only for specified marker
-add_action('wpgmza_marker_deleted', 	array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));	// TODO: Only for specified marker
+add_action('wpgmza_marker_saved', function($marker) {
+	Category::rebuildTableFromLegacyField(array(
+		'marker' => $marker
+	));
+});
+
+add_action('wpgmza_marker_deleted', function($marker_id) {
+	Category::rebuildTableFromLegacyField(array(
+		'marker_id' => $marker_id
+	));
+});
+
 add_action('wpgmza_categories_saved',	array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));
 add_action('wpgmza_category_deleted',	array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));
 add_action('wpgmza_import_complete',	array('WPGMZA\\Category', 'rebuildTableFromLegacyField'));

@@ -45,7 +45,7 @@ class CustomFields implements \IteratorAggregate, \JsonSerializable, \Countable
 		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
 		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
 		global $WPGMZA_TABLE_NAME_MAPS_HAS_CUSTOM_FIELDS_FILTERS;
-				
+			
 		dbDelta("
 			CREATE TABLE `$WPGMZA_TABLE_NAME_CUSTOM_FIELDS` (
 				`id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,11 +88,23 @@ class CustomFields implements \IteratorAggregate, \JsonSerializable, \Countable
 	{
 		global $wpdb;
 		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
+		global $WPGMZA_TABLE_NAME_MAPS_HAS_CUSTOM_FIELDS_FILTERS;
+		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
 		
 		if(CustomFields::$installed !== null)
 			return CustomFields::$installed;
 		
-		CustomFields::$installed = $wpdb->get_var("SHOW TABLES LIKE '$WPGMZA_TABLE_NAME_CUSTOM_FIELDS'");
+		$customFieldsTableInstalled 				= $wpdb->get_var("SHOW TABLES LIKE '$WPGMZA_TABLE_NAME_CUSTOM_FIELDS'");
+		$markerHasCustomFieldsTableInstalled		= $wpdb->get_var("SHOW TABLES LIKE '$WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS'");
+		$mapsHasCustomFieldFiltersTableInstalled	= $wpdb->get_var("SHOW TABLES LIKE '$WPGMZA_TABLE_NAME_MAPS_HAS_CUSTOM_FIELDS_FILTERS'");
+		$markersHasCustomFieldsTableInstalled		= $wpdb->get_var("SHOW TABLES LIKE '$WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS'");
+		
+		CustomFields::$installed = (
+			!empty($customFieldsTableInstalled) &&
+			!empty($markerHasCustomFieldsTableInstalled) &&
+			!empty($mapsHasCustomFieldFiltersTableInstalled) &&
+			!empty($markersHasCustomFieldsTableInstalled)
+		);
 		
 		return CustomFields::$installed;
 	}

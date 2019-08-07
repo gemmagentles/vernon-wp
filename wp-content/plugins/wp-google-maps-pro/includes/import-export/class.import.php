@@ -92,7 +92,6 @@ abstract class Import {
 		
 		$this->record_start_time();
 		$this->attempt_set_time_limit();
-
 	}
 
 	/**
@@ -153,7 +152,7 @@ abstract class Import {
 		if ( empty( $file_contents ) && ! empty( $this->file_url ) ) {
 
 			$file_contents = wp_remote_get( $this->file_url );
-
+			
 			if ( ! is_wp_error( $file_contents ) ) {
 
 				$this->file_data = wp_remote_retrieve_body( $file_contents );

@@ -48,9 +48,10 @@ class BasicTable extends \WPGMZA\MarkerListing
 					$img->setAttribute('src', $marker->pic);
 				$img->setInlineStyle('width', "{$imageDimensions->width}px");
 				$img->setInlineStyle('height', "{$imageDimensions->height}px");
+				$img->setAttribute('alt', $marker->title);
 				
 				// Title
-				$title = $item->querySelector('.wpgmza-content-address-holder-inner a');
+				$title = $item->querySelector('.wpgmza_marker_title a');
 				$title->setAttribute('title', $marker->title);
 				$title->appendText($marker->title);
 				
@@ -71,9 +72,22 @@ class BasicTable extends \WPGMZA\MarkerListing
 					$directions->setAttribute('wpgm_addr_field', $marker->address);
 					$directions->setAttribute('gps', "{$marker->lat},{$marker->lng}");
 				}
+				
+				// Link
+				$a = $item->querySelector('.wpgmza-link > a, .wpgmza_marker_link > a');
+				$text = __('More Details', 'wp-google-maps');
+				
+				if(!empty($wpgmza->settings->wpgmza_settings_infowindow_link_text))
+					$text = $wpgmza->settings->wpgmza_settings_infowindow_link_text;
+				
+				if($a && !empty($marker->link))
+				{
+					$a->setAttribute('href', $marker->link);
+					$a->appendText($text);
+				}
 			}
 			
-			$this->appendListingItem($document, $item);
+			$this->appendListingItem($document, $item, $marker);
 		}
 		
 		$response->html = $document->saveInnerBody();

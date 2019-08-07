@@ -48,7 +48,7 @@ class BasicList extends \WPGMZA\MarkerListing
 				$item->querySelector('.wpgmza_div_address')->appendText($marker->address);
 			}
 			
-			$this->appendListingItem($document, $item);
+			$this->appendListingItem($document, $item, $marker);
 		}
 		
 		$response->html = $document->saveInnerBody();

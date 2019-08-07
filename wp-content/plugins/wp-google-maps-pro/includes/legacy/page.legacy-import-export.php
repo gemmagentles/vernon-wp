@@ -14,7 +14,7 @@
 class WPGMapsImportExport{
 
 	public function __construct(){
-
+		
 	}
 
 	public function export_map( $mapid = false ){
@@ -28,7 +28,7 @@ class WPGMapsImportExport{
 			global $wpdb;
 
 	    	$query = "SELECT * FROM `{$wpdb->prefix}wpgmza_maps` WHERE `id` = '$mapid'";
-
+			
 	        $results = $wpdb->get_row( $query, ARRAY_A );
 
 	        $map_data = array();
@@ -126,6 +126,8 @@ class WPGMapsImportExport{
 
 		global $wpdb;
 		global $wpgmza;
+        global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
+        global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
         
         $fileName = $wpdb->prefix.'wpgmza.csv';
         
@@ -141,7 +143,10 @@ class WPGMapsImportExport{
         $query = "SELECT *, {$wpgmza->spatialFunctionPrefix}X(latlng) AS lat, {$wpgmza->spatialFunctionPrefix}Y(latlng) AS lng FROM `{$wpdb->prefix}wpgmza`";
         
         $results = $wpdb->get_results( $query, ARRAY_A );
-        
+
+        WPGMZA\CustomFields::install();
+        $existing_custom_fields = $wpdb->get_results("SELECT `id`, `name` FROM $WPGMZA_TABLE_NAME_CUSTOM_FIELDS");
+
         $headerDisplayed = false;
         
         foreach ( $results as $data ) {
@@ -153,7 +158,13 @@ class WPGMapsImportExport{
 				
 				// Remove latlng spatial column
 				array_splice($keys, array_search('latlng', $keys), 1);
-				
+
+				if ( !empty($existing_custom_fields) ) {
+                    foreach ($existing_custom_fields as $existing_custom_field) {
+                        $keys[] = 'Custom Field: ' . $existing_custom_field->name;
+                    }
+                }
+
                 fputcsv($fh, $keys, ",", '"');
 				
                 $headerDisplayed = true;
@@ -162,7 +173,23 @@ class WPGMapsImportExport{
 			
 			// Remove latlng spatial column
 			unset($data['latlng']);
-		
+
+            if (!empty($existing_custom_fields)) {
+                $custom_fields = $wpdb->get_results("SELECT `field_id`, `value` FROM `$WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS` WHERE `object_id`=" . intval($data['id']));
+
+                foreach ($existing_custom_fields as $existing_custom_field) {
+                    $custom_field_data = '';
+                    foreach ($custom_fields as $i => $custom_field) {
+                        if ($custom_field->field_id == $existing_custom_field->id) {
+                            $custom_field_data = $custom_field->value;
+                            unset($custom_fields[$i]);
+                            break;
+                        }
+                    }
+                    $data[] = $custom_field_data;
+                }
+            }
+
             // Put the data into the stream
             fputcsv($fh, $data, ",", '"');
         }

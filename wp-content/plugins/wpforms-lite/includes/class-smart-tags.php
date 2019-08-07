@@ -258,8 +258,7 @@ class WPForms_Smart_Tags {
 		if ( ! empty( $query_vars[1] ) ) {
 
 			foreach ( $query_vars[1] as $key => $query_var ) {
-
-				$value   = ! empty( $_GET[ $query_var ] ) ? sanitize_text_field( $_GET[ $query_var ] ) : '';
+				$value   = ! empty( $_GET[ $query_var ] ) ? wp_unslash( sanitize_text_field( $_GET[ $query_var ] ) ) : ''; // phpcs:ignore
 				$content = str_replace( $query_vars[0][ $key ], $value, $content );
 			}
 		}
@@ -300,6 +299,7 @@ class WPForms_Smart_Tags {
 				$field_id    = $field_parts[0];
 				$field_key   = ! empty( $field_parts[1] ) ? sanitize_key( $field_parts[1] ) : 'value';
 				$value       = ! empty( $fields[ $field_id ][ $field_key ] ) ? wpforms_sanitize_textarea_field( $fields[ $field_id ][ $field_key ] ) : '';
+				$value       = apply_filters( 'wpforms_field_smart_tag_value', $value );
 				$content     = str_replace( '{field_id="' . $parts . '"}', $value, $content );
 			}
 		}

@@ -87,6 +87,8 @@ add_action('wp_ajax_wpgmza_custom_field_filter_get_filtered_marker_ids', 'WPGMZA
 
 function custom_field_filter_get_filtered_marker_ids() {
 	
+	// NB: No security needed, this endpoint does not add any data
+	
 	$controller = apply_filters('wpgmza_get_custom_field_filter_controlller', $_POST);
 	$filtered_marker_ids = $controller->getFilteredMarkerIDs();
 	

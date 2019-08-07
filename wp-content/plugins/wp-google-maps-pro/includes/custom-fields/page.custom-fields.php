@@ -30,6 +30,14 @@ class CustomFieldsPage
 		global $wpdb;
 		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
 		
+		check_ajax_referer('wpgmza', 'security');
+		
+		if(!current_user_can('administrator'))
+		{
+			http_response_code(401);
+			exit;
+		}
+		
 		$numFields = count($_POST['ids']);
 		
 		// Remove fields which aren't in POST from the DB
@@ -76,6 +84,9 @@ class CustomFieldsPage
 	protected function attributeTableHTML($field)
 	{
 		$attributes = json_decode($field->attributes);
+		
+		if(empty($attributes))
+			$attributes = array("" => "");
 		
 		?>
 		<input name="attributes[]" type="hidden"/>
@@ -125,7 +136,7 @@ class CustomFieldsPage
 			?>
 			<tr>
 				<td>
-					<input name="ids[]" value="<?php echo $obj->id; ?>"/>
+					<input readonly name="ids[]" value="<?php echo $obj->id; ?>"/>
 				</td>
 				<td>
 					<input name="names[]" value="<?php echo addslashes($obj->name); ?>"/>
@@ -189,6 +200,8 @@ class CustomFieldsPage
 	 */
 	public function html()
 	{
+		$nonce = wp_create_nonce('wpgmza');
+		
 		?>
 		
 		<form id="wpgmza-custom-fields" 
@@ -196,6 +209,7 @@ class CustomFieldsPage
 			method="POST">
 			
 			<input name="action" value="wpgmza_save_custom_fields" type="hidden"/>
+			<input name="security" value="<?php echo $nonce; ?>" type="hidden"/>
 			
 			<h1>
 				<?php

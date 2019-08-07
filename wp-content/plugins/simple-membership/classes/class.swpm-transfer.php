@@ -13,13 +13,15 @@ class SwpmTransfer {
         'company_name' => '', 'country' => '',
         'gender' => 'not specified',
         'membership_level' => '2');
+    
     public static $default_level_fields = array(
         'alias' => '', 'role' => '',
         'subscription_period' => '', 'subscription_duration_type' => SwpmMembershipLevel::NO_EXPIRY);
+    
     public static $admin_messages = array();
     private static $_this;
 
-    private function __contruct() {
+    private function __construct() {
         $this->message = get_option('swpm-messages');
     }
 

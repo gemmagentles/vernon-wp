@@ -5,11 +5,12 @@ namespace WPGMZA;
 if(!defined('WPGMZA_DIR_PATH'))
 	return;
 
-require_once(WPGMZA_DIR_PATH . 'includes/class.plugin.php');
-require_once(plugin_dir_path(__FILE__) . 'class.category.php');
-require_once(plugin_dir_path(__FILE__) . 'class.pro-rest-api.php');
-require_once(plugin_dir_path(__FILE__) . 'tables/class.pro-admin-marker-datatable.php');
-require_once(plugin_dir_path(__FILE__) . '3rd-party-integration/class.pro-gutenberg.php');
+wpgmza_require_once(WPGMZA_DIR_PATH . 'includes/class.plugin.php');
+wpgmza_require_once(plugin_dir_path(__FILE__) . 'class.category.php');
+wpgmza_require_once(plugin_dir_path(__FILE__) . 'class.pro-rest-api.php');
+wpgmza_require_once(plugin_dir_path(__FILE__) . 'class.pro-marker.php');
+wpgmza_require_once(plugin_dir_path(__FILE__) . 'tables/class.pro-admin-marker-datatable.php');
+wpgmza_require_once(plugin_dir_path(__FILE__) . '3rd-party-integration/class.pro-gutenberg.php');
 
 class ProPlugin extends Plugin
 {
@@ -24,7 +25,13 @@ class ProPlugin extends Plugin
 	{
 		$data = Plugin::getLocalizedData();
 		
+		$categoryTree = new CategoryTree();
+		
+		if(empty($data['ajaxnonce']))
+			$data['ajaxnonce'] = wp_create_nonce('wpgmza_ajaxnonce');
+		
 		return array_merge($data, array(
+			'categoryTreeData'		=> $categoryTree,
 			'defaultPreloaderImage'	=> plugin_dir_url(__DIR__) . 'images/AjaxLoader.gif',
 			'pro_version' 			=> $this->getProVersion()
 		));

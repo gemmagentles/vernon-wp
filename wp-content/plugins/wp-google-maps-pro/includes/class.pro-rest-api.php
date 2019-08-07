@@ -9,22 +9,36 @@ class ProRestAPI extends RestAPI
 		RestAPI::__construct();
 	}
 	
-	public function onRestAPIInit()
+	public function registerRoutes()
 	{
-		RestAPI::onRestAPIInit();
+		if(method_exists(get_parent_class($this), 'registerRoutes'))
+			RestAPI::registerRoutes(); // Failsafe for basic < 7.11.40 w/Pro >= 7.11.47 in which this method doesn't exist on the parent class
 		
-		register_rest_route(RestAPI::NS, '/marker-listing/', array(
-			'methods' => array('GET', 'POST'),
-			'callback' => array($this, 'markerListing')
+		if(!method_exists($this, 'registerRoute'))
+			return; // Legacy basic failsafe
+		
+		$this->registerRoute('/marker-listing/', array(
+			'methods'					=> array('GET'),
+			'callback' 					=> array($this, 'markerListing'),
+			'useCompressedPathVariable' => true
+		));
+		
+		$this->registerRoute('/marker-listing/', array(
+			'methods'					=> array('POST'),
+			'callback' 					=> array($this, 'markerListing')
 		));
 	}
 	
 	public function markerListing($request)
 	{
-		$request = $_REQUEST;
+		$request = $this->getRequestParameters();
 		$map_id = $request['map_id'];
 		
-		$class = '\\' . stripslashes( $request['phpClass'] );
+		if(RestAPI::isRequestURIUsingCompressedPathVariable())
+			$class = '\\' . $request['phpClass'];
+		else
+			$class = '\\' . stripslashes( $request['phpClass'] );
+		
 		$instance = $class::createInstance($map_id);
 		
 		if(!($instance instanceof MarkerListing))

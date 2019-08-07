@@ -401,9 +401,9 @@ ul.wpgmza_marker_list_class {
     width:20%;
 }
 .wpgmza-basic-listing-image-holder img { 
-    border:1px solid #ccc  !important;
-    padding:5px  !important;
-    float:right  !important;
+    border: 1px solid #ccc;
+    padding: 5px !important;
+    float: right !important;
     height: auto !important;
     width: 100% !important;
 }
@@ -664,11 +664,6 @@ ul.wpgmza_marker_list_class {
 	clear: none;
 }
 
-.wpgmza-directions-buttons
-{
-	font-size: 2em;
-}
-
 .wpgmza-directions-buttons i
 {
 	color: #bbb;
@@ -834,7 +829,7 @@ ul.wpgmza_marker_list_class {
     padding: 0px 0px 0px 7px;
 	position: absolute;
     color: #fff;
-    width: 100%;
+    width: auto;
 }
 
 .wpgmza-modern-marker-listing-marker-view *[data-custom-field-name]{
@@ -1476,80 +1471,7 @@ ul.wpgmza_marker_list_class {
     top: 70px;
 }
 
-#wpgmza-google-api-error-dialog
-{
-	width: 66vw;
-}
-
-#wpgmza-google-api-error-list,
-	#wpgmza-google-api-error-list *
-{
-	text-align: left;
-}
-
-#wpgmza-google-api-error-list
-{
-	list-style: none;
-}
-
-#wpgmza-google-api-error-list li
-{
-	background: ghostwhite;
-	padding: 0.5em;
-	margin: 0.5em;
-}
-
-#wpgmza-google-api-error-list li:before
-{
-	content: "\26D4";
-	color: red;
-}
-
-#wpgmza-google-api-error-dialog a
-{
-	color: blue;
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-documentation-buttons
-{
-	float: right;
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-documentation-buttons a
-{
-	color: #444444;
-    background: #F3F3F3;
-    border: 1px #DADADA solid;
-    padding: 5px 10px;
-    border-radius: 2px;
-    cursor: pointer;
-    font-size: 9pt;
-    outline: none;
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-documentation-buttons a:hover {
-    border: 1px #C6C6C6 solid;
-    box-shadow: 1px 1px 1px #EAEAEA;
-    color: #333333;
-    background: #F7F7F7;
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-documentation-buttons a:active {
-    box-shadow: inset 1px 1px 1px #DFDFDF;   
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-documentation-buttons a i
-{
-	font-weight: bold;
-	padding-right: 0.3em;
-}
-
-#wpgmza-google-api-error-dialog .wpgmza-front-end-only
-{
-	color: red;
-	font-size: 0.8em;
-}
-
+#
 .wpgmza-modern-marker-listing-buttons
 {
 	pointer-events: none;
@@ -1570,7 +1492,20 @@ ul.wpgmza_marker_list_class {
 	bottom: 0.5em;
 }
 
-.wpgmza-google-html-overlay
+.wpgmza-modern-store-locator button.wpgmza-use-my-location
 {
-	position: absolute;
+	padding: 0;
+	width: 21px;
+	height: 21px;
+	position: relative;
+	top: -3px;
+}
+
+.wpgmza-directions-step:before
+{
+	width: 1em;
+	height: 1em;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 }

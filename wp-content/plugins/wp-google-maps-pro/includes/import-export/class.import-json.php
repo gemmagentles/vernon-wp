@@ -166,7 +166,7 @@ class ImportJSON extends Import {
 		<h2><?php esc_html_e( 'Map Data', 'wp-google-maps' ); ?></h2>
 		</p>
 		<div class="switch"><input id="categories_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo empty( $this->file_data['categories'] ) ? 'disabled' : ( ! $doing_edit || $this->options['categories'] ? 'checked' : '' ); ?>><label for="categories_import"></label></div><?php esc_html_e( 'Categories', 'wp-google-maps' ); ?><br>
-		<div class="switch"><input id="customfields_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo empty( $this->file_data['customfields'] ) ? 'disabled' : ( ! $doing_edit || $this->options['customfields'] ? 'checked' : '' ); ?>><label for="customfields_import"></label></div><?php esc_html_e( 'Custom Fields', 'wp-google-maps' ); ?><br>
+		<div class="switch"><input id="customfields_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo ( ! $doing_edit || $this->options['customfields'] ? 'checked' : '' ); ?>><label for="customfields_import"></label></div><?php esc_html_e( 'Custom Fields', 'wp-google-maps' ); ?><br>
 		<div class="switch"><input id="markers_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo empty( $this->file_data['markers'] ) ? 'disabled' : ( ! $doing_edit || $this->options['markers'] ? 'checked' : '' ); ?>><label for="markers_import"></label></div><?php esc_html_e( 'Markers', 'wp-google-maps' ); ?><br>
 		<div class="switch"><input id="circles_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo empty( $this->file_data['circles'] ) ? 'disabled' : ( ! $doing_edit || $this->options['circles'] ? 'checked' : '' ); ?>><label for="circles_import"></label></div><?php esc_html_e( 'Circles', 'wp-google-maps' ); ?><br>
 		<div class="switch"><input id="polygons_import" class="map_data_import cmn-toggle cmn-toggle-round-flat" type="checkbox" <?php echo empty( $this->file_data['polygons'] ) ? 'disabled' : ( ! $doing_edit || $this->options['polygons'] ? 'checked' : '' ); ?>><label for="polygons_import"></label></div><?php esc_html_e( 'Polygons', 'wp-google-maps' ); ?><br>
@@ -445,7 +445,7 @@ class ImportJSON extends Import {
 				}
 			}
 
-			$this->import_custom_fields();
+			// $this->import_custom_fields();
 			$this->import_maps();
 			$this->import_categories();
 			$this->import_markers();
@@ -755,13 +755,17 @@ class ImportJSON extends Import {
 			return;
 
 		}
+		
+		CustomFields::install();
 
 		global $wpdb;
 		global $wpgmza_tblname;
 
-		foreach ( $this->file_data['markers'] as $marker ) {
+		foreach ( $this->file_data['markers'] as $fields ) {
+			
+			$custom_fields_data = null;
 
-			if ( ! isset( $marker['map_id'] ) || absint( $marker['map_id'] ) < 1 || ! isset( $this->map_id_map[ absint( $marker['map_id'] ) ] ) ) {
+			if ( ! isset( $fields['map_id'] ) || absint( $fields['map_id'] ) < 1 || ! isset( $this->map_id_map[ absint( $fields['map_id'] ) ] ) ) {
 
 				continue;
 
@@ -769,128 +773,36 @@ class ImportJSON extends Import {
 			
 			if(isset($this->options['geocode']))
 			{
-				if(!($result = $this->geocode($marker['address'])))
-					echo "<div>" . sprintf( __('Failed to geocode "%s"'), $marker['address'] ) . '</div>';
+				if(!($result = $this->geocode($fields['address'])))
+					echo "<div>" . sprintf( __('Failed to geocode "%s"'), $fields['address'] ) . '</div>';
 				
-				$marker['lat'] = $result[0];
-				$marker['lng'] = $result[1];
+				$fields['lat'] = $result[0];
+				$fields['lng'] = $result[1];
 			}
 			
-			$stmt = $wpdb->prepare( "INSERT INTO `$wpgmza_tblname`
-				(`map_id`,`address`,`description`,`pic`,`link`,`icon`,`lat`,`lng`,`anim`,`title`,`infoopen`,`category`,`approved`,`retina`,`type`,`did`,`other_data`,`latlng`)
-				VALUES (%d,%s,%s,%s,%s,%s,%f,%f,%d,%s,%d,%d,%d,%d,%d,%s,%s,POINT(%f,%f))",
-				$this->map_id_map[ absint( $marker['map_id'] ) ],
-				isset( $marker['address'] ) ? $marker['address'] : '',
-				isset( $marker['description'] ) ? $marker['description'] : '',
-				isset( $marker['pic'] ) ? $marker['pic'] : '',
-				isset( $marker['link'] ) ? $marker['link'] : '',
-				isset( $marker['icon'] ) ? $marker['icon'] : '',
-				isset( $marker['lat'] ) ? $marker['lat'] : 0,
-				isset( $marker['lng'] ) ? $marker['lng'] : 0,
-				isset( $marker['anim'] ) ? $marker['anim'] : 0,
-				isset( $marker['title'] ) ? $marker['title'] : __( 'New Imported Marker' , 'wp-google-maps' ),
-				isset( $marker['infoopen'] ) ? $marker['infoopen'] : 0,
-				isset( $marker['category'] ) ? $marker['category'] : 0,
-				isset( $marker['approved'] ) ? $marker['approved'] : 1,
-				isset( $marker['retina'] ) ? $marker['retina'] : 0,
-				isset( $marker['type'] ) ? $marker['type'] : 0,
-				isset( $marker['did'] ) ? $marker['did'] : '',
-				isset( $marker['other_data'] ) ? $marker['other_data'] : '',
-				isset( $marker['lat'] ) ? $marker['lat'] : 0,
-				isset( $marker['lng'] ) ? $marker['lng'] : 0
-			);
+			$fields['map_id'] = $this->map_id_map[ absint( $fields['map_id'] ) ];
 			
-			file_put_contents(ABSPATH . 'query.log', $stmt, FILE_APPEND);
-			
-			$success = $wpdb->query( $stmt );
-			
-			$marker_id = $wpdb->insert_id;
-			
-			if(!empty($marker['custom_fields_data']))
+			if(!empty($fields['custom_fields_data']))
 			{
+				$custom_fields_data = $fields['custom_fields_data'];
+				unset($fields['custom_fields_data']);
+			}
+			
+			unset($fields['id']);
+			
+			// Create the marker
+			$marker = Marker::createInstance($fields);
+			
+			// Custom field data
+			if(!empty($custom_fields_data))
+			{
+				$custom_fields = new CustomMarkerFields($marker->id);
 				
-				$custom_fields = new CustomMarkerFields($marker_id);
-				
-				foreach($marker['custom_fields_data'] as $key => $value)
+				foreach($custom_fields_data as $key => $value)
 					$custom_fields->{$key} = $value;
-				
 			}
 			
 		} // End foreach().
-	}
-
-	/**
-	 * Import custom fields.
-	 */
-	protected function import_custom_fields() {
-		
-		global $wpdb;
-		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
-
-		if ( ! $this->options['customfields'] || empty( $this->file_data['customfields'] ) ) {
-
-			return;
-
-		}
-		
-		CustomFields::install();
-		
-		// Get existing custom field names
-		$existing_custom_field_names = $wpdb->get_col("SELECT name FROM $WPGMZA_TABLE_NAME_CUSTOM_FIELDS");
-		
-		// Start building the insert query
-		$columns = $wpdb->get_results("SHOW COLUMNS FROM $WPGMZA_TABLE_NAME_CUSTOM_FIELDS");
-		
-		$column_names = array();
-		$placeholders = array();
-		
-		foreach($columns as $col)
-		{
-			if($col->Field == 'id')
-				continue; // Ignore ID
-			
-			$column_names[] = $col->Field;
-			
-			if(preg_match('/^int/', $col->Type))
-				$placeholders[] = '%d';
-			else
-				$placeholders[] = '%s';
-		}
-		
-		$imploded_columns = implode(', ', $column_names);
-		$imploded_placeholders = implode(', ', $placeholders);
-		
-		$qstr = "INSERT INTO $WPGMZA_TABLE_NAME_CUSTOM_FIELDS ($imploded_columns) VALUES ($imploded_placeholders)";
-		
-		foreach ( $this->file_data['customfields'] as $field )
-		{
-			$values = array();
-			
-			foreach($columns as $col) {
-				
-				if($col->Field == 'id')
-					continue; // Ignore ID
-				
-				if($col->Field == 'name')
-				{
-					$custom_field_name = $field[$col->Field];
-					
-					if(array_search($custom_field_name, $existing_custom_field_names) !== false)
-						continue 2; // Don't insert this field, it already exists
-				}
-				
-				if(isset($field[$col->Field]))
-					$values[] = $field[$col->Field];
-				else
-					$values[] = '';
-				
-			}
-			
-			$stmt = $wpdb->prepare($qstr, $values);
-			
-			$wpdb->query($stmt);
-		}
-		
 	}
 
 	/**
