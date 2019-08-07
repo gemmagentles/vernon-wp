@@ -124,7 +124,7 @@ function wpforms_admin_scripts() {
 		'addon_deactivate'                => esc_html__( 'Deactivate', 'wpforms-lite' ),
 		'addon_inactive'                  => esc_html__( 'Inactive', 'wpforms-lite' ),
 		'addon_install'                   => esc_html__( 'Install Addon', 'wpforms-lite' ),
-		'addon_error'                     => esc_html__( 'Could not install an addon. Please download from wpforms.com and install manually.', 'wpforms-lite' ),
+		'addon_error'                     => esc_html__( 'Could not install addon. Please download from wpforms.com and install manually.', 'wpforms-lite' ),
 		'plugin_error'                    => esc_html__( 'Could not install a plugin. Please download from WordPress.org and install manually.', 'wpforms-lite' ),
 		'addon_search'                    => esc_html__( 'Searching Addons', 'wpforms-lite' ),
 		'ajax_url'                        => admin_url( 'admin-ajax.php' ),
@@ -344,8 +344,8 @@ function wpforms_admin_upgrade_link( $medium = 'link' ) {
  */
 function wpforms_check_php_version() {
 
-	// Display for PHP below 5.4.
-	if ( version_compare( PHP_VERSION, '5.4', '>=' ) ) {
+	// Display for PHP below 5.6
+	if ( version_compare( PHP_VERSION, '5.5', '>=' ) ) {
 		return;
 	}
 
@@ -379,7 +379,7 @@ function wpforms_check_php_version() {
 		) .
 		'<br><br><em>' .
 		wp_kses(
-			__( '<strong>Please Note:</strong> Support for PHP 5.3 will be discontinued in 2019. After this, if no further action is taken, WPForms functionality will be disabled.', 'wpforms-lite' ),
+			__( '<strong>Please Note:</strong> Support for PHP 5.3 to 5.5 will be discontinued in 2019. After this, if no further action is taken, WPForms functionality will be disabled.', 'wpforms-lite' ),
 			array(
 				'strong' => array(),
 				'em'     => array(),

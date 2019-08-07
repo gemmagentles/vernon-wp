@@ -32,6 +32,13 @@
             "wpgmza"
         ]
     },
+    "wpgmza-elias-fano": {
+        "src": "js\/v8\/elias-fano.js",
+        "pro": false,
+        "dependencies": [
+            "wpgmza"
+        ]
+    },
     "wpgmza-event-dispatcher": {
         "src": "js\/v8\/event-dispatcher.js",
         "pro": false,
@@ -311,7 +318,7 @@
         "src": "js\/v8\/google-maps\/google-text-overlay.js",
         "pro": false,
         "dependencies": [
-            "wpgmza-text"
+            "wpgmza-google-text"
         ]
     },
     "wpgmza-google-text": {
@@ -416,6 +423,20 @@
             "wpgmza"
         ]
     },
+    "wpgmza-category-tree-node": {
+        "src": "js\/v8\/category-tree-node.js",
+        "pro": true,
+        "dependencies": [
+            "wpgmza-event-dispatcher"
+        ]
+    },
+    "wpgmza-category-tree": {
+        "src": "js\/v8\/category-tree.js",
+        "pro": true,
+        "dependencies": [
+            "wpgmza-category-tree-node"
+        ]
+    },
     "wpgmza-custom-field-filter-controller": {
         "src": "js\/v8\/custom-field-filter-controller.js",
         "pro": true,
@@ -437,6 +458,13 @@
             "wpgmza-map-object"
         ]
     },
+    "wpgmza-legacy-json-converter": {
+        "src": "js\/v8\/legacy-json-converter.js",
+        "pro": true,
+        "dependencies": [
+            "wpgmza"
+        ]
+    },
     "wpgmza-modern-directions-box": {
         "src": "js\/v8\/modern-directions-box.js",
         "pro": true,
@@ -455,6 +483,14 @@
         "src": "js\/v8\/modern-marker-listing-marker-view.js",
         "pro": true,
         "dependencies": [
+            "wpgmza-popout-panel"
+        ]
+    },
+    "wpgmza-modern-marker-listing": {
+        "src": "js\/v8\/marker-listings\/modern-marker-listing.js",
+        "pro": true,
+        "dependencies": [
+            "wpgmza-marker-listing",
             "wpgmza-popout-panel"
         ]
     },
@@ -560,7 +596,7 @@
         "src": "js\/v8\/marker-listings\/advanced-table-datatable.js",
         "pro": true,
         "dependencies": [
-            "wpgmza"
+            "wpgmza-data-table"
         ]
     },
     "wpgmza-advanced-table-marker-listing": {
@@ -581,15 +617,7 @@
         "src": "js\/v8\/marker-listings\/marker-listing.js",
         "pro": true,
         "dependencies": [
-            "wpgmza"
-        ]
-    },
-    "wpgmza-modern-marker-listing": {
-        "src": "js\/v8\/marker-listings\/modern-marker-listing.js",
-        "pro": true,
-        "dependencies": [
-            "wpgmza-marker-listing",
-            "wpgmza-popout-panel"
+            "wpgmza-event-dispatcher"
         ]
     },
     "wpgmza-ol-heatmap": {

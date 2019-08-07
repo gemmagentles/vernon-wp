@@ -1,6 +1,11 @@
 <?php
 // File field
 
+/* 
+ * This file is also included in:
+ * 	pro/render/qtranslate_file.php
+ */
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 

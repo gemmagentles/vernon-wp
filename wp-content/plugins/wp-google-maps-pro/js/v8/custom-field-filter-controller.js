@@ -41,8 +41,9 @@ jQuery(function($) {
 		$(container).find("button.wpgmza-reset-custom-fields").on("click", function(event) {
 			$(container).find("input:not([type='checkbox']):not([type='radio']), textarea").val("");
 			$(container).find("input[type='checkbox']").prop("checked", false);
-			$(container).find("option:selected").prop("selected", false);
-			$(container).find("option[value='*']").prop("selected", true);
+			//$(container).find("option:selected").prop("selected", false);
+			//$(container).find("option[value='*']").prop("selected", true);
+			$(container).find("select").val("");
 			self.onWidgetChanged();
 		});
 	};
@@ -155,6 +156,9 @@ jQuery(function($) {
 	};
 	
 	$(window).on("load", function(event) {
+		
+		if(WPGMZA.is_admin == 1)
+			return;
 		
 		$(".wpgmza_map").each(function(index, el) {
 			var map_id = parseInt( $(el).attr("id").match(/\d+/)[0] );

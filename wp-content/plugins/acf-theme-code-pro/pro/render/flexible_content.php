@@ -37,7 +37,17 @@ foreach ( $this->settings['layouts'] as $layout ) {
 	}
 
 	// create layout object that contains layout sub fields
-	$acftc_layout = new ACFTCP_Flexible_Content_Layout( $layout['name'], $this->nesting_level + 1, $sub_field_indent_count, $field_location, $layout_key, $this->id, $sub_fields );
+	$args = array(
+		'name' => $layout['name'],
+		'nesting_level' => $this->nesting_level + 1,
+		'indent_count' => $sub_field_indent_count,
+		'field_location' => $field_location,
+		'layout_key' => $layout_key,
+		'parent_field_id' => $this->id,
+		'sub_fields' => $sub_fields,
+		'exclude_html_wrappers' => $this->exclude_html_wrappers
+	);
+	$acftc_layout = new ACFTCP_Flexible_Content_Layout( $args );
 
 	// TODO Check for layout without a name
 
@@ -52,7 +62,7 @@ foreach ( $this->settings['layouts'] as $layout ) {
 
 	// if layout has sub fields
 	if ( !empty( $acftc_layout->sub_fields ) ) {
-		$acftc_layout->render_sub_fields();
+		echo $acftc_layout->get_sub_fields_html();
 	}
 	else {
 		// layout has no sub fields

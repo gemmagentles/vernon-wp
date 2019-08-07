@@ -19,9 +19,14 @@ jQuery(function($) {
 		
 		this.initMarkerListing();
 		this.initCustomFieldFilterController();
+		this.initUserLocationMarker();
 		
 		this.on("init", function(event) {
 			self.onInit(event);
+		});
+		
+		this.on("markersplaced", function(event) {
+			self.onMarkersPlaced(event);
 		});
 	}
 	
@@ -44,13 +49,37 @@ jQuery(function($) {
 		
 	});
 	
+	Object.defineProperty(WPGMZA.ProMap.prototype, "directionsEnabled", {
+		
+		get: function() {
+			
+			return this.settings.directions_enabled == 1;
+			
+		}
+		
+	});
+	
 	WPGMZA.ProMap.prototype.onInit = function(event)
 	{
+		var self = this;
+		
 		this.initPreloader();
+		
+		if(this.shortcodeAttributes.lat && this.shortcodeAttributes.lng)
+		{
+			var latLng = new WPGMZA.LatLng({
+				lat: this.shortcodeAttributes.lat,
+				lng: this.shortcodeAttributes.lng
+			});
+			
+			this.setCenter(latLng);
+		}
 		
 		if(this.shortcodeAttributes.cat)
 		{
 			var categories = this.shortcodeAttributes.cat.split(",");
+			
+			// Set filtering controls
 			var select = $("select[mid='" + this.id + "'][name='wpgmza_filter_select']");
 			
 			for(var i = 0; i < categories.length; i++)
@@ -59,7 +88,43 @@ jQuery(function($) {
 				select.val(categories[i]);
 			}
 			
-			this.markerFilter.update();
+			// Force category ID's in case no filtering controls are present
+			this.markerFilter.update({
+				categories: categories
+			});
+		}
+		
+		var zoom;
+		if(zoom = WPGMZA.getQueryParamValue("mzoom"))
+			this.setZoom(zoom);
+		
+		if(this.settings.automatically_pan_to_users_location == "1"){
+
+			WPGMZA.getCurrentPosition(function(result) {
+						
+				self.setCenter(
+					new WPGMZA.LatLng({
+						lat: result.coords.latitude,
+						lng: result.coords.longitude
+					})
+				);
+					
+			});
+		
+		}
+
+	}
+	
+	WPGMZA.ProMap.prototype.onMarkersPlaced = function(event)
+	{
+		// Clustering
+		if(window.wpgm_g_e && wpgm_g_e == 1 && this.settings.mass_marker_support == 1)
+		{
+			this.markerClusterer.addMarkers(this.markers);
+			
+			// Legacy support
+			if(typeof window.markerClusterer == "array")
+				window.markerClusterer[this.id] = clusterer;
 		}
 	}
 	
@@ -85,7 +150,6 @@ jQuery(function($) {
 	
 	WPGMZA.ProMap.prototype.initMarkerListing = function()
 	{
-		// TODO: Support carousel
 		var markerListingElement = $("[data-wpgmza-marker-listing][id$='_" + this.id + "']");
 		
 		// NB: This is commented out to allow the category filter to still function with "No marker listing". This will be rectified in the future with a unified filtering interface
@@ -96,6 +160,43 @@ jQuery(function($) {
 	WPGMZA.ProMap.prototype.initCustomFieldFilterController = function()
 	{
 		this.customFieldFilterController = WPGMZA.CustomFieldFilterController.createInstance(this.id);
+	}
+	
+	WPGMZA.ProMap.prototype.initUserLocationMarker = function()
+	{
+		var self = this;
+		
+		if(this.settings.show_user_location != 1)
+			return;
+		
+		var icon = this.settings.upload_default_ul_marker;
+		var options = {
+			id: WPGMZA.guid(),
+			animation: WPGMZA.Marker.ANIMATION_DROP
+		};
+		
+		if(icon && icon.length)
+			options.icon = icon;
+		
+		var marker = WPGMZA.Marker.createInstance(options);
+		
+		WPGMZA.watchPosition(function(position) {
+			
+			marker.setPosition({
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			});
+			
+			if(!marker.map)
+				self.addMarker(marker);
+			
+			if(!self.userLocationMarker)
+			{
+				self.userLocationMarker = marker;
+				self.trigger("userlocationmarkerplaced");
+			}
+			
+		});
 	}
 	
 	WPGMZA.ProMap.prototype.getMapObjectArrays = function()

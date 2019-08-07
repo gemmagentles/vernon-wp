@@ -19,7 +19,16 @@ jQuery(function($) {
 			parseFloat(this.lat)
 		]);
 		
-		this.element = $("<div class='ol-marker'><img src='" + WPGMZA.defaultMarkerIcon + "' alt=''/></div>")[0];
+		var img = $("<img alt=''/>")[0];
+		img.onload = function(event) {
+			if(self.map)
+				self.map.olMap.updateSize();
+		}
+		img.src = WPGMZA.defaultMarkerIcon;
+		
+		this.element = $("<div class='ol-marker'></div>")[0];
+		this.element.append(img);
+		
 		this.element.wpgmzaMarker = this;
 		
 		$(this.element).on("mouseover", function(event) {
@@ -29,7 +38,8 @@ jQuery(function($) {
 		this.overlay = new ol.Overlay({
 			element: this.element,
 			position: origin,
-			positioning: "bottom-center"
+			positioning: "bottom-center",
+			stopEvent: false
 		});
 		this.overlay.setPosition(origin);
 		
@@ -162,6 +172,11 @@ jQuery(function($) {
 		}
 		else
 			$(this.element).draggable({disabled: true});
+	}
+	
+	WPGMZA.OLMarker.prototype.setOpacity = function(opacity)
+	{
+		$(this.element).css({opacity: opacity});
 	}
 	
 	WPGMZA.OLMarker.prototype.onDragStart = function(event)

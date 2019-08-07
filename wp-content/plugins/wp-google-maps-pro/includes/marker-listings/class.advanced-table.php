@@ -10,6 +10,9 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 		
 		\WPGMZA\MarkerDataTable::__construct();
 		
+		// TODO: Review this. Is it needed? This may need to be added for broken DOM workaround
+		// $this->element->setAttribute('data-wpgmza-marker-listing', "true");
+		
 		// Temporary workaround for map ID not passed through datatables endpoint
 		if($map_id == null && isset($_REQUEST['wpgmzaDataTableRequestData']))
 			$map_id = (int)$_REQUEST['wpgmzaDataTableRequestData']['map_id'];
@@ -77,10 +80,13 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 			$result['category'] = __('Category', 'wp-google-maps');
 
 		if(empty($settings->wpgmza_settings_markerlist_address))
-			$result['address'] = __('Address',		'wp-google-maps');
+			$result['address'] = __('Address', 'wp-google-maps');
 		
 		if(empty($settings->wpgmza_settings_markerlist_description))
-			$result['description'] = __('Description',	'wp-google-maps');
+			$result['description'] = __('Description', 'wp-google-maps');
+		
+		if(empty($settings->wpgmza_settings_markerlist_link))
+			$result['link'] = __('Link', 'wp-google-maps');
 		
 		// TODO: It might be more efficient to put this in a class property in the constructor
 		$customFields = new \WPGMZA\CustomFields();
@@ -113,14 +119,30 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 		if(!$exclude_columns)
 			$exclude_columns = array();
 		
+		// TODO: Removed, this stops search from working with store locator, not quite sure why this was added in the first place.
+		//if(isset($input_params['overrideMarkerIDs']) || isset($input_params['markerIDs']))
+			//return "";
+		
+		if(empty($input_params['search']['value']))
+			return "";
+		
 		$exclude_columns = array_merge($exclude_columns, $this->getCustomFieldColumnNames());
 		
-		return \WPGMZA\MarkerDataTable::getSearchClause($input_params, $query_params, $exclude_columns);
+		$sql = \WPGMZA\MarkerDataTable::getSearchClause($input_params, $query_params, $exclude_columns);
+		
+		if(empty($sql))
+			return $sql;
+		
+		// TODO: This will be implemented as a trait in the future, when we drop support for PHP 5.3
+		$sql = \WPGMZA\ProAdminMarkerDataTable::appendCategoryAndCustomFieldSearchClauses($sql, $input_params, $query_params);
+		
+		return $sql;
 	}
 	
 	// TODO: This is duplicated from admin marker table. Use a trait when PHP 5.4 is the minimum version
 	protected function filterColumns(&$columns, $input_params)
 	{
+		global $wpgmza;
 		global $WPGMZA_TABLE_NAME_MARKERS;
 		global $WPGMZA_TABLE_NAME_CATEGORIES;
 		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES;
@@ -162,6 +184,25 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 							)
 						) AS category";
 							
+						break;
+					
+					case 'link':
+					
+						$text = __('More Details', 'wp-google-maps');
+						
+						if(!empty($wpgmza->settings->wpgmza_settings_infowindow_link_text))
+							$text = __($wpgmza->settings->wpgmza_settings_infowindow_link_text, 'wp-google-maps');
+					
+						$text = esc_sql($text);
+					
+						$columns[$key] = "(
+							CASE WHEN LENGTH(link) > 0
+							THEN CONCAT('<a target=\"_BLANK\" href=\"', REPLACE(link, '\"', '&quot;'), '\">$text</a>') 
+							ELSE ''
+							END
+						)
+						AS link";
+					
 						break;
 				}
 		}
@@ -313,6 +354,9 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 		for($index = 0; $index < count($records->data); $index++)
 		{
 			$last = count($records->data[$index]) - 1;
+			
+			if($this->map->order_markers_by == \WPGMZA\MarkerListing::ORDER_BY_DISTANCE && !empty($input_params['filteringParams']['center']))
+				$last--;
 			
 			$records->meta[$index]->id = $records->data[$index][$last];
 			unset($records->data[$index][$last]);

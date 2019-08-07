@@ -171,7 +171,7 @@ class Export {
 
 		$where = empty( $this->export_args['maps'] ) ? '1=1' : '`id` IN (' . implode( ',', $this->export_args['maps'] ) . ')';
 
-		$results = $wpdb->get_results( "SELECT * FROM `$wpgmza_tblname_maps` WHERE $where", ARRAY_A );
+		$results = $wpdb->get_results( "SELECT * FROM `$wpgmza_tblname_maps` WHERE $where AND active = '0'", ARRAY_A );
 		
 		foreach($results as $key => $array)
 		{

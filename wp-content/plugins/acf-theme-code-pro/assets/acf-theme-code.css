@@ -6,6 +6,7 @@
 	padding:0;
 }
 
+
 /* warpper for the intro / meta bar */
 .acftc-field-meta {
 	position: relative;
@@ -47,7 +48,7 @@
 	z-index: 1000;
 }
 
-.acftc-copy-all:hover, 
+.acftc-copy-all:hover,
 .acftc-field-code .acftc-field__copy:hover  {
 	opacity: 1;
 }
@@ -201,4 +202,93 @@ body.post-type-acf .acf-locations .acf-field select  {
 
 .acftc-copy-all:hover  {
 	opacity: 1;
+}
+
+#acf-admin-tool-acftcp_registration .inside {
+	margin:0 !important;
+	padding:0 !important;
+}
+
+#acf-admin-tool-acftcp_registration .inside p {
+	padding:5px 10px;
+	margin:10px 0;
+}
+
+#acf-admin-tool-acftcp_registration .acf-meta-box-wrap .acf-fields {
+	border: 0px !important;
+}
+
+/* hide all the registration divs to start */
+.registration-wrap {
+	display: none;
+}
+/* how the block registration to start */
+#acftc-register-block {
+	display: block;
+}
+
+.acf-registrations {
+	border-bottom:1px solid #e5e5e5;
+}
+
+.acf-block-code-hidden,
+.acf-option-code-hidden {
+	display: none;
+}
+
+#acf-admin-tool-acftcp_registration {
+	/* width: calc(100% + 16px);
+	margin-right: 0; */
+}
+
+#acf-admin-tool-acftcp_registration .hndle {
+	cursor: default !important;
+}
+
+#acf-admin-tool-acftcp_registration input[type=text] {
+	box-shadow: none;
+}
+.acftc-field--top {
+		border-top:1px solid #ebebeb;
+}
+
+.acftc-field {
+	background: #fafafa;
+	display: flex;
+	border-bottom: 1px solid #ebebeb;
+}
+
+.acftc-label {
+	height: 50px;
+	line-height: 46px;
+	float: left;
+	width: 20%;
+	margin: 0;
+	padding: 0 15px;
+	font-weight: bold;
+	border-right: 1px solid #ebebeb;
+}
+.acftc-label label:hover {
+	cursor: default !important;
+}
+
+.acftc-input {
+	display: inline;
+	width: 80%;
+	float: right;
+	padding:8px 15px;
+}
+.acftc-input input,
+.acftc-input select {
+	width: 100%;
+	line-height: 30px;
+	padding:0 10px;
+}
+
+/* styles for the block and repeater admin area */
+#acf-admin-tool-acftcp_location_registration .inside {
+	padding: 0 !important;
+}
+#acf-admin-tool-acftcp_location_registration .inside p {
+	padding:0 12px;
 }

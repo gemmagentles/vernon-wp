@@ -119,6 +119,9 @@ jQuery(function($) {
 					return;
 				
 				// Left click
+				if($(event.target).closest(".ol-marker").length)
+					return; // A marker was clicked, not the map. Do nothing
+				
 				self.trigger({
 					type: "click",
 					latLng: latLng
@@ -275,16 +278,21 @@ jQuery(function($) {
 		view.fit(extent, this.olMap.getSize());
 	}
 	
-	WPGMZA.OLMap.prototype.panTo = function(latLng)
+	WPGMZA.OLMap.prototype.panTo = function(latLng, zoom)
 	{
 		var view = this.olMap.getView();
-		view.animate({
+		var options = {
 			center: ol.proj.fromLonLat([
 				parseFloat(latLng.lng),
 				parseFloat(latLng.lat),
 			]),
 			duration: 500
-		});
+		};
+		
+		if(arguments.length > 1)
+			options.zoom = parseInt(zoom);
+		
+		view.animate(options);
 	}
 	
 	WPGMZA.OLMap.prototype.getZoom = function()

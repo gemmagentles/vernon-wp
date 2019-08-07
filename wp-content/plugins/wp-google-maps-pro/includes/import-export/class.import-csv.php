@@ -34,6 +34,15 @@ class ImportCSV extends Import {
 	 * @var array Key is header string, value is array index.
 	 */
 	protected $header_map = array();
+
+    /**
+     * Custom field map.
+     *
+     * Maps custom field headers to custom field ids.
+     *
+     * @var array Key is header string, value is custom field id.
+     */
+    protected $custom_field_map = array();
 	
 	/**
 	 * Error messages by handle
@@ -177,6 +186,9 @@ class ImportCSV extends Import {
 	 */
 	protected function parse_file() {
 
+        global $wpdb;
+        global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
+
 		// Convert newlines to <br/> and remove newlines, this ensures proper newline support
 		$lines = array();
 		
@@ -208,16 +220,64 @@ class ImportCSV extends Import {
 			ftruncate($fp, 0);
 		}
 		
-		$headers = array_map( 'strtolower', str_getcsv( $this->file_data[0] ) );
+		$headers = str_getcsv( $this->file_data[0] );
 		unset( $this->file_data[0] );
 
-		foreach ( $headers as $index => $header ) {
+        CustomFields::install();
+        $existing_custom_fields = $wpdb->get_results("SELECT `id`, `name` FROM $WPGMZA_TABLE_NAME_CUSTOM_FIELDS");
+
+        foreach ( $headers as $index => $header ) {
 
 			if ( strlen( $header ) > 0 ) {
 
-				$header = str_replace( ' ', '_', $header );
-				$this->header_map[ $header ] = $index;
+			    if ( false !== stristr( $header, 'Custom Field:' ) ) {
 
+                    $custom_field_name = trim( str_ireplace( 'Custom Field:', '', $header ) );
+                    $custom_field_found = false;
+                    if ( is_array( $existing_custom_fields ) ) {
+
+                        foreach ( $existing_custom_fields as $custom_fields ) {
+
+                            if ( strtolower( $custom_fields->name ) == strtolower( $custom_field_name ) ) {
+
+                                $this->custom_field_map[$index] = $custom_fields->id;
+                                $custom_field_found = true;
+                                break;
+
+                            }
+                        }
+                    }
+
+                    if ( !$custom_field_found ) {
+
+                        $insert_success = $wpdb->insert(
+                            $WPGMZA_TABLE_NAME_CUSTOM_FIELDS,
+                            array(
+                                'name' => $custom_field_name,
+                                'icon' => '',
+                                'attributes' => '{"":""}',
+                                'widget_type' => 'none',
+                            ),
+                            array(
+                                '%s',
+                                '%s',
+                                '%s',
+                                '%s',
+                            )
+                        );
+
+                        if ( $insert_success ) {
+
+                            $this->custom_field_map[$index] = $wpdb->insert_id;
+
+                        }
+                    }
+                } else {
+
+                    $header = strtolower( str_replace( ' ', '_', $header ) );
+                    $this->header_map[$header] = $index;
+
+                }
 			}
 		}
 		
@@ -283,7 +343,7 @@ class ImportCSV extends Import {
 	 * @return string Options html.
 	 */
 	public function admin_options() {
-
+		
 		$doing_edit = ! empty( $_POST['schedule_id'] ) ? true : false;
 
 		$source = !empty( $this->file ) ? esc_html( basename( $this->file ) ) : ( ! empty( $this->file_url ) ? esc_html( $this->file_url ) : '' );
@@ -629,6 +689,7 @@ class ImportCSV extends Import {
 
 		global $wpdb;
 		global $wpgmza_tblname;
+		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
 		global $wpgmza_tblname_maps;
 		global $wpgmza_tblname_circles;
 		global $wpgmza_tblname_datasets;
@@ -641,7 +702,7 @@ class ImportCSV extends Import {
 		switch ( $this->import_type ) {
 
 			case 'marker':
-				$wpdb->query( "DELETE FROM `$wpgmza_tblname` WHERE `map_id` IN ($applys_in)" );
+				$wpdb->query( "DELETE a, b FROM `$wpgmza_tblname` a LEFT JOIN `$WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS` b ON b.object_id = a.id WHERE a.map_id IN ($applys_in)" );
 				break;
 
 			case 'circle':
@@ -968,7 +1029,17 @@ class ImportCSV extends Import {
 					$this->failure_message_by_handle[ $status ] = 'No row was inserted';
 					$this->failure($status, $row_index);
 				}
-				
+
+				if ( !empty( $wpdb->insert_id ) ) {
+                    $custom_fields = new CustomMarkerFields($wpdb->insert_id);
+                    foreach ($marker as $index => $marker_data) {
+                        if (!empty($this->custom_field_map[$index])) {
+
+                            $custom_fields->{$this->custom_field_map[$index]} = $marker_data;
+
+                        }
+                    }
+                }
 			}
 			
 			$this->bail_if_near_time_limit();

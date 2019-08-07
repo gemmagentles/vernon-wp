@@ -1,6 +1,7 @@
 <?php
 // qTranslate File field
 
-// Same as ACF core file field
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 include( ACFTCP_Core::$plugin_path . 'render/file.php' );

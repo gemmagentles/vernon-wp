@@ -10,7 +10,7 @@ jQuery(function($) {
 		var self = this;
 		
 		// NB: Legacy compatibility
-		this.element = element = $("#wpgmza_marker_holder_" + map.id);
+		this.element = element = $("#wpgmza_marker_holder_" + map.id + ", #wpgmza_marker_list_" + map.id);
 		
 		WPGMZA.MarkerListing.apply(this, arguments);
 		

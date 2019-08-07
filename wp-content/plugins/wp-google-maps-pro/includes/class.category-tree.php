@@ -34,6 +34,7 @@ class CategoryTree extends CategoryTreeNode
 				)
 			) AS marker_count 
 			FROM $WPGMZA_TABLE_NAME_CATEGORIES
+			WHERE active=0
 			ORDER BY priority";
 		
 		$params = array();
@@ -77,7 +78,7 @@ class CategoryTree extends CategoryTreeNode
 			
 			if(!isset($nodesByID[$parentID]))
 			{
-				if(!empty($wpgmza->settings->developer_mode) && !(defined( 'DOING_AJAX' ) && DOING_AJAX))
+				if($wpgmza->isInDeveloperMode() && !(defined( 'DOING_AJAX' ) && DOING_AJAX))
 					trigger_error("Parent category $parentID missing", E_USER_NOTICE);
 				
 				// Drop the node

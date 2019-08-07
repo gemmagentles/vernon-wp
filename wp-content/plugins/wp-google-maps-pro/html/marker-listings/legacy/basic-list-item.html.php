@@ -6,4 +6,5 @@
 		<div class="wpgmza-basic-list-item wpgmza_div_title"></div>
 		<div class="wpgmza-basic-list-item wpgmza_div_address"></div>
 	</div>
+	<!-- No directions or links on basic list at the time of writing -->
 </div>

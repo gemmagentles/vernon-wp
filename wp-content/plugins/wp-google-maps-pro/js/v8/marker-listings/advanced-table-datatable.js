@@ -1,13 +1,15 @@
 /**
  * @namespace WPGMZA
  * @module AdvancedTableDataTable
- * @requires WPGMZA
+ * @requires WPGMZA.DataTable
  */
 jQuery(function($) {
 	
 	WPGMZA.AdvancedTableDataTable = function(element)
 	{
 		var self = this;
+		
+		this.element = element;
 		
 		WPGMZA.DataTable.apply(this, arguments);
 		
@@ -41,12 +43,15 @@ jQuery(function($) {
 			
 			var ths = $(self.element).find("thead th");
 			
-			if(settings.json.data.length == 0)
-				return;
+			if(!self.lastResponse || !self.lastResponse.meta)
+				return; // Not ready yet
+			
+			if(self.lastResponse.meta.length == 0)
+				return; // No results
 			
 			$(self.element).find("tbody>tr").each(function(index, tr) {
 				
-				var meta = settings.json.meta[index];
+				var meta = self.lastResponse.meta[index];
 				
 				$(tr).addClass("wpgmaps_mlist_row");
 				$(tr).attr("mid", meta.id);
@@ -71,13 +76,12 @@ jQuery(function($) {
 		var request = WPGMZA.DataTable.prototype.onAJAXRequest.apply(this, arguments);
 		
 		if(this.filteredMarkerIDs)
-			request.wpgmzaDataTableRequestData.markerIDs = this.filteredMarkerIDs.join(",");
+			request.markerIDs = this.filteredMarkerIDs.join(",");
 		
 		if(this.filteringParams)
-			request.wpgmzaDataTableRequestData.filteringParams = this.filteringParams;
+			request.filteringParams = this.filteringParams;
 		
-		request.wpgmzaDataTableRequestData.overrideListingOrderSettings = this.overrideListingOrderSettings;
-		
+		request.overrideListingOrderSettings = this.overrideListingOrderSettings;
 		
 		return request;
 	}

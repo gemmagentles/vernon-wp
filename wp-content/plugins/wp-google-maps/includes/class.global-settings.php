@@ -2,7 +2,8 @@
 
 namespace WPGMZA;
 
-
+if(!defined('ABSPATH'))
+	return;
 
 require_once(plugin_dir_path(__DIR__) . 'lib/codecabin/class.settings.php');
 
@@ -72,7 +73,7 @@ class GlobalSettings extends \codecabin\Settings
 			'engine' 				=> 'google-maps',
 			'google_maps_api_key'	=> get_option('wpgmza_google_maps_api_key'),
 			'default_marker_icon'	=> Marker::DEFAULT_ICON,
-			'developer_mode'		=> !empty($this->legacySettings['developer_mode'])
+			'developer_mode'		=> false
 		));
 		
 		return $settings;

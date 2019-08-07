@@ -2,7 +2,7 @@
 
 namespace WPGMZA;
 
-class CategoryTreeNode
+class CategoryTreeNode implements \JsonSerializable
 {
 	public $id;
 	public $name;
@@ -13,6 +13,18 @@ class CategoryTreeNode
 	public function __construct($parent=null)
 	{
 		$this->children = array();
+	}
+	
+	public function jsonSerialize()
+	{
+		return array(
+			'id' 			=> (int)$this->id,
+			'name'			=> $this->category_name,
+			'icon'			=> $this->category_icon,
+			'priority'		=> (int)$this->priority,
+			'children'		=> $this->children,
+			'marker_count'	=> (int)$this->marker_count
+		);
 	}
 	
 	public function getChildByID($id)
@@ -62,5 +74,27 @@ class CategoryTreeNode
 				$result[] = $node;
 			
 		return $result;
+	}
+	
+	public function toJsTreeStructure()
+	{
+		$obj = array(
+			'id'		=> $this->id
+		);
+		
+		if(!empty($this->category_name))
+			$obj['text'] = $this->category_name;
+		else if(!empty($this->name))
+			$obj['text'] = $this->name;
+		
+		if(!empty($this->children))
+		{
+			$obj['children'] = array();
+			
+			foreach($this->children as $child)
+				$obj['children'][] = $child->toJsTreeStructure();
+		}
+		
+		return $obj;
 	}
 }

@@ -72,12 +72,20 @@ jQuery(function($) {
 			if($(event.target).closest("[data-map-id]").attr("data-map-id") != self.map_id)
 				return;
 			
+			//var address = $(event.currentTarget).attr("wpgm_addr_field");
+			//$(self.element).find(".wpgmza-directions-to").val(address);
+			
 			self.open();
 			
 		});
 		
 		$(document.body).on("click", "#wpgmza_marker_list_" + map_id + " .wpgmza_gd", function(event) {
+			
+			var address = $(event.currentTarget).attr("wpgm_addr_field");
+			$(self.element).find(".wpgmza-directions-to").val(address);
+			
 			self.open();
+			
 		});
 		
 		$(this.element).find(".wpgmza-close").on("click", function(event) {

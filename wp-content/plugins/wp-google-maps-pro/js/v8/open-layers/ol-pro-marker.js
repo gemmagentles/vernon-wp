@@ -17,10 +17,16 @@ jQuery(function($) {
 	{
 		var icon = this.getIcon();
 		
+		if(!icon)
+			return;
+		
 		if(typeof icon == "object" && "url" in icon)
 			icon = icon.url;
 		else if(typeof icon != "string")
+		{
 			console.warn("Invalid marker icon");
+			return;
+		}
 		
 		$(this.element).find("img").attr("src", icon);
 	}

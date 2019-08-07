@@ -2,6 +2,9 @@
 
 namespace WPGMZA;
 
+if(!defined('ABSPATH'))
+	return;
+
 require_once(plugin_dir_path(__FILE__) . 'class.crud.php');
 
 /**
@@ -25,7 +28,7 @@ class Map extends Crud
 		switch($name)
 		{
 			case "storeLocatorDistanceUnits":
-				if(!empty($this->wpgmza_store_locator_distance))
+				if(!empty($this->store_locator_distance) && $this->store_locator_distance == 1)
 					return Distance::UNITS_MI;
 				else
 					return Distance::UNITS_KM;

@@ -254,6 +254,8 @@ function import_ajax_file_options() {
 			$extension = 'csv';
 
 		}
+		else
+			$extension = 'json';	// Assume JSON
 		
 	}
 	
@@ -330,6 +332,8 @@ function import_ajax_import() {
 			$extension = 'csv';
 
 		}
+		else if($extension == 'php')
+			$extension = 'json';	// Assume JSON
 	}
 
 	if ( ! empty( $extension ) /*&& array_key_exists( strtolower( $extension ), $import_mimes )*/ ) {
@@ -433,8 +437,10 @@ function import_cron_import( $schedule_id ) {
 
 		}
 	}
+	else
+		$extension = 'json';	// Assume JSON
 
-	if ( ! empty( $extension ) && array_key_exists( strtolower( $extension ), $import_mimes ) ) {
+	if ( ! empty( $extension ) /*&& array_key_exists( strtolower( $extension ), $import_mimes )*/ ) {
 
 		$import_class = 'WPGMZA\\Import' . strtoupper( $extension );
 
@@ -611,9 +617,11 @@ function import_ajax_schedule() {
 			$extension = 'csv';
 
 		}
+		else
+			$extension = 'json';	// Assume JSON
 	}
 
-	if ( ! empty( $extension ) && array_key_exists( strtolower( $extension ), $import_mimes ) ) {
+	if ( ! empty( $extension ) /*&& array_key_exists( strtolower( $extension ), $import_mimes )*/ ) {
 
 		$import_schedule = get_option( 'wpgmza_import_schedule' );
 
@@ -982,7 +990,7 @@ function import_export_admin_options() {
 	<div id="export-tab" style="display:none;">
 		<h2><?php esc_html_e( 'Export Data', 'wp-google-maps' ); ?></h2>
 		<p class="description" style="max-width:600px;">
-			<?php esc_html_e( 'Select which maps and map data youâ€™d like to export. Click the Export button to download a JSON file of the exported maps and their data.', 'wp-google-maps' ); ?>
+			<?php esc_html_e( 'Select which maps and map data you\'d like to export. Click the Export button to download a JSON file of the exported maps and their data.', 'wp-google-maps' ); ?>
 		</p>
 		<div style="margin:0 0 1em 0;width:100%;">
 			<?php if ( empty( $maps ) ) { ?>

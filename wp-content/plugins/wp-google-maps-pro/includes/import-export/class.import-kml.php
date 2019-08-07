@@ -690,6 +690,10 @@ class ImportKML extends Import {
 				$style_id = ltrim( $poly_placemark->styleUrl, '#' );
 				$style = $this->file_data->xpath( "//kml:Style[@id='$style_id']" );
 
+				if ( empty( $style ) ) {
+				    $style = $this->file_data->xpath( "//kml:Style[@id='{$style_id}-normal']" );
+                }
+
 				if ( isset( $style[0]->LineStyle->color ) ) {
 
 					$polygon['linecolor'] = substr( $style[0]->LineStyle->color, 6, 2 ) . substr( $style[0]->LineStyle->color, 4, 2 ) . substr( $style[0]->LineStyle->color, 2, 2 );
@@ -715,6 +719,34 @@ class ImportKML extends Import {
 					$polygon['opacity'] = 0;
 
 				}
+
+				$style_highlight = $this->file_data->xpath( "//kml:Style[@id='{$style_id}-highlight']" );
+
+                if ( isset( $style_highlight[0]->LineStyle->color ) ) {
+
+                    $polygon['ohlinecolor'] = substr( $style_highlight[0]->LineStyle->color, 6, 2 ) . substr( $style_highlight[0]->LineStyle->color, 4, 2 ) . substr( $style_highlight[0]->LineStyle->color, 2, 2 );
+                    $polygon['ohlineopacity'] = hexdec( substr( $style_highlight[0]->LineStyle->color, 0, 2 ) ) / 255;
+
+                }
+
+                if ( isset( $style_highlight[0]->PolyStyle->outline ) && ! $style_highlight[0]->PolyStyle->outline ) {
+
+                    $polygon['ohlineopacity'] = 0;
+
+                }
+
+                if ( isset( $style_highlight[0]->PolyStyle->color ) ) {
+
+                    $polygon['ohfillcolor'] = substr( $style_highlight[0]->PolyStyle->color, 6, 2 ) . substr( $style_highlight[0]->PolyStyle->color, 4, 2 ) . substr( $style_highlight[0]->PolyStyle->color, 2, 2 );
+                    $polygon['ohopacity'] = hexdec( substr( $style_highlight[0]->PolyStyle->color, 0, 2 ) ) / 255;
+
+                }
+
+                if ( isset( $style_highlight[0]->PolyStyle->fill ) && ! $style_highlight[0]->PolyStyle->fill ) {
+
+                    $polygon['ohopacity'] = 0;
+
+                }
 			}
 
 			$polys_xml = simplexml_load_string( $poly_placemark->asXML() );
@@ -763,7 +795,7 @@ class ImportKML extends Import {
 						'link'          => isset( $polygon['link'] ) ? $polygon['link'] : '',
 						'ohfillcolor'   => isset( $polygon['ohfillcolor'] ) ? $polygon['ohfillcolor'] : '57FF78',
 						'ohlinecolor'   => isset( $polygon['ohlinecolor'] ) ? $polygon['ohlinecolor'] : '737373',
-						'ohopacity'     => isset( $polygon['opacity'] ) ? $polygon['opacity'] : 0.7,
+						'ohopacity'     => isset( $polygon['ohopacity'] ) ? $polygon['ohopacity'] : 0.7,
 						'polyname'      => isset( $polygon['polyname'] ) ? $polygon['polyname'] . ( $poly_no > 0 ? ' ' . $poly_no : '' ) : __( 'New Imported Polygon', 'wp-google-maps' ),
 					), array(
 						'%d',

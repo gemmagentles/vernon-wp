@@ -307,8 +307,16 @@ class WPForms_Builder {
 		wp_enqueue_script(
 			'wpforms-builder',
 			WPFORMS_PLUGIN_URL . 'assets/js/admin-builder.js',
-			array( 'wpforms-utils', 'jquery-ui-sortable', 'jquery-ui-draggable', 'tooltipster', 'jquery-confirm' ),
+			array( 'wpforms-utils', 'wpforms-admin-builder-templates', 'jquery-ui-sortable', 'jquery-ui-draggable', 'tooltipster', 'jquery-confirm' ),
 			WPFORMS_VERSION
+		);
+
+		wp_enqueue_script(
+			'wpforms-admin-builder-templates',
+			WPFORMS_PLUGIN_URL . "assets/js/components/admin/builder/templates{$min}.js",
+			array( 'wp-util' ),
+			WPFORMS_VERSION,
+			true
 		);
 
 		$strings = array(
@@ -408,6 +416,9 @@ class WPForms_Builder {
 			'upload_image_remove'      => esc_html__( 'Remove Image', 'wpforms-lite' ),
 			'provider_add_new_acc_btn' => esc_html__( 'Add', 'wpforms-lite' ),
 			'pro'                      => wpforms()->pro,
+			'is_gutenberg'             => version_compare( get_bloginfo( 'version' ), '5.0', '>=' ) && ! is_plugin_active( 'classic-editor/classic-editor.php' ),
+			'cl_fields_supported'      => wpforms_get_conditional_logic_form_fields_supported(),
+
 		);
 		$strings = apply_filters( 'wpforms_builder_strings', $strings, $this->form );
 

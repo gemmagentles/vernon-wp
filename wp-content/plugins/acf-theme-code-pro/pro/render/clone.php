@@ -28,9 +28,18 @@ if ( !empty( $cloned_items) ) { // make sure at least one field has been selecte
 
             if ( $single_field_object ) {
 
-                $acftc_field = new ACFTCP_Field( $this->nesting_level, $this->indent_count, $this->location, $single_field_object, $this); // Last argument is $clone_parent_acftcp_group_ref
+                $args = array(
+                    'nesting_level' => $this->nesting_level,
+                    'indent_count' => $this->indent_count,
+                    'location_val' => $this->location,
+                    'field_data_obj' => $single_field_object,
+                    'clone_parent_acftcp_field' => $this,
+                    'exclude_html_wrappers' => $this->exclude_html_wrappers
+                );
 
-                $acftc_field->render_field();
+                $acftc_field = new ACFTCP_Field( $args );
+
+                echo $acftc_field->get_field_html();
 
             }
 
@@ -43,9 +52,17 @@ if ( !empty( $cloned_items) ) { // make sure at least one field has been selecte
 
             if ( $cloned_field_group_post_object ) {
 
-                $cloned_acftcp_group = new ACFTCP_Group( $cloned_field_group_post_object->ID, null, $this->nesting_level, $this->indent_count, $this->location, $this );
+                $args = array(
+                    'field_group_id' => $cloned_field_group_post_object->ID,
+                    'nesting_level' => $this->nesting_level,
+                    'indent_count' => $this->indent_count,
+                    'location' => $this->location,
+                    'clone_parent_acftcp_group' => $this,
+                    'exclude_html_wrappers' => $this->exclude_html_wrappers
+                );
+                $cloned_acftcp_group = new ACFTCP_Group( $args );
 
-                $cloned_acftcp_group->render_field_group();
+                echo $cloned_acftcp_group->get_field_group_html();
 
             }
 

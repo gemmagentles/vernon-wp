@@ -85,6 +85,7 @@ jQuery(function($) {
 	{
 		WPGMZA.MarkerListing.prototype.onHTMLResponse.call(this, html);
 		
+		$(this.element).trigger('destroy.owl.carousel');
 		$(this.element).owlCarousel(this.getOwlCarouselOptions());
 	}
 	

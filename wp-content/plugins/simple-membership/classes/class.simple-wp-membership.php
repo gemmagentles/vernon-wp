@@ -187,7 +187,8 @@ class SimpleWpMembership {
         //Initialize the settings menu hooks.
         $swpm_settings_obj->init_config_hooks();
         $addon_saved = filter_input(INPUT_POST, 'swpm-addon-settings');
-        if (!empty($addon_saved)) {
+        if (!empty($addon_saved) && current_user_can('manage_options')) {
+            check_admin_referer('swpm_addon_settings_section', 'swpm_addon_settings_section_save_settings');
             do_action('swpm_addon_settings_save');
         }
     }
@@ -228,6 +229,9 @@ class SimpleWpMembership {
             }
         }
         SwpmLog::log_auth_debug("Trying wp_signon() with username: " . $username, true);
+        
+        add_filter('wordfence_ls_require_captcha', '__return_false');//For Wordfence plugin's captcha compatibility
+        
         $user_obj = wp_signon(array('user_login' => $username, 'user_password' => $pass, 'remember' => $rememberme), is_ssl());
         if ($user_obj instanceof WP_User) {
             wp_set_current_user($user_obj->ID, $user_obj->user_login);
@@ -637,7 +641,7 @@ class SimpleWpMembership {
         wp_register_script('swpm.validationEngine-localization', SIMPLE_WP_MEMBERSHIP_URL . '/js/swpm.validationEngine-localization.js', array('jquery'));
     }
 
-    public static function enqueue_validation_scripts($add_params = false) {
+    public static function enqueue_validation_scripts($add_params = array()) {
         //Localization for jquery.validationEngine
         //This array will be merged with $.validationEngineLanguage.allRules object from jquery.validationEngine-en.js file
         $loc_data = array(
@@ -655,9 +659,12 @@ class SimpleWpMembership {
             'required' => array(
                 'alertText' => '* ' . SwpmUtils::_('This field is required'),
             ),
-            'SWPMUserName' => array(
-                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-*@'),
+            'strongPass' => array(
+                'alertText' => '* ' . SwpmUtils::_('Password must contain at least:').'<br>'.SwpmUtils::_('- a digit').'<br>'.SwpmUtils::_('- an uppercase letter').'<br>'.SwpmUtils::_('- a lowercase letter'),
             ),
+            'SWPMUserName' => array(
+                'alertText' => '* ' . SwpmUtils::_('Invalid Username').'<br>'.SwpmUtils::_('Usernames can only contain: letters, numbers and .-_*@'),
+            ),            
             'minSize' => array(
                 'alertText' => '* ' . SwpmUtils::_('Minimum '),
                 'alertText2' => SwpmUtils::_(' characters required'),
@@ -667,12 +674,21 @@ class SimpleWpMembership {
             ),
         );
 
-        if ($add_params !== false) {
+        $nonce=wp_create_nonce( 'swpm-rego-form-ajax-nonce' );
+
+        if ($add_params) {
             // Additional parameters should be added to the array, replacing existing ones
+            if (isset($add_params['ajaxEmailCall'])) {
+                if (isset($add_params['ajaxEmailCall']['extraData'])) {
+                    $add_params['ajaxEmailCall']['extraData'].='&nonce='.$nonce;
+                }
+            }
             $loc_data = array_replace_recursive($add_params, $loc_data);
         }
 
         wp_localize_script('swpm.validationEngine-localization', 'swpm_validationEngine_localization', $loc_data);
+
+        wp_localize_script('jquery.validationEngine-en', 'swpmRegForm', array('nonce' => $nonce));
 
         wp_enqueue_style('validationEngine.jquery');
         wp_enqueue_script('jquery.validationEngine');

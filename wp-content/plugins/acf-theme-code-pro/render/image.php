@@ -1,6 +1,12 @@
 <?php
 // Image field
 
+/* 
+ * This file is also included in:
+ * 	pro/render/qtranslate_image.php
+ * 	pro/render/image_aspect_ratio_crop.php
+ */
+
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 

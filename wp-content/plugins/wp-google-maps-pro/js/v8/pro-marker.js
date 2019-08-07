@@ -23,6 +23,10 @@ jQuery(function($) {
 		}
 		
 		WPGMZA.Marker.call(this, row);
+		
+		this.on("mouseover", function(event) {
+			self.onMouseOver(event);
+		});
 	}
 	
 	WPGMZA.ProMarker.prototype = Object.create(WPGMZA.Marker.prototype);
@@ -30,9 +34,51 @@ jQuery(function($) {
 	
 	WPGMZA.ProMarker.prototype.onAdded = function(event)
 	{
+		var m;
+		
 		WPGMZA.Marker.prototype.onAdded.call(this, event);
 		
 		this.updateIcon();
+		
+		if(this.map.storeLocator && this == this.map.storeLocator.marker)
+			return;
+		
+		if(this == this.map.userLocationMarker)
+			return;
+		
+		if(this.map.settings.store_locator_hide_before_search == 1)
+		{
+			this.isFiltered = true;
+			this.setVisible(false);
+			return;
+		}
+		
+		if(
+			WPGMZA.getQueryParamValue("markerid") == this.id
+			|| 
+			this.map.shortcodeAttributes.marker == this.id
+			)
+		{
+			this.openInfoWindow();
+			this.map.setCenter(this.getPosition());
+		}
+		
+		if("approved" in this && this.approved == 0)
+			this.setOpacity(0.6);
+	}
+	
+	WPGMZA.ProMarker.prototype.onClick = function(event)
+	{
+		WPGMZA.Marker.prototype.onClick.apply(this, arguments);
+		
+		if(this.map.settings.click_open_link == 1 && this.linkd && this.linkd.length)
+			window.open(this.linkd);
+	}
+	
+	WPGMZA.ProMarker.prototype.onMouseOver = function(event)
+	{
+		if(WPGMZA.settings.wpgmza_settings_map_open_marker_by == WPGMZA.ProInfoWindow.OPEN_BY_HOVER)
+			this.openInfoWindow();
 	}
 	
 	WPGMZA.ProMarker.prototype.getIcon = function()
@@ -46,7 +92,7 @@ jQuery(function($) {
 		}
 		
 		// NB: Redundant, this is now done on the DB
-		if(this.icon && this.icon.length || (window.google && this.icon instanceof google.maps.MarkerImage))
+		if(this.icon && this.icon.length || (window.google && window.google.maps && this.icon instanceof google.maps.MarkerImage))
 			return stripProtocol(this.icon);
 		
 		/*var categoryIcon = this.getIconFromCategory();
@@ -54,6 +100,10 @@ jQuery(function($) {
 			return stripProtocol(categoryIcon);*/
 		
 		var defaultIcon = this.map.settings.upload_default_marker;
+		if(defaultIcon && defaultIcon.length)
+			return stripProtocol(defaultIcon);
+		
+		defaultIcon = this.map.settings.default_marker;
 		if(defaultIcon && defaultIcon.length)
 			return stripProtocol(defaultIcon);
 		
@@ -97,15 +147,19 @@ jQuery(function($) {
 		this.updateIcon();
 	}
 	
-	WPGMZA.ProMarker.prototype.toJSON = function()
+	WPGMZA.ProMarker.prototype.openInfoWindow = function()
 	{
-		var result = WPGMZA.Marker.prototype.toJSON.call(this);
+		WPGMZA.Marker.prototype.openInfoWindow.apply(this);
 		
-		// This block will only set the categories in if the user hasn't selected all. If they have, no categories are sent as no selection means bypass category logic
-		if(this.categories.length != this.map.categories.length)
-			result.categories = this.categories.slice();
+		if(this.disableInfoWindow)
+			return false;
 		
-		return result;
+		if(this.map && this.map.userLocationMarker == this)
+			this.infoWindow.setContent(WPGMZA.localized_strings.my_location);
 	}
+	
+	
+	
+	
 	
 });

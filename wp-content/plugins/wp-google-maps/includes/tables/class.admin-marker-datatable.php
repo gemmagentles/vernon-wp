@@ -2,6 +2,9 @@
 
 namespace WPGMZA;
 
+if(!defined('ABSPATH'))
+	return;
+
 class AdminMarkerDataTable extends MarkerDataTable
 {
 	const ID_PLACEHOLDER = '__5d5621cf7b6bb90bfb7bda85a0df7293';
@@ -46,7 +49,7 @@ class AdminMarkerDataTable extends MarkerDataTable
 		
 		return 'REPLACE(\'
 		
-			<a title="Edit this marker" class="wpgmza_edit_btn button" id="' . $id_placeholder . '">
+			<a title="Edit this marker" class="wpgmza_edit_btn button" id="' . $id_placeholder . '" data-edit-marker-id="' . $id_placeholder . '">
 				<i class="fa fa-edit"> </i>
 			</a>
 			<a href="?page=wp-google-maps-menu&amp;action=edit_marker&amp;id=' . $id_placeholder . '" title="' 

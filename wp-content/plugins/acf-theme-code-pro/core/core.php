@@ -19,12 +19,12 @@ class ACFTCP_Core {
 		'color_picker',
 		'wysiwyg',
 		'oembed',
-		'radio',
 		'range',
 		'extended-color-picker',
 		'qtranslate_text',
 		'qtranslate_textarea',
-		'qtranslate_wysiwyg'
+		'qtranslate_wysiwyg',
+		'star_rating_field',
 	);
 
 	// Field types supported by TC Pro
@@ -53,9 +53,15 @@ class ACFTCP_Core {
 		'group',
 		'focal_point',
 		'button_group',
+		'radio',
 		'qtranslate_image',
 		'qtranslate_file',
-		'forms'
+		'forms',
+		'icon-picker',
+		'svg_icon',
+		'color_palette',
+		'swatch',
+		'image_aspect_ratio_crop',
 	);
 
 	/**
@@ -150,7 +156,7 @@ class ACFTCP_Core {
 	public function display_callback( $field_group_post_obj ) {
 
 		$locations_ui = new ACFTCP_Locations( $field_group_post_obj );
-		$locations_ui->render_locations();
+		echo $locations_ui->get_locations_html();
 
 	}
 
@@ -160,9 +166,11 @@ class ACFTCP_Core {
 
 		// grab the post type
 		global $post_type;
+		global $page;
+		$page = $GLOBALS['plugin_page'];
 
 		// if post type is an ACF field group
-		if( 'acf-field-group' == $post_type || 'acf' == $post_type ) {
+		if( 'acf-field-group' == $post_type || 'acf' == $post_type || 'acf-tools' == $page ) {
 
 			// Plugin styles
 			wp_enqueue_style( 'acftc_css', self::$plugin_url . 'assets/acf-theme-code.css', '' , self::$plugin_version);

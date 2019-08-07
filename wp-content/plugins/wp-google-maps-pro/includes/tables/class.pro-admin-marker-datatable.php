@@ -64,6 +64,8 @@ class ProAdminMarkerDataTable extends AdminMarkerDataTable
 		// Temporary workaround for map ID not passed through datatables endpoint
 		if(isset($_REQUEST['wpgmzaDataTableRequestData']))
 			$map_id = (int)$_REQUEST['wpgmzaDataTableRequestData']['map_id'];
+		else
+			$map_id = (int)$_REQUEST['map_id'];
 		
 		foreach($columns as $key => $value)
 		{
@@ -135,6 +137,65 @@ class ProAdminMarkerDataTable extends AdminMarkerDataTable
 		}
 		
 		return $columns;
+	}
+	
+	public static function appendCategoryAndCustomFieldSearchClauses($sql, $input_params, &$query_params)
+	{
+		global $wpdb;
+		global $WPGMZA_TABLE_NAME_MARKERS;
+		global $WPGMZA_TABLE_NAME_CATEGORIES;
+		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES;
+		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
+		
+		if(empty($input_params['search']['value']))
+			return $sql;
+			
+		$clauses = explode(' OR ', trim($sql, '()'));
+		$term = $input_params['search']['value'];
+		
+		// Categories
+		$categories = "(
+			
+			SELECT GROUP_CONCAT(category_name SEPARATOR ', ')
+			FROM $WPGMZA_TABLE_NAME_CATEGORIES
+			WHERE $WPGMZA_TABLE_NAME_CATEGORIES.id IN (
+				SELECT category_id
+				FROM $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES
+				WHERE marker_id=$WPGMZA_TABLE_NAME_MARKERS.id
+			)
+			
+		) LIKE %s";
+		
+		$clauses[] = $categories;
+		$query_params[] = "%%" . $wpdb->esc_like($term) . "%%";
+		
+		// Custom fields
+		$custom_fields = "(
+			
+			SELECT GROUP_CONCAT(value SEPARATOR ', ')
+			FROM $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS
+			WHERE $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS.object_id = $WPGMZA_TABLE_NAME_MARKERS.id
+			
+		) LIKE %s";
+		
+		$clauses[] = $custom_fields;
+		$query_params[] = "%%" . $wpdb->esc_like($term) . "%%";
+		
+		// Rebuild clause
+		$sql = "(" . implode(' OR ', $clauses) . ")";
+		
+		return $sql;
+	}
+	
+	// TODO: Implement this as a trait when we drop support for PHP 5.3
+	public function getSearchClause($input_params, &$query_params, $exclude_columns=null)
+	{
+		$sql = AdminMarkerDataTable::getSearchClause($input_params, $query_params, $exclude_columns);
+		
+		if(empty($input_params['search']['value']))
+			return $sql;
+		
+		return ProAdminMarkerDataTable::appendCategoryAndCustomFieldSearchClauses($sql, $input_params, $query_params);
 	}
 }
 

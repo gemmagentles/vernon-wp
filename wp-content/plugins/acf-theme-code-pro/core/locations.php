@@ -160,8 +160,8 @@ class ACFTCP_Locations {
 	* Exclude location rules that aren't really locations
 	* (they relate to the backend visiblity of the field group)
 	*
-	* @param Location rule
-	* @return Boolean
+	* @param Array $location_rule
+	* @return bool 
 	*
 	* Requires $this->$locations_excluded
 	*
@@ -174,252 +174,257 @@ class ACFTCP_Locations {
 
 
 	/**
-	* Render the locations
-	*/
-	public function render_locations() {
+	 * Get locations HTML
+	 * 
+	 * @return string
+	 */
+	public function get_locations_html() {
 
-		// Get field group without a location argument
-		$parent_field_group= new ACFTCP_Group( $this->field_group_post_ID );
+		$args = array(
+			'field_group_id' => $this->field_group_post_ID
+			// no location argument included
+		);
+		$parent_field_group= new ACFTCP_Group( $args );
 
 		// If no fields in field group: display notice
 		// (needs to be done at this level because ACFTC Group class is used recursively)
-		if ( empty( $parent_field_group->fields ) ) {
-			$this->render_no_fields_notice();
-			return;
+		if ( empty( $parent_field_group->fields ) ) { 
+			
+			ob_start();?>
+
+			<div class="acftc-intro-notice">
+				<p>Create some fields and publish the field group to generate theme code.</p>
+			</div>
+			
+			<?php return ob_get_clean();
 		}
 
 		// If all locations are excluded: render fields without location ui
 		// elements (eg. only the Current User location is selected)
-		if ( empty( $this->location_rules) ) {
-			$parent_field_group->render_field_group();
-			return;
+		if ( empty( $this->location_rules ) ) {
+			return $parent_field_group->get_field_group_html();
 		}
+
+		ob_start();
 
 		// If more than one location: render location select
 		if ( count( $this->location_rules) > 1 ) {
-			$this->render_location_select();
+			echo $this->get_location_select_html();
 		}
 
-		// Render all fields for every location
-		foreach ( $this->location_rules as $key => $location_rule ) {
+		// Render ALL fields for every location
+		foreach ( $this->location_rules as $key => $location_rule ) :
 
-			$location = $location_rule['param'];
+			$args = array(
+				'field_group_id' => $this->field_group_post_ID,
+				'location' => $location_rule['param'] // included this time
+			);
+			$parent_field_group = new ACFTCP_Group( $args ); 
+			
+			// Wrapping div used for show and hide functionality
 
-			// Get the parent field group with location argument included
-			$parent_field_group = new ACFTCP_Group( $this->field_group_post_ID, null, 0 , 0 , $location );
+?>
+<div id="acftc-group-<?php echo $key; ?>" class="location-wrap">
+<?php 
 
-			// Open location wrapper (used for show and hide functionality)
-			echo '<div id="acftc-group-'. $key .'" class="location-wrap">';
+				echo $this->get_location_helper_html( $location_rule );
+				
+				if ( $location_rule['param'] != 'block' ) { 
+					echo $parent_field_group->get_field_group_html(); 
+				}
+				
+?>
+</div>
+<?php
 
-				// Render the location variables block
-				$this->render_location_variables( $location_rule );
+		endforeach;
 
-				// Render the field group
-				$parent_field_group->render_field_group();
-
-			// Close location wrapper
-			echo '</div>';
-
-		}
+		return ob_get_clean();
 
 	}
 
 
 	/**
-	 * Display no fields notice
+	 * Get location option text for use in location select
+	 * 
+	 * @param Array $location_rule
+	 * Array (
+	 *	[param] => block
+	 *	[operator] => ==
+	 *	[value] => acf/example
+	 * ) 
+	 * @return string 
+	 * 
 	 */
-	private function render_no_fields_notice() {
-		echo '<div class="acftc-intro-notice"><p>Create some fields and publish the field group to generate theme code.</p></div>';
+	private function get_location_option_text( $location_rule ) { 
+
+		if ( !$location_rule ) {
+			return;
+		}
+
+		$location_name_title_case = ucwords( str_replace('_', ' ', $location_rule['param'] ) );
+
+		if ( empty( $location_rule['value'] ) ) {
+			$location_value_no_dashes = 'unknown';
+		} else {
+			$location_value_no_dashes = str_replace( '-' , ' ', $location_rule['value'] );
+		}
+		
+		$location_value_clean = str_replace( array( 'category:', 'acf/' ) , '', $location_value_no_dashes );
+		$location_value_title_case = ucwords( $location_value_clean );
+
+		$location_operator_text = ($location_rule['operator'] === '==' ) ? '' : 'Not ';
+
+		return "{$location_name_title_case} ({$location_operator_text}{$location_value_title_case})";
+
 	}
 
 
 	/**
 	 * Render header for location select
+	 * 
+	 * @return string 
 	 */
-	private function render_location_select() {
+	private function get_location_select_html() { 
+		
+		ob_start();
+		?>
+<div class="inside acf-fields -left acf-locations">
+	<div class="acf-field acf-field-select" data-name="style" data-type="select">
+		<div class="acf-label">
+			<label for="acf_field_group-style">Location</label>
+		</div>
+		<div class="acf-input">
+			<select id="acftc-group-option" class="" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">
+<?php foreach ( $this->location_rules as $key => $location_rule ) : ?>
+				<option value="acftc-group-<?php echo $key; ?>"><?php echo $this->get_location_option_text( $location_rule ); ?></option>
+<?php endforeach; ?>
+			</select>
+		</div>
+	</div>
+</div>
 
-		// Location select opening HTML
-		echo '<div class="inside acf-fields -left acf-locations">';
-		echo '<div class="acf-field acf-field-select" data-name="style" data-type="select">';
-		echo '<div class="acf-label"><label for="acf_field_group-style">Location</label></div>';
-		echo '<div class="acf-input">';
-		echo '<select id="acftc-group-option" class="" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">';
-
-		foreach ( $this->location_rules as $key => $location_rule ) {
-
-			// Location paramater
-			$location_param = $location_rule['param'];
-
-			// Remove underscores and convert to uppercase (options_page becomes Options Page)
-			$location_param = ucwords( str_replace('_', ' ', $location_param ) );
-
-			// Location value
-			$location_value = $location_rule['value'];
-
-			// Remove dashes and convert to uppercase
-			$location_value = str_replace('-', ' ', $location_value );
-
-			// Remove "category:" and convert to uppercase (post becomes Post)
-			$location_value = ucwords( str_replace('category:', '', $location_value )); // TODO: Wrap this string replace in a conditional that checks for the relevant location type
-
-			// Create location labels
-			if ( $location_rule['operator'] === '==' ) {
-
-				// Equal to
-				$location_label = $location_param.' ('.$location_value.')';
-
-			} else {
-
-				// Not equal to
-				$location_label = $location_param.' (Not '.$location_value.')';
-
-			}
-
-			// Add option to location select
-			echo '<option value="acftc-group-'.$key.'">'.$location_label.'</option>';
-
-		}
-
-		// Location select closing HTML
-		echo '</select>';
-		echo '</div>';
-		echo '</div>';
-		echo '</div>';
-
+<?php 
+		return ob_get_clean(); 
 	}
 
 	/**
-	* Render location variables block
-	*
-	* @param A location rule array
-	*/
-	private function render_location_variables( $location_rule ) {
+	 * Get html for location helper
+	 *
+	 * @param Array $location_rule
+	 * Array (
+	 *	[param] => block
+	 *	[operator] => ==
+	 *	[value] => acf/example
+	 * )
+	 * @return string 
+	 */
+	private function get_location_helper_html( $location_rule ) { 
 
-		$location = $location_rule['param'];
+		$location_helper_title = $this->get_location_helper_title( $location_rule );
+		$location_helper_php = $this->get_location_helper_php( $location_rule );
+		
+		if ( !$location_helper_title || !$location_helper_php ) {
+			return "";
+		}
+		
+		ob_start();
 
-		// Setup a string for the location meta
-		$location_meta = '';
+?>
+	<div class="acftc-field-meta">
+		<span class="acftc-field-meta__title" data-pseudo-content="<?php echo $location_helper_title; ?>"></span>
+	</div>
 
-		// User Form
-		if ($location == 'user_form' ) {
+	<div class="acftc-field-code">
+		<a href="#" class="acftc-field__copy acf-js-tooltip" title="Copy to Clipboard"></a>
+		<pre class="line-numbers"><code class="language-php"><?php echo $location_helper_php; ?></code></pre>
+	</div>
+<?php
 
-			$location_meta = 'User Variables';
+		return ob_get_clean();
+		
+	}
 
-			$location_php  = htmlspecialchars("<?php") . "\n";
+	/**
+	 * Get location helper block title
+	 * 
+	 * @param Array $location_rule
+	 * Array (
+	 *	[param] => block
+	 *	[operator] => ==
+	 *	[value] => acf/example
+	 * )
+	 * @return string/false
+     *
+	 */
+	private function get_location_helper_title( $location_rule ) { 
 
-			$location_php .= htmlspecialchars("// Define user ID") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with ID of user to be queried") . "\n";
-			$location_php .= htmlspecialchars("\$user_id = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Example: Get ID of current user") . "\n";
-			$location_php .= htmlspecialchars("// \$user_id = get_current_user_id();") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Define prefixed user ID") . "\n";
-			$location_php .= htmlspecialchars("\$user_acf_prefix = 'user_';") . "\n";
-			$location_php .= htmlspecialchars("\$user_id_prefixed = \$user_acf_prefix . \$user_id;") . "\n";
-
-			$location_php .= htmlspecialchars("?>") . "\n";
-
-		// Attachment
-		} elseif ($location == 'attachment') {
-
-			$location_meta = 'Attachment Variables';
-
-			$location_php  = htmlspecialchars("<?php") . "\n";
-
-			$location_php .= htmlspecialchars("// Define attachment ID") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with ID of attachment to be queried") . "\n";
-			$location_php .= htmlspecialchars("\$attachment_id = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Example: Get attachment ID (for use in attachment.php)") . "\n";
-			$location_php .= htmlspecialchars("// \$attachment_id = \$post->ID;") . "\n";
-
-			$location_php .= htmlspecialchars("?>") . "\n";
-
-		// Taxonomy Term
-		} elseif ($location == 'taxonomy') {
-
-			$location_meta = 'Taxonomy Term Variables';
-			$taxonomy = $location_rule['value'];
-
-			$location_php  = htmlspecialchars("<?php") . "\n";
-
-			$location_php .= htmlspecialchars("// Define taxonomy prefix") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with the name of the taxonomy eg 'category'") . "\n";
-			$location_php .= htmlspecialchars("\$taxonomy_prefix = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Define term ID") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with ID of term to be queried eg '123' ") . "\n";
-			$location_php .= htmlspecialchars("\$term_id = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Define prefixed term ID") . "\n";
-			$location_php .= htmlspecialchars("\$term_id_prefixed = \$taxonomy_prefix .'_'. \$term_id;") . "\n";
-
-			$location_php .= htmlspecialchars("?>") . "\n";
-
-		// Comment
-		} elseif ($location == 'comment') {
-
-			$location_meta = 'Comment Variables';
-
-			$location_php  = htmlspecialchars("<?php") . "\n";
-
-			$location_php .= htmlspecialchars("// Define comment ID") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with ID of comment to be queried") . "\n";
-			$location_php .= htmlspecialchars("\$comment_id = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Define prefixed comment ID") . "\n";
-			$location_php .= htmlspecialchars("\$comment_acf_prefix = 'comment_';") . "\n";
-			$location_php .= htmlspecialchars("\$comment_id_prefixed = \$comment_acf_prefix . \$comment_id;") . "\n";
-
-			$location_php .= htmlspecialchars("?>") . "\n";
-
-		// Widget
-		} elseif ($location == 'widget') {
-
-			$location_meta = 'Widget Variables';
-
-			$location_php  = htmlspecialchars("<?php") . "\n";
-
-			$location_php .= htmlspecialchars("// Define widget ID") . "\n";
-			$location_php .= htmlspecialchars("// Replace NULL with ID of widget to be queried eg 'pages-2' or \$args['widget_id']") . "\n";
-			$location_php .= htmlspecialchars("\$widget_id = NULL;") . "\n\n";
-
-			$location_php .= htmlspecialchars("// Define prefixed widget ID") . "\n";
-			$location_php .= htmlspecialchars("\$widget_acf_prefix = 'widget_';") . "\n";
-			$location_php .= htmlspecialchars("\$widget_id_prefixed = \$widget_acf_prefix . \$widget_id;") . "\n";
-
-			$location_php .= htmlspecialchars("?>") . "\n";
-
-
-		// Else location variables block is not required
-		} else {
-
-			return;
-
+		if ( empty( $location_rule ) ) {
+			return false;
 		}
 
-		// Setup a new code block - this type for the intro
-		// Setup a div with the meta data - this is used for the heading
-		echo '<div class="acftc-field-meta">';
-		echo '<span class="acftc-field-meta__title" data-pseudo-content="'.$location_meta.'"></span>';
-		echo '</div>';
+		$location_slug = $location_rule['param'];
 
-		// Open div for field code wrapper (used for the button etc)
-		echo '<div class="acftc-field-code">';
+        switch ( $location_slug ) {
 
-		// Copy button
-		echo '<a href="#" class="acftc-field__copy acf-js-tooltip" title="Copy to Clipboard"></a>';
+            case 'user_form':
+                return 'User Variables';
+                break;
+            
+            case 'attachment':
+                return 'Attachment Variables';
+                break;
+               
+            case 'taxonomy':
+                return 'Taxonomy Term Variables';
+                break;
 
-		// PHP code block for field
-		echo '<pre class="line-numbers"><code class="language-php">';
+            case 'comment':
+                return 'Comment Variables';
+                break;
+                
+            case 'widget':
+                return 'Widget Variables';
+                break;
 
-		// echo the php for this location
-		echo $location_php;
-
-		// Close PHP code block
-		echo '</div></code></pre>';
+			case 'block':
+				return 'Block Template';
+                break;                
+                            
+			default:
+				return false;
+				break;
+		}
 
 	}
 
+	
+	/**
+	 * Get location helper php
+	 *
+	 * @param Array $location_rule
+	 * Array (
+	 *	[param] => block
+	 *	[operator] => ==
+	 *	[value] => acf/example
+	 * )
+	 * @return string
+	 */
+	private function get_location_helper_php( $location_rule ) { 
+		
+		// TODO Block partial is dependent on $location_rule
+		
+		ob_start();
+
+		$location_slug = $location_rule['param'];
+
+		$location_helper_partial = ACFTCP_Core::$plugin_path . 'pro/render/location-helpers/' . $location_slug . '.php';
+
+		if ( file_exists( $location_helper_partial ) ) {
+			include( $location_helper_partial );
+		} 
+
+		return ob_get_clean();
+
+	}
 }

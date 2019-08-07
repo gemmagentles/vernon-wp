@@ -172,7 +172,7 @@
 			<?php esc_html_e( 'Export Data', 'wp-google-maps' ); ?>
 		</h2>
 		<p class="description" style="max-width:600px;">
-			<?php esc_html_e( 'Select which maps and map data youâ€™d like to export. Click the Export button to download a JSON file of the exported maps and their data.', 'wp-google-maps' ); ?>
+			<?php esc_html_e( 'Select which maps and map data you\'d like to export. Click the Export button to download a JSON file of the exported maps and their data.', 'wp-google-maps' ); ?>
 		</p>
 		<div style="margin:0 0 1em 0;width:100%;">
 			<?php if ( empty( $maps ) ) { ?>

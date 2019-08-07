@@ -31,6 +31,8 @@ jQuery(function($) {
 		this.approved = 1;
 		this.pic = null;
 		
+		this.disableInfoWindow = false;
+		
 		WPGMZA.MapObject.apply(this, arguments);
 		
 		if(row && row.heatmap)
@@ -133,8 +135,6 @@ jQuery(function($) {
 	{
 		var self = this;
 		
-		// this.infoWindow = WPGMZA.InfoWindow.createInstance(this);
-		
 		this.addEventListener("click", function(event) {
 			self.onClick(event);
 		});
@@ -149,6 +149,9 @@ jQuery(function($) {
 		
 		if(this.map.settings.marker == this.id)
 			self.trigger("select");
+		
+		if(this.infoopen == "1")
+			this.openInfoWindow();
 	}
 	
 	WPGMZA.Marker.prototype.initInfoWindow = function()
@@ -172,6 +175,10 @@ jQuery(function($) {
 			return;
 		}
 		
+		// NB: This is a workaround for "undefined" in InfoWindows (basic only) on map edit page
+		if(WPGMZA.currentPage == "map-edit" && !WPGMZA.pro_version)
+			return;
+		
 		if(this.map.lastInteractedMarker)
 			this.map.lastInteractedMarker.infoWindow.close();
 		this.map.lastInteractedMarker = this;
@@ -187,7 +194,7 @@ jQuery(function($) {
 	 */
 	WPGMZA.Marker.prototype.onClick = function(event)
 	{
-
+		
 	}
 	
 	/**
@@ -377,6 +384,11 @@ jQuery(function($) {
 	 * @param {object} options An object containing the options to be set
 	 */
 	WPGMZA.Marker.prototype.setOptions = function(options)
+	{
+		
+	}
+	
+	WPGMZA.Marker.prototype.setOpacity = function(opacity)
 	{
 		
 	}
