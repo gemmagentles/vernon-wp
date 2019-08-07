@@ -63,6 +63,9 @@ jQuery(function($) {
 			if(!(event.target instanceof WPGMZA.Marker))
 				return;
 			
+			if(event.target == self.map.userLocationMarker || event.target == self.map.storeLocatorMarker)
+				return;
+			
 			self.open(event.target.id);
 			
 		});
@@ -116,7 +119,36 @@ jQuery(function($) {
 		WPGMZA.PopoutPanel.prototype.open.apply(this, arguments);
 		
 		var self = this;
-		var marker_data = wpgmaps_localize_marker_data[this.map_id][marker_id];
+		
+		var marker_data;
+        var data = wpgmaps_localize_marker_data[this.map.id];
+		
+		if(typeof data == "array")
+			for(var i = 0; i < data.length; i++)
+			{
+				if(data[i].marker_id == marker_id)
+				{
+					marker_data = data[i];
+					
+					break;
+				}
+			}
+		else if(typeof data == "object")
+			for(var key in data)
+			{
+				if(data[key].marker_id == marker_id)
+				{
+					marker_data = data[key];
+					
+					break;
+				}
+			}
+		
+		if(!marker_data)
+		{
+			console.warn("Failed to find marker data for marker " + mapObject.id);
+			return false;
+		}
 		
 		this.focusedMarker = marker_array[this.map_id][marker_id];
 			
@@ -153,7 +185,13 @@ jQuery(function($) {
 			{
 				case "pic":
 					$(el).attr("src", value);
+					$(el).attr("alt", marker_data['title']);
 					// $(el).css({visibility: (value == "" ? "hidden" : "visible")});
+					
+					if(marker_data['pic'].length)
+						$(el).show();
+					else
+						$(el).hide();
 					
 					break;
 				

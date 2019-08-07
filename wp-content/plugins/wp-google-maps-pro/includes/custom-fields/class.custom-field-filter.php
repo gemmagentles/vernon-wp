@@ -22,6 +22,9 @@ class CustomFieldFilter
 		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
 		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
 		
+		// TODO: Not sure why this has to be set here, seems some things are out of sequence
+		$WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS = $wpdb->prefix . "wpgmza_markers_has_custom_fields";
+		
 		if(!is_numeric($field_id))
 			throw new \Exception('Invalid field ID');
 		

@@ -13,6 +13,14 @@ jQuery(function($) {
 	WPGMZA.GoogleProMarker.prototype = Object.create(WPGMZA.GoogleMarker.prototype);
 	WPGMZA.GoogleProMarker.prototype.constructor = WPGMZA.GoogleProMarker;
 	
+	WPGMZA.GoogleProMarker.prototype.onAdded = function(event)
+	{
+		WPGMZA.GoogleMarker.prototype.onAdded.apply(this, arguments);
+		
+		if(this.map.settings.wpgmza_settings_disable_infowindows)
+			this.googleMarker.setOptions({clickable: false});
+	}
+	
 	WPGMZA.GoogleProMarker.prototype.updateIcon = function()
 	{
 		var self = this;

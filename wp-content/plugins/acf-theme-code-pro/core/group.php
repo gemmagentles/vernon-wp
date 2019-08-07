@@ -31,44 +31,54 @@ class ACFTCP_Group {
 	// theme code indent for the field group
 	public $indent_count;
 
+	private $exclude_html_wrappers = false;
+
 	// if the field group is a clone
 	public $clone = false;
-	public $clone_parent_acftcp_group_ref = null;
+	public $clone_parent_acftcp_group = null;
 
 	// field location (for options panel etc)
 	public $location;
 
 	/**
 	 * Constructor for field group
-	 *
-	 * @param $field_group_id					int
-	 * @param $fields							array
-	 * @param $nesting_level					int
-	 * @param $indent_count						int
-	 * @param $location							string
-	 * @param $clone_parent_acftcp_group_ref	object ref
+	 * 
+	 * @param array $args Array of arguments.
 	 */
-	function __construct( $field_group_id = null, $fields = null, $nesting_level = 0, $indent_count = 0, $location = '', &$clone_parent_acftcp_group_ref = null ) {
+	function __construct( $args = array() ) {
+
+		$default_args = array(
+			'field_group_id' => null,
+			'fields' => null,
+			'nesting_level' => 0,
+			'indent_count' => 0,
+			'location' => '',
+			'clone_parent_acftcp_group' => null,
+			'exclude_html_wrappers' => false // Change to true for debug
+		);
+
+		$args = array_merge( $default_args, $args ); 
 
 		// Constructor requires either fields or a field group id
-		if ( empty( $field_group_id ) && empty( $fields ) ) {
+		if ( empty( $args['field_group_id'] ) && empty( $args['fields'] ) ) {
 			return false;
 		}
 
 		// Use fields provided (repeater add on in use)
-		if ( !empty( $fields ) && is_array( $fields ) ) {
-			$this->fields = $fields;
+		if ( !empty( $args['fields'] ) && is_array( $args['fields'] ) ) {
+			$this->fields = $args['fields'];
 		}
 		// Get fields by field group id
-		elseif ( !empty( $field_group_id ) ) {
-			$this->id = $field_group_id;
+		elseif ( !empty( $args['field_group_id'] ) ) {
+			$this->id = $args['field_group_id'];
 			$this->fields = $this->get_fields();
 		}
 
-		$this->nesting_level = $nesting_level;
-		$this->indent_count = $indent_count;
-		$this->location = $location;
-		$this->clone_parent_acftcp_group_ref = &$clone_parent_acftcp_group_ref;
+		$this->nesting_level = $args['nesting_level'];
+		$this->indent_count = $args['indent_count'];
+		$this->location = $args['location'];
+		$this->clone_parent_acftcp_group = $args['clone_parent_acftcp_group'];
+		$this->exclude_html_wrappers = $args['exclude_html_wrappers'];
 
 	}
 
@@ -133,12 +143,16 @@ class ACFTCP_Group {
 
 
 	/**
-	 * Render theme PHP for all fields in field group
-	 */
-	public function render_field_group() {
-
+	 * Get HTML for field group
+	 *
+	 * @return string
+	 **/
+	public function get_field_group_html() {
+		
 		// TODO: Is sorting necessary for sub fields of repeater created with
 		// the repeater add on? They do have order_no data.
+		
+		$field_group_html = '';
 
 		// ACF - create, sort and render fields
 		if ( 'postmeta' == ACFTCP_Core::$db_table ) {
@@ -148,11 +162,15 @@ class ACFTCP_Group {
 
 			foreach ( $this->fields as $field ) {
 
-				$acftc_field = new ACFTCP_Field(	$this->nesting_level,
-												$this->indent_count,
-												$this->location,
-												$field
-												);
+				$args = array(
+					'nesting_level' => $this->nesting_level,
+					'indent_count' => $this->indent_count,
+					'location' => $this->location,
+					'field_data_obj' => $field,
+					'exclude_html_wrappers' => $this->exclude_html_wrappers
+				);
+
+				$acftc_field = new ACFTCP_Field( $args );
 
 				array_push( $acftc_fields, $acftc_field );
 
@@ -163,7 +181,7 @@ class ACFTCP_Group {
 
 			// render fields
 			foreach ( $acftc_fields as $acftc_field ) {
-				$acftc_field->render_field();
+				$field_group_html .= $acftc_field->get_field_html();
 			}
 
 		}
@@ -174,23 +192,29 @@ class ACFTCP_Group {
 			// create and render ACFTCP_Field objects
 			foreach ( $this->fields as $field_post_obj ) {
 
-				$acftc_field = new ACFTCP_Field(	$this->nesting_level,
-												$this->indent_count,
-												$this->location, // TODO: Incomplete location functionality
-												$field_post_obj,
-												$this->clone_parent_acftcp_group_ref // TODO: Add this clone bit to the postmeta table func above?
-												);
+				$args = array(
+					'nesting_level' => $this->nesting_level,
+					'indent_count' => $this->indent_count,
+					'location_val' => $this->location, // TODO: Incomplete location functionality
+					'field_data_obj' => $field_post_obj,
+					'clone_parent_acftcp_field' => $this->clone_parent_acftcp_group, // TODO: Add this clone bit to the postmeta table func above?
+					'exclude_html_wrappers' => $this->exclude_html_wrappers
+				);
 
-				$acftc_field->render_field();
+				$acftc_field = new ACFTCP_Field( $args );
+
+				$field_group_html .= $acftc_field->get_field_html();
 
 			}
 
 		}
 
+		return $field_group_html;
+
 	}
 
 	/**
-	 * Field order number comparion, used by usort() in render_field_group()
+	 * Field order number comparion, used by usort() in get_field_group_html()
 	 */
 	private function compare_field_order( $a, $b ) {
 

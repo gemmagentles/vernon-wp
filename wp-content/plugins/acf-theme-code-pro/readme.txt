@@ -1,14 +1,26 @@
 === ACF Theme Code Pro ===
 Contributors: aaronrutley, ben-pearson
-Requires at least: 4.5.3
-Tested up to: 4.9.4
-Stable tag: 2.3.0
+Requires at least: 4.8.0
+Tested up to: 5.0.0
+Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 ACF Theme Code will automatically generate the code needed to implement Advanced Custom Fields in your themes!
 
 == Changelog ==
+
+= 2.4.0 =
+* Core: Theme Code Pro generates code to register for ACF Blocks and Options!
+* Core: Theme Code Pro generates code for use within for ACF Blocks!
+* Core: Radio Button field (core): Add support for all return types
+* Core: Refactoring that will allow for the more options for the code generated in the future
+* New Field Supported: ACF Icon Field
+* New Field Supported: ACF Star Rating Field
+* New Field Supported: ACF Color Palette Field 
+* New Field Supported: ACF Image Aspect Ratio Crop
+* New Field Supported: ACF Color Swatches
+* New Field Supported: ACF SVG Icon
 
 = 2.3.0 =
 * New Field Supported: ACF Ninja Forms add on
@@ -17,7 +29,7 @@ ACF Theme Code will automatically generate the code needed to implement Advanced
 * New Field(s) Supported: ACF qTranslate
 * Core: Resolved EDD Conflicts
 * Core: Improved Widget Location Variables
-* Fix: EDD naming conflict 
+* Fix: EDD naming conflict
 * Fix: Location error if visual editor is disabled
 * Fix: Select Conflict with Seamless Field Group Option
 

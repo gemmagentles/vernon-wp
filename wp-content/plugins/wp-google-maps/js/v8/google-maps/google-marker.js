@@ -42,6 +42,8 @@ jQuery(function($) {
 			
 		this.googleMarker.setLabel(this.settings.label);
 		
+		if(this.anim)
+			this.googleMarker.setAnimation(this.anim);
 		if(this.animation)
 			this.googleMarker.setAnimation(this.animation);
 			
@@ -179,6 +181,11 @@ jQuery(function($) {
 	WPGMZA.GoogleMarker.prototype.setDraggable = function(draggable)
 	{
 		this.googleMarker.setDraggable(draggable);
+	}
+	
+	WPGMZA.GoogleMarker.prototype.setOpacity = function(opacity)
+	{
+		this.googleMarker.setOpacity(opacity);
 	}
 	
 });

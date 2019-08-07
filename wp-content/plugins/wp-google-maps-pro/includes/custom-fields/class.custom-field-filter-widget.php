@@ -77,15 +77,15 @@ add_filter('wpgooglemaps_filter_map_div_output', 'WPGMZA\\add_custom_filter_widg
 
 function add_custom_filter_widgets($html)
 {
-	$document = new \DOMDocument();
+	$document = new DOMDocument();
 	$document->loadHTML($html);
-	$xpath = new \DOMXPath($document);
-	$results = $xpath->query('//div[@class="wpgmza_map"]');
+	$element = $document->querySelector('.wpgmza_map');
 	
-	if($results->length == 0)
+	if(!$element)
+	{
+		trigger_error('No map element found to add custom field filters to', E_USER_WARNING);
 		return $html;
-	
-	$element = $results->item(0);
+	}
 	
 	if(!preg_match('/\d+/', $element->getAttribute('id'), $m))
 		return $html;

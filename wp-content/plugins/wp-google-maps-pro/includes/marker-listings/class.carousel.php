@@ -37,6 +37,57 @@ class Carousel extends \WPGMZA\MarkerListing
 		$this->element->removeClass('wpgmza_marker_list_class');
 	}
 	
+	public function __get($name)
+	{
+		global $wpgmza;
+		
+		switch($name)
+		{
+			case 'hideImage':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_image);
+				break;
+			
+			case 'hideTitle':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_title);
+				break;
+			
+			case 'hideIcon':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_icon);
+				break;
+			
+			case 'hideAddress':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_address);
+				break;
+			
+			case 'hideDescription':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_description);
+				break;
+			
+			case 'hideLink':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_marker_link);
+				break;
+			
+			case 'hideDirectionsLink':
+				return !empty($wpgmza->settings->wpgmza_settings_carousel_markerlist_directions);
+				break;
+		}
+		
+		return \WPGMZA\MarkerListing::__get($name);
+	}
+	
+	protected function removeHiddenFields($item, $marker)
+	{
+		global $wpgmza;
+		
+		\WPGMZA\MarkerListing::removeHiddenFields($item, $marker);
+		
+		if($this->hideDirectionsLink && $el = $item->querySelector('.wpgmza_marker_directions_link'))
+			$el->remove();
+		
+		if($this->hideImage && $el = $item->querySelector('.wpgmza_map_image'))
+			$el->remove();
+	}
+	
 	public function getAjaxResponse($request)
 	{
 		global $wpgmza;
@@ -78,6 +129,7 @@ class Carousel extends \WPGMZA\MarkerListing
 			$item->querySelector('.wpgmza_marker_icon')->setAttribute('src', $icon);
 			$item->querySelector('.wpgmza_marker_title')->appendText($marker->title);
 			$item->querySelector('.wpgmza_marker_address')->appendText($marker->address);
+			$item->querySelector('.wpgmza_marker_description')->import($marker->description);
 			
 			if($img = $item->querySelector('.wpgmza_map_image'))
 			{
@@ -85,11 +137,23 @@ class Carousel extends \WPGMZA\MarkerListing
 					$img->remove();
 				else
 					$img->setAttribute('src', $marker->pic);
-				
-				
+				$img->setAttribute('alt', $marker->title);
 			}
 			
-			$this->appendListingItem($document, $item);
+			// Link
+			$a = $item->querySelector('.wpgmza-link > a, .wpgmza_marker_link > a');
+			$text = __('More Details', 'wp-google-maps');
+			
+			if(!empty($wpgmza->settings->wpgmza_settings_infowindow_link_text))
+				$text = $wpgmza->settings->wpgmza_settings_infowindow_link_text;
+			
+			if($a && !empty($marker->link))
+			{
+				$a->setAttribute('href', $marker->link);
+				$a->appendText($text);
+			}
+			
+			$this->appendListingItem($document, $item, $marker);
 			$index++;
 		}
 		

@@ -1,6 +1,7 @@
 <?php
 // qTranslate - Image field
 
-// Same as ACF core image field
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 include( ACFTCP_Core::$plugin_path . 'render/image.php' );

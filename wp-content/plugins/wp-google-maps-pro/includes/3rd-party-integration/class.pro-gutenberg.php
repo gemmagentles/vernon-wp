@@ -63,6 +63,11 @@ class ProGutenberg extends Gutenberg
 			$output_attributes['parent_id']		= $mapID;
 		}
 		
+		if(!empty($attr['className']))
+		{
+			$output_attributes['classname']		= $attr['className'];
+		}
+		
 		$attributes_string = '';
 		
 		foreach($output_attributes as $key => $value)

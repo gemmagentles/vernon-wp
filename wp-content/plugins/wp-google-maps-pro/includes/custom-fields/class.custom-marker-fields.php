@@ -3,6 +3,8 @@
 namespace WPGMZA;
 
 global $wpdb;
+global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
+
 $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS = $wpdb->prefix . 'wpgmza_markers_has_custom_fields';
 
 require_once(__DIR__ . '/class.custom-map-object-fields.php');
@@ -13,9 +15,7 @@ class CustomMarkerFields extends CustomMapObjectFields
 	{
 		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
 		
-		$this->meta_table_name = $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS;
-		
-		CustomMapObjectFields::__construct($marker_id);
+		CustomMapObjectFields::__construct($marker_id, $WPGMZA_TABLE_NAME_MARKERS_HAS_CUSTOM_FIELDS);
 	}
 	
 	public static function getCustomFieldValues($map_id, $field_id)

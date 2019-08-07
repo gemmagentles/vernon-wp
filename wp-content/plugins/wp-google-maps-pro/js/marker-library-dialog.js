@@ -29,6 +29,7 @@
 				type: "POST",
 				data: {
 					action: "wpgmza_upload_base64_image",
+					security: wpgmza_legacy_map_edit_page_vars.ajax_nonce,
 					data: event.data.data,
 					mimeType: "image/png"
 				},
@@ -48,6 +49,8 @@
 		currentCallback = callback;
 		
 		$(this.element).remodal().open();
+		
+		$("iframe#mappity").attr("src", "https://www.mappity.org?wpgmza-embed=1");
 	}
 	
 	WPGMZA.MarkerLibraryDialog.prototype.onSearch = function()

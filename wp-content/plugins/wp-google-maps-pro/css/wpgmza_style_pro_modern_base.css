@@ -71,6 +71,12 @@
     margin-top: 5px;
     padding-right: 5px;
  }
+ 
+  .wpgmza_iw_custom_fields
+  {
+	  color: white;
+  }
+ 
 .wpgmza_modern_infowindow_close {
     cursor: pointer;
     width: 20px;

@@ -2,6 +2,9 @@
 
 namespace WPGMZA;
 
+if(!defined('ABSPATH'))
+	return;
+
 class Query
 {
 	private $_type;
@@ -75,9 +78,8 @@ class Query
 				if(!is_array($value))
 					throw new \Exception('Fields must be an array');
 				
-				var_dump($this->_fields);
-				
-				array_splice($this->_fields, 0, count($this->_fields), $value);
+				foreach($value as $k => $v)
+					$this->_fields->{$k} = $v;
 
 				break;
 				
@@ -155,8 +157,15 @@ class Query
 			case 'SELECT':
 				if(empty($this->_fields))
 					throw new \Exception('You must specify fields to select');
+				
+				$arr = $this->_fields->toArray();
+				
+				if(!empty($arr))
+					$str = implode(', ', $arr);
+				else
+					$str = '*';
 			
-				$qstr .= " " . implode(', ', $this->_fields->toArray()) . " FROM";
+				$qstr .= " $str FROM";
 				break;
 			
 			case 'INSERT':
@@ -169,6 +178,14 @@ class Query
 		}
 		
 		$qstr .= " " . $this->_table;
+		
+		if(!empty($this->_join))
+		{
+			$qstr .= ' ';
+			
+			foreach($this->_join as $join)
+				$qstr .= 'JOIN ' . $join;
+		}
 		
 		$where = $this->_where->toArray();
 		if(!empty($where))

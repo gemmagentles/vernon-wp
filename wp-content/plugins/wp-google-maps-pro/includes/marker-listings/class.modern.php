@@ -46,7 +46,7 @@ class Modern extends \WPGMZA\MarkerListing
 			
 			$item->populate($marker);
 			
-			$this->appendListingItem($this->document, $item);
+			$this->appendListingItem($this->document, $item, $marker);
 		}
 		
 		$response->html = "";

@@ -23,8 +23,6 @@ jQuery(function($) {
 	WPGMZA.GoogleInfoWindow.prototype = Object.create(Parent.prototype);
 	WPGMZA.GoogleInfoWindow.prototype.constructor = WPGMZA.GoogleInfoWindow;
 	
-	WPGMZA.GoogleInfoWindow.WRAPPER_GUID = "a924f451-bd89-4a92-beab-4664ec729535";
-	
 	WPGMZA.GoogleInfoWindow.prototype.setMapObject = function(mapObject)
 	{
 		if(mapObject instanceof WPGMZA.Marker)
@@ -43,8 +41,13 @@ jQuery(function($) {
 			return;
 		
 		this.googleInfoWindow = new google.maps.InfoWindow();
+		
+		google.maps.event.addListener(this.googleInfoWindow, "domready", function(event) {
+			self.trigger("domready");
+		});
+		
 		google.maps.event.addListener(this.googleInfoWindow, "closeclick", function(event) {
-			self.trigger("infowindowclose");
+			self.mapObject.map.trigger("infowindowclose");
 		});
 	}
 	
@@ -70,7 +73,7 @@ jQuery(function($) {
 			this.googleObject
 		);
 		
-		var guid = WPGMZA.GoogleInfoWindow.WRAPPER_GUID;
+		var guid = WPGMZA.guid();
 		var html = "<div id='" + guid + "'>" + this.content + "</div>";
 
 		this.googleInfoWindow.setContent(html);
@@ -82,12 +85,13 @@ jQuery(function($) {
 			
 			if(div.length)
 			{
+				clearInterval(intervalID);
+				
 				div[0].wpgmzaMapObject = self.mapObject;
+				div.addClass("wpgmza-infowindow");
 				
 				self.element = div[0];
 				self.trigger("infowindowopen");
-				
-				clearInterval(intervalID);
 			}
 			
 		}, 50);

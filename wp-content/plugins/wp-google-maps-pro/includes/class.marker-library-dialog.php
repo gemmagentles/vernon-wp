@@ -22,7 +22,7 @@ class MarkerLibraryDialog
 		<div class="wpgmza-marker-library-dialog">
 			<button data-remodal-action="close" class="remodal-close"></button>
 			<span style="float: right;">Powered by <a style="font-family: Roboto, sans-serif;" href="https://www.mappity.org">mappity.org</a></span>
-			<iframe id="mappity" src="https://www.mappity.org?wpgmza-embed=1"></iframe>
+			<iframe id="mappity" src=""></iframe>
 		</div>
 		<?php
 	}

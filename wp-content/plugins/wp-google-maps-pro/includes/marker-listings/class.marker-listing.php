@@ -36,7 +36,7 @@ class MarkerListing extends AjaxTable
 		$this->map = Map::createInstance($map_id);
 		
 		// HTML attributes
-		$this->element->setAttribute('data-wpgmza-marker-listing', null);
+		$this->element->setAttribute('data-wpgmza-marker-listing', "true");
 		
 		// Legacy HTML
 		if($wpgmza->settings->useLegacyHTML)
@@ -49,6 +49,40 @@ class MarkerListing extends AjaxTable
 		$proDir = plugin_dir_url(dirname(__DIR__));
 		wp_enqueue_style('wpgmza_pagination', $proDir . 'lib/pagination.css');
 		wp_enqueue_script('wpgmza_pagination', $proDir . 'lib/pagination.min.js');
+	}
+	
+	public function __get($name)
+	{
+		global $wpgmza;
+		
+		switch($name)
+		{
+			case 'hideIcon':
+				return !empty($wpgmza->settings->wpgmza_settings_markerlist_icon);
+				break;
+			
+			case 'hideLink':
+				return !empty($wpgmza->settings->wpgmza_settings_markerlist_link);
+				break;
+			
+			case 'hideTitle':
+				return !empty($wpgmza->settings->wpgmza_settings_markerlist_title);
+				break;
+			
+			case 'hideAddress':
+				return !empty($wpgmza->settings->wpgmza_settings_markerlist_address);
+				break;
+			
+			case 'hideCategories':
+				// Only applicable for AdvancedTable
+				break;
+				
+			case 'hideDescription':
+				return !empty($wpgmza->settings->wpgmza_settings_markerlist_description);
+				break;
+		}
+		
+		return AjaxTable::__get($name);
 	}
 	
 	protected function getItemHTMLPath()
@@ -217,7 +251,35 @@ class MarkerListing extends AjaxTable
 		return $dimensions;
 	}
 	
-	public function appendListingItem($document, $item)
+	protected function removeHiddenFields($item, $marker)
+	{
+		global $wpgmza;
+		
+		// Hide the icon if setting is selected
+		if($this->hideIcon && $el = $item->querySelector('.wpgmza_marker_icon'))
+			$el->remove();
+		
+		// Hide the link if selected
+		if($link = $item->querySelector('.wpgmza-link, .wpgmza_marker_link'))
+		{
+			if(empty($marker->link) || $this->hideLink)
+				$link->remove();
+		}
+		
+		// Hide title if selected
+		if($this->hideTitle && $el = $item->querySelector('.wpgmza_marker_title, .wpgmza_div_title'))
+			$el->remove();
+		
+		// Hide address if selected
+		if($this->hideAddress && $el = $item->querySelector('.wpgmza_div_address, .wpgmza-address, .wpgmza_marker_address'))
+			$el->remove();
+		
+		// Hide description if selected
+		if($this->hideDescription && $el = $item->querySelector('.wpgmza-desc, .wpgmza_marker_description'))
+			$el->remove();
+	}
+	
+	protected function appendListingItem($document, $item, $marker)
 	{
 		global $wpgmza;
 		
@@ -227,9 +289,31 @@ class MarkerListing extends AjaxTable
 		{
 			$even = ($container->childNodes->length % 2 == 1);
 			$item->addClass(($even ? 'wpgmaps_even' : 'wpgmaps_odd'));
+			
+			if($customFieldsContainer = $item->querySelector(".wpgmza_custom_fields"))
+			{
+				$customFields = new CustomMarkerFields($marker->id);
+				$customFieldsContainer->import($customFields->html());
+			}
 		}
 		
+		$this->removeHiddenFields($item, $marker);
+		
 		$container->appendChild($item);
+	}
+	
+	public function getRecords($input_params)
+	{
+		$records = AjaxTable::getRecords($input_params);
+		
+		// NB: Legacy support, V8 handles this with jsonSerialize
+		foreach($records->data as $key => $obj)
+			unset($records->data[$key]->latlng);
+		
+		foreach($records->meta as $key => $obj)
+			unset($records->meta[$key]->latlng);
+		
+		return $records;
 	}
 	
 	public static function createInstanceFromStyle($style, $map_id)
@@ -271,4 +355,4 @@ add_filter('wpgmza_get_marker_listing_class_from_style', function($style) {
 	
 	return null;
 	
-});
+}, 1, 1);

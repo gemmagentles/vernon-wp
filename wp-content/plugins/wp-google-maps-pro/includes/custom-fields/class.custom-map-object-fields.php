@@ -19,8 +19,8 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 	protected static $field_names_by_id = null;
 	protected static $field_ids_by_name = null;
 	
-	protected $meta_table_name = null;
 	private $object_id;
+	private $meta_table_name;
 	
 	private $meta;
 	private $attributes;
@@ -30,7 +30,7 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 	 * Constructor. DO NOT call this directly. Use the hooks, for example wpgmza_get_marker_custom_fields
 	 * @return WPGMZA\CustomFields
 	 */
-	public function __construct($object_id)
+	public function __construct($object_id, $table_name)
 	{
 		global $wpdb;
 		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
@@ -50,6 +50,8 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 			CustomMapObjectFields::$field_ids_by_name = array_flip(CustomMapObjectFields::$field_names_by_id);
 		}
 		
+		$this->meta_table_name = $table_name;
+		
 		if(!$this->meta_table_name)
 			throw new \Exception('No table name');
 		
@@ -68,6 +70,7 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 			WHERE `object_id`=%d
 			AND LENGTH(value)
 			";
+			
 		$params = array($object_id);
 		$stmt = $wpdb->prepare($qstr, $params);
 		
@@ -141,6 +144,7 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 	public function __set($name, $value)
 	{
 		global $wpdb;
+		global $WPGMZA_TABLE_NAME_CUSTOM_FIELDS;
 		
 		if($name == 'object_id')
 			throw new \Exception('Property is read only');
@@ -151,7 +155,20 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 			$name = CustomMapObjectFields::$field_names_by_id[ (int)$name ];
 		}
 		else
+		{
+			// Create the field if it doesn't exist
+			
+			if(!isset(CustomMapObjectFields::$field_ids_by_name[$name]))
+			{
+				$stmt = $wpdb->prepare("INSERT INTO $WPGMZA_TABLE_NAME_CUSTOM_FIELDS (name) VALUES (%s)", array($name));
+				
+				$wpdb->query($stmt);
+				
+				CustomMapObjectFields::$field_ids_by_name[$name] = $wpdb->insert_id;
+			}
+			
 			$field_id = CustomMapObjectFields::$field_ids_by_name[$name];
+		}
 		
 		$this->meta[$name] = $value;
 		
@@ -213,12 +230,19 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 			
 			$item = '<p data-custom-field-id="' . $id . '" data-custom-field-name="' . htmlspecialchars($key) . '" ';
 			
-			foreach($this->attributes[$key] as $attr_name => $attr_value)
+			if(!empty($this->attributes))
 			{
-				if(empty($attr_name) || empty($attr_value))
-					continue;
+				$arr = (array)$this->attributes;
 				
-				$item .= "$attr_name=\"" . addcslashes($attr_value, '"') . "\"";
+				if(isset($arr[$key]))
+					foreach($arr[$key] as $attr_name => $attr_value)
+					{
+						// NB: Temporary fix for blank attribute names
+						if(empty($attr_name))
+							continue;
+						
+						$item .= "$attr_name=\"" . addcslashes($attr_value, '"') . "\"";
+					}
 			}
 
 			$item .= '>';
@@ -255,8 +279,17 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 		{
 			$attributes = '';
 			
-			foreach(json_decode($field->attributes) as $attr_name => $attr_value)
-				$attributes .= " $attr_name=\"" . addcslashes($attr_value, '"') . "\"";
+			$json = json_decode($field->attributes);
+			
+			if($json)
+				foreach($json as $attr_name => $attr_value)
+				{
+					// NB: Temporary fix for blank attribute names
+					if(empty($attr_name))
+						continue;
+					
+					$attributes .= " $attr_name=\"" . addcslashes($attr_value, '"') . "\"";
+				}
 			
 			$item = '<tr data-custom-field-id="' . $field->id . '">
 				<td>
