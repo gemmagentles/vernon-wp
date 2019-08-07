@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Barlow:300,400,700&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Barlow+Condensed:300,400,700,900|Barlow:300,400,700,900&display=swap);
 /* Theme Name: Vernon Theme */
 /* Version: 0.1 */
 /* Author: Another Blank Page */
@@ -250,7 +250,7 @@ TYPOGRAPHY
 *********************/
 .header {
   font-size: 0.875em;
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.8px;
   background: white;
@@ -624,7 +624,7 @@ TYPOGRAPHY
         max-width: 86px; }
     .slider__content-box-inner--heading {
       padding: 10px 0 15px 0;
-      font-family: "Barlow", sans-serif;
+      font-family: "Barlow Condensed", sans-serif;
       font-size: 24px;
       color: #424445; }
       @media (min-width: 48em) {
@@ -653,7 +653,7 @@ TYPOGRAPHY
           margin: 65px 0 10px; } }
   .slider__progress-bar {
     margin-top: 30px;
-    font-family: "Barlow", sans-serif;
+    font-family: "Barlow Condensed", sans-serif;
     color: #424445;
     font-size: 1.25em;
     letter-spacing: 4px;
@@ -923,7 +923,7 @@ TYPOGRAPHY
     margin-bottom: 0; }
 
 .filter-widget__inner .select2-container--default .select2-selection--single .select2-selection__rendered .select2-selection__placeholder {
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   letter-spacing: 1px;
   color: #424445;
   font-size: 14px; }
@@ -934,7 +934,7 @@ TYPOGRAPHY
 .filter-widget__inner .select2-container--default .select2-selection--single .select2-selection__rendered {
   padding: 10px 14px;
   font-size: 14px;
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   letter-spacing: 1px; }
   @media (min-width: 64em) {
     .filter-widget__inner .select2-container--default .select2-selection--single .select2-selection__rendered {
@@ -987,7 +987,7 @@ TYPOGRAPHY
 
 .select2-results__option {
   color: #424445 !important;
-  font-family: "Barlow", sans-serif !important;
+  font-family: "Barlow Condensed", sans-serif !important;
   letter-spacing: 1px;
   font-size: 0.875em; }
   @media (min-width: 70em) {
@@ -1001,7 +1001,7 @@ TYPOGRAPHY
   height: 48px !important; }
 
 input[type=text].select2-search__field {
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   letter-spacing: 1px;
   color: #424445;
   font-size: 14px; }
@@ -1354,7 +1354,7 @@ input[type=text].select2-search__field {
   padding: 18px 0;
   color: #EB0029;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 14px;
   position: relative;
   font-weight: normal;
@@ -1412,7 +1412,7 @@ input[type=text].select2-search__field {
 .sv-product-hero-content .image-variable-item-polished-chrome p, .sv-product-hero-content .image-variable-item-brushed-nickel p, .sv-product-hero-content .image-variable-item-oil-rubbed-bronze p, .sv-product-hero-content .image-variable-item-matte-black p, .sv-product-hero-content .image-variable-item-polished-nickel p {
   color: #424445;
   font-size: 1em;
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   position: absolute;
   top: 60px;
   font-weight: 400; }
@@ -1839,7 +1839,7 @@ a.next.page-numbers:active {
       top: 95px;
       left: 61px;
       color: #EB0029;
-      font-family: "Barlow", sans-serif;
+      font-family: "Barlow Condensed", sans-serif;
       font-size: 0.875em;
       text-transform: uppercase;
       letter-spacing: 2.2px; }
@@ -2906,7 +2906,7 @@ TYPOGRAPHY
 .subtitle {
   color: #EB0029;
   text-transform: uppercase;
-  font-family: "Barlow", sans-serif;
+  font-family: "Barlow Condensed", sans-serif;
   font-size: 10px;
   position: relative;
   letter-spacing: 1px; }

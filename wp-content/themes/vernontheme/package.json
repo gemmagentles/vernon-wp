@@ -1,7 +1,7 @@
 {
-  "name": "domar",
-  "version": "1.6.0",
-  "description": "domar wordpress theme package",
+  "name": "vernon",
+  "version": "1.6.1",
+  "description": "Vernon wordpress theme package",
   "main": "index.js",
   "browserslist": [
     "> 1%",
@@ -17,7 +17,7 @@
     "dist": "webpack --mode production",
     "watch": "webpack --watch --mode development"
   },
-  "author": "Luka Omrčen (%lukaomi)",
+  "author": "Gemma Gentles",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
