@@ -1163,8 +1163,7 @@ input[type=text].select2-search__field {
       top: 50%;
       right: 0;
       line-height: 0.7;
-      z-index: 2;
-      overflow: hidden; } }
+      z-index: 2; } }
   @media (min-width: 99.5em) {
     .product-grid::after {
       font-size: 18.5em; } }
@@ -3237,6 +3236,20 @@ p {
 /*********************
 BUTTONS
 *********************/
+input[type=button],
+input[type=submit],
+input[type=reset] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0px !important;
+  background-image: none !important;
+  border: 0px; }
+
+a[href^="tel"] {
+  color: #424445;
+  text-decoration: none; }
+
 .sydney-button {
   margin-left: -5px;
   background: #EB0029;
