@@ -279,6 +279,22 @@ p {
 BUTTONS
 *********************/
 
+input[type=button], 
+input[type=submit], 
+input[type=reset] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0px !important;
+    background-image: none !important; 
+    border: 0px;
+}
+
+a[href^="tel"] {
+    color: $font-color;
+    text-decoration: none;
+}
+
 .sydney-button {
     margin-left: -5px;
     background: $primary-color;
