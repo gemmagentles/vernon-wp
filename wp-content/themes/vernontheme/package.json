@@ -1,6 +1,6 @@
 {
   "name": "vernon",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "description": "Vernon wordpress theme package",
   "main": "index.js",
   "browserslist": [
