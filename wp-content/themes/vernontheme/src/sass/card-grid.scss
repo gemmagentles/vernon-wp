@@ -30,23 +30,53 @@
     &__container {
 
         @include breakpoint(tablet) {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-gap: 20px;
+            display: table;
             padding: 0 60px;
         }
 
         @include breakpoint(desktop) {
-            grid-gap: 40px;
             padding: 0 80px;
+        }
+    }
+
+    &__image-wrapper {
+        @include breakpoint(tablet) {
+            display: table-cell;
+            padding-right: 20px;
+        }
+
+        @include breakpoint(desktop) {
+            padding-right: 40px;
         }
     }
 
     &__image-wrapper:last-child {
         margin-bottom: 80px;
+        padding-right: 0;
 
         @include breakpoint(tablet) {
             margin-bottom: 0;
+        }
+    }
+
+    @supports (display: grid) {
+        &__container {
+
+            @include breakpoint(tablet) {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-gap: 20px;
+            }
+    
+            @include breakpoint(desktop) {
+                grid-gap: 40px;
+            }
+        }
+
+        &__image-wrapper {
+            @include breakpoint(tablet) {
+                padding-right: 0;
+            }
         }
     }
 
