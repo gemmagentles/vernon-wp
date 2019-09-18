@@ -788,10 +788,28 @@ class ImportJSON extends Import {
 				unset($fields['custom_fields_data']);
 			}
 			
+			// Discard ID
 			unset($fields['id']);
+			
+			// Remap categories
+			$oldCategories = null;
+			$newCategories = array();
+			
+			if(!empty($fields['category']))
+				$oldCategories = explode(',', $fields['category']);
+			
+			if(!empty($fields['categories']))
+				$oldCategories = $fields['categories'];
+			
+			unset($fields['category']);
+			unset($fields['categories']);
+			
+			foreach($oldCategories as $old)
+				$newCategories[] = $this->cat_id_map[$old];
 			
 			// Create the marker
 			$marker = Marker::createInstance($fields);
+			$marker->categories = $newCategories;
 			
 			// Custom field data
 			if(!empty($custom_fields_data))

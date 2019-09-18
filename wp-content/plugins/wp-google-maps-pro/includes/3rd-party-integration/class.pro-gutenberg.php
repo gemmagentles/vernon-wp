@@ -37,8 +37,6 @@ class ProGutenberg extends Gutenberg
 		global $wpdb;
 		global $WPGMZA_TABLE_NAME_MAPS;
 		
-		extract($attr);
-		
 		$mapID = '1';
 		
 		if(isset($attr['id']))

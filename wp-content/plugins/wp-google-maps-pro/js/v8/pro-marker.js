@@ -46,7 +46,7 @@ jQuery(function($) {
 		if(this == this.map.userLocationMarker)
 			return;
 		
-		if(this.map.settings.store_locator_hide_before_search == 1)
+		if(this.map.settings.store_locator_hide_before_search == 1 && WPGMZA.is_admin != 1)
 		{
 			this.isFiltered = true;
 			this.setVisible(false);

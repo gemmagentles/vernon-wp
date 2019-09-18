@@ -1,15 +1,15 @@
-=== Mailchimp for WordPress ===
+=== MC4WP: Mailchimp for WordPress ===
 Contributors: Ibericode, DvanKooten, hchouhan, lapzor
 Donate link: https://mc4wp.com/#utm_source=wp-plugin-repo&utm_medium=mailchimp-for-wp&utm_campaign=donate-link
 Tags: mailchimp, mc4wp, email, marketing, newsletter, subscribe, widget, mc4wp, contact form 7, woocommerce, buddypress, ibericode, mailchimp form
 Requires at least: 4.1
 Tested up to: 5.2
-Stable tag: 4.5.3
+Stable tag: 4.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.3
 
-Mailchimp for WordPress, the #1 Mailchimp plugin.
+Mailchimp for WordPress, the #1 unofficial Mailchimp plugin.
 
 == Description ==
 
@@ -195,6 +195,26 @@ The plugin provides various filter & action hooks that allow you to modify or ex
 6. Dive into detailed sign-up statistics (premium feature).
 
 == Changelog == 
+
+
+#### 4.5.5 - Sep 12, 2019
+
+**Fixes**
+
+- Google reCAPTCHA script was still loading even if no forms have it enabled.
+
+
+#### 4.5.4 - Sep 11, 2019
+
+**Improvements**
+
+- Removed custom color from menu item for improved accessibility.
+- Take birthday field format into account when sending data to Mailchimp.
+- Print Google reCAPTCHA script in footer.
+
+**Changes**
+
+- Changed plugin name to MC4WP instead of Mailchimp for WordPress.
 
 
 #### 4.5.3 - July 23, 2019

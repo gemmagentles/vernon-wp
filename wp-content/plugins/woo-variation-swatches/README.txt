@@ -1,12 +1,12 @@
-=== WooCommerce Variation Swatches ===
-Contributors: EmranAhmed, wpeshaan, getwooplugins
-Tags: woocommerce variation, woocommerce, variation swatches, woocommerce attributes, product attributes, product color, product size, variable product attributes, variation product swatches, color variation swatch, image variation swatch, printful color swatches
+=== Variation Swatches for WooCommerce ===
+Contributors: EmranAhmed, getwooplugins
+Tags: woocommerce variation swatches, woocommerce variation, woocommerce, variation swatches, woocommerce attributes, product attributes, product color, product size, variable product attributes, variation product swatches, color variation swatch, image variation swatch, printful color swatches
 Requires at least: 4.8
-Tested up to: 5.0
+Tested up to: 5.2
 Requires PHP: 5.6
 Stable tag: trunk
 WC requires at least: 3.2
-WC tested up to: 3.5
+WC tested up to: 3.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,17 +14,17 @@ Beautiful Color, Image and Buttons Variation Swatches For WooCommerce Product At
 
 == Description ==
 
-=== How To Install WooCommerce Variation Swatches Plugin for WooCommerce Variable Products ===
+=== How To Install Product Variation Swatches Plugin for WooCommerce Variable Products ===
 
 [youtube https://www.youtube.com/watch?v=BySSYFuqwls]
 
-=== How To Import WooCommerce Swatches Plugin Data For Existing Product Attribute Variations ===
+=== How To Import Product Swatches Plugin Data For Existing Product Attribute Variations ===
 
 [youtube https://www.youtube.com/watch?v=k-Snfpzy8M0]
 
-WooCommerce Variation Swatches is easy to use WooCommerce product variation swatches plugin. It offers an aesthetic and professional experience to select attributes for variation products. It turns the product variation select options fields into radio images, colors, and label. It means with the help of this powerful WooCommerce color or image variation swatches plugin, you can show product variation items in images, colors, and label. So, you can say goodbye to dropdown product attribute fields.
+Variation Swatches is easy to use WooCommerce product variation swatches plugin. It offers an aesthetic and professional experience to select attributes for variation products. It turns the product variation select options fields into radio images, colors, and label. It means with the help of this powerful WooCommerce color or image variation swatches plugin, you can show product variation items in images, colors, and label. So, you can say goodbye to dropdown product attribute fields.
 
-WooCommerce Variation Swatches not only offers the color, image and label attributes in the single WooCommerce product. It also enables them in product quick view. If you're using WooCommerce themes like Flatsome that comes with default Quick View option, you don’t need to hassle to load color and image swatches for variable product attributes in quick view separately.
+Variation Swatches for WooCommerce not only offers the color, image and label attributes in the single WooCommerce product. It also enables them in product quick view. If you're using WooCommerce themes like Flatsome that comes with default Quick View option, you don’t need to hassle to load color and image swatches for variable product attributes in quick view separately.
 
 In the free WooCommerce attribute variation plugin, besides creating size, brand, image, color, and label variation swatches, you can handle the swatches shape style <strong>Rounded and Circle</strong>. On top of that, it allows you beautiful tooltips on variation swatch hover.  Based on your requirement you enable and disable hover from the settings. To maximize and personalize your development process,  the product attributes swatches comes an option to disable default plugin stylesheet so that you can personally write your own CSS. 
 
@@ -70,10 +70,10 @@ In the free WooCommerce attribute variation plugin, besides creating size, brand
 * Compatible with popular WooCommerce themes and plugins 
 * Frequently Updated And Secured Codebase 
 * Option to disable default plugin stylesheet for theme developer
-* Enable Color Swatches For Printful Technology
+* Enable Color Swatches like Printful Technology
 * Compatible With Popular WooCommerce Plugins Including <a href="http://bit.ly/woovs-org-item-page">WooCommerce Variation Image Gallery</a>  
 
-= PREMIUM FEATURES OF WOOCOMMERCE VARIATION SWATCHES =
+= PREMIUM FEATURES OF VARIATION SWATCHES FOR WOOCOMMERCE =
 
 [Live Demo](http://bit.ly/3rd-main-demo-readme) | [Upgrade to PRO](http://bit.ly/upgrade-to-pro-readme) | [Documentation](https://getwooplugins.com/documentation/woocommerce-variation-swatches/?utm_source=wordpress.org&utm_medium=README&utm_campaign=woo-variation-swatches) | [Support](https://getwooplugins.com/tickets/?utm_source=wordpress.org&utm_medium=README&utm_campaign=woo-variation-swatches)
 
@@ -143,6 +143,7 @@ In the free WooCommerce attribute variation plugin, besides creating size, brand
 * Archive Page Swatches Alignment
  [Live Demo & Documentation](http://bit.ly/3rd-demo-readme-shop-alignment)
 <hr />
+* Multi Color Variaiton Swatchees. 
 * Customize Tooltip Text and Background Color
 * Enable / Disable Ajax Variation
 * Archive page swatches positioning
@@ -153,95 +154,56 @@ In the free WooCommerce attribute variation plugin, besides creating size, brand
 * Customize swatches colors, background and border sizes
 * Automatic updates and exclusive technical support
 
-= Sites Built With WooCommerce Variation Swatches Plugin =
+= Sites Built With Variation Swatches for WooCommerce Plugin =
 
 <blockquote>
 <ul>
-<li> Built With: Flatsome WooCommerce Theme
-   <ul style="list-style: none;">
-   	<li><a target="_blank" href="http://bit.ly/wvs-flatsome-01">muliomulio.com | Niche: Leather Bag Store </a>  </li>
-   	<li><a target="_blank" href="http://bit.ly/wvs-client-demo-01">designchess.com  | Niche: Chess Design Store </a></li>
-	<li><a target="_blank" href="http://bit.ly/woovs-demo-flatsome-02">makromass.pl| Niche: Supplements for athletes </a></li>
-	<li><a target="_blank" href="http://bit.ly/wvs-demo-client-2">delampjesfabriek.nl  | Niche: Supplements for athletes </a></li>
-	<li><a target="_blank" href="http://bit.ly/flatsome-wvs-demo-04">bell-motorcycle-helmets.co.uk | Niche: Motorcycle Helmets </a></li>
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Flatsome WooCommerce Theme</a>
+</li>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Avada WooCommerce Multi-Purpose Theme</a>
+</li>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Divi by Elegant Themes</a>
 </li>
 
-<li> Built With: Avada WooCommerce Multi-Purpose Theme
-   <ul>
-   	<li><a target="_blank" href="http://bit.ly/woovs-demo-avada-01">luckyonebijoux.com | Niche: Jewelry Shop </a></li>
-	<li><a target="_blank" href="http://bit.ly/woovs-avada-02">polymaker.metricdesign.net | Niche: 3d Parts Shop </a></li>   	
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Enfold - WooCommerce Multi-Purpose Theme</a>
+</li>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Astra WooCommerce Theme</a>
 </li>
 
-<li> Built With: Divi by Elegant Themes
-   <ul>
-   	<li><a target="_blank" href="http://bit.ly/wvs-divi-demo-01">embodywear.com | Niche: Bodywear Shop </a></li>
-   	<li><a target="_blank" href="http://bit.ly/divi-wvs-demo-01">clasp.apsbay.com | Niche: Handbags Shop </a></li>
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Salient WooCommerce Theme</a>
 </li>
 
-<li> Built With: Enfold - WooCommerce Multi-Purpose Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/wvs-enfold-demo">drawnfresh.co.uk | Niche: T-Shirt Store </a> </li>
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Twenty Seventen Theme</a>
 </li>
 
-<li> Built With: Astra WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/astra-wvs-demo">polelegendaerial.at | Niche: Shoe Store </a> </li>
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: TheGem WooCommerce Theme</a>
 </li>
 
-<li> Built With: Salient WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/salient-wvs-demo">chooseoneshop.com | Niche: T-Shirt Store </a> </li>
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Kalium WooCommerce Professionals Theme</a>
 </li>
 
-<li> Built With: Twenty Seventen Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/twentey-seventeen-demo">vollstedt-b2b.com | Niche: Leather Wallets Store </a></li>
-
-   </ul>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Jevelin WooCommerce Theme</a>
+</li>
+<li> 
+   <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Nitro WooCommerce Theme</a>
+</li>
+<li> 
+    <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: KuteShop WooCommerce Theme</a>
+</li>
+<li> 
+    <a target="_blank" href="https://getwooplugins.com/showcase-swatches">Built With: Domino WooCommerce Theme</a>
 </li>
 
-<li> Built With: TheGem WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/thegem-wvs-demo">sarrowork.com.br | Niche: Jacket Clothing Store </a></li>
-
-   </ul>
-</li>
-
-<li> Built With: Kalium WooCommerce Professionals Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/wvg-demo-kelium">qnoop.com | Niche: Clothing Store </a></li>
-   </ul>
-</li>
-
-<li> Built With: Jevelin WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/jevelin-wvs-demo">falkgarn.se | Niche: Cotton & Spinning Store </a></li>
-   </ul>
-</li>
-
-<li> Built With: Nitro WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/woovs-demo-nitro">sethsoldtimes.com | Niche: Dise Golf Store </a></li>
-   </ul>
-</li>
-
-<li> Built With: Domino WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/domino-theme-demo">abso.com.ar | Niche: Clothing Store </a></li>
-   </ul>
-</li>
-
-<li> Built With: KuteShop WooCommerce Theme
-   <ul>
-   		<li><a target="_blank" href="http://bit.ly/kuteshop-vws-demo">torbice.s | Niche: Bag and Baggage Store </a></li>
-   </ul>
-</li>
 </ul>
 </blockquote>
 
@@ -278,7 +240,7 @@ In the free WooCommerce attribute variation plugin, besides creating size, brand
 
 1. Login to your the admin panel
 2. Navigate to Plugins -> Add New
-3. Search **WooCommerce Variation Swatches**
+3. Search **Variation Swatches for WooCommerce**
 4. Click install and activate respectively.
 
 ### Manual Install From WordPress Dashboard
@@ -355,6 +317,47 @@ And your are ready to go.
 12. Global Variation Color Swatches Attribute List Preview
 
 == Changelog ==
+
+= 1.0.62 =
+
+* Add: WC 3.7 update
+
+= 1.0.61 =
+
+* Fix: CSS source map issue.
+
+= 1.0.60 =
+
+* Fix: Clear selection js error fix.
+
+= 1.0.59 =
+
+* Add: Dokan Multivendor Support added
+
+= 1.0.58 =
+
+* Fix: Inactive WooCommerce notice
+* Fix: Known Issues
+
+= 1.0.57 =
+
+* Fix: Some known issues
+* Add: WordPress 5.2 Compatibility
+
+= 1.0.56 =
+
+* Fix: Language load
+* Add: FacetWP Load More Option
+* Add: WooCommerce 3.6 update
+
+= 1.0.55 =
+
+* Add: Oxygen Theme Support CSS
+
+= 1.0.54 =
+
+* Fix: Load Assets without CDN.
+* Remove: Product Page popup attribute
 
 = 1.0.53 =
 

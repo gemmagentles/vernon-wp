@@ -3,7 +3,7 @@
 Plugin Name: WP Google Maps
 Plugin URI: https://www.wpgmaps.com
 Description: The easiest to use Google Maps plugin! Create custom Google Maps with high quality markers containing locations, descriptions, images and links. Add your customized map to your WordPress posts and/or pages quickly and easily with the supplied shortcode. No fuss.
-Version: 7.11.44
+Version: 7.11.50
 Author: WP Google Maps
 Author URI: https://www.wpgmaps.com
 Text Domain: wp-google-maps
@@ -11,6 +11,33 @@ Domain Path: /languages
 */
 
 /*
+ * 7.11.50 :- 2019-09-13 :- Medium priority
+ * Fixed markers not visible in Internet Explorer when using OpenLayers (append is not a method)
+ *
+ * 7.11.49 :- 2019-09-10 :- Medium priority
+ * Added warning when "Do not enqueue datatables" is selected, but dataTables library is not loaded
+ * Added comment to wpgmza_data.js to fix issues with empty files and Safari
+ * Altered "zero-results" message to "No results found for this address"
+ * Fixed skipNonceCheck flag being ignored when Live Tracking App is used
+ *
+ * 7.11.48 :- 2019-08-28 :- Low priority
+ * Fixed polygons and polylines not displaying back end before global settings have been saved
+ * Increased link column to accept 2083 characters
+ *
+ * 7.11.47 :- 2019-08-09 :- Medium priority
+ * Fixed map engine dialog submission not working
+ * Fixed WPGMZA.EventDispatcher not handing some native events over to DOM correctly
+ *
+ * 7.11.46 :- 2019-08-08 :- Medium priority
+ * Fixed conflict with WooCommerce effecting checkout page on installations with debug notices turned on
+ * Fixed WPGMZA.getQueryParamValue matching location hash on last parameter
+ *
+ * 7.11.45 :- 2019-08-07 :- Medium priority
+ * Added ABSPATH checks to .html.php files, class.settings.php and backwards_compat_v6.php
+ * Fixed add shape buttons disabled for Google when global settings have never been saved
+ * Fixed permissions issues when attempting to save global settings (HTTP error 401)
+ * Fixed permissions issues preventing users without manage_options capability from logging in
+ *
  * 7.11.44 :- 2019-08-01 :- Low priority
  * Added REST API parameter skipNonceCheck for Live Tracking App
  * Fixed map type settings not "live" in map edit page
@@ -55,6 +82,7 @@ Domain Path: /languages
  *
  * 7.11.36 :- 2019-07-11 :- Low priority
  * Re-added admin-ajax fallback for when REST API is blocked
+ * Fixed Polyline color issue
  *
  * 7.11.35 :- 2019-07-08 :- High priority
  * Security vulnerabilities fixed (Thank you Plugin Review Team at WordPress.org and pluginvulnerabilities.com)

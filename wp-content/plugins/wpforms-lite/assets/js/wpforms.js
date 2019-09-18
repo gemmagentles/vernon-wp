@@ -670,6 +670,13 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 				}
 			} );
 
+			// IE: Click on the `image choice` image should trigger the click event on the input (checkbox or radio) field.
+			$( document ).on( 'click', '.wpforms-image-choices-item img', function( e ) {
+
+				e.preventDefault();
+				$( this ).closest( 'label' ).find( 'input' ).click();
+			} );
+
 			$( document ).on( 'change', '.wpforms-field-checkbox input, .wpforms-field-radio input, .wpforms-field-payment-multiple input, .wpforms-field-payment-checkbox input, .wpforms-field-gdpr-checkbox input', function( event ) {
 
 				var $this  = $( this ),
@@ -1299,19 +1306,30 @@ var wpforms = window.wpforms || ( function( document, window, $ ) {
 		 */
 		currentIpToCountry: function( callback ) {
 
-			$.get( 'https://ipapi.co/jsonp', function() {}, 'jsonp' )
-
-				.always( function( resp ) {
-
-					var countryCode = ( resp && resp.country ) ? resp.country : '';
-
-					if ( ! countryCode ) {
-						var lang = app.getFirstBrowserLanguage();
-						countryCode = lang.indexOf( '-' ) > -1 ? lang.split( '-' ).pop() : '';
+			$.get( 'https://geo.wpforms.com/v2/geolocate/json/' )
+				.done( function( resp ) {
+					if ( resp && resp.country_code ) {
+						callback( resp.country_code );
+					} else {
+						fallback();
 					}
-
-					callback( countryCode );
+				} )
+				.fail( function( resp ) {
+					fallback();
 				} );
+
+			var fallback = function() {
+
+				$.get( 'https://ipapi.co/jsonp', function() {}, 'jsonp' )
+					 .always( function( resp ) {
+						 var countryCode = ( resp && resp.country ) ? resp.country : '';
+						 if ( ! countryCode ) {
+							 var lang = app.getFirstBrowserLanguage();
+							 countryCode = lang.indexOf( '-' ) > -1 ? lang.split( '-' ).pop() : '';
+						 }
+						 callback( countryCode );
+					 } );
+			};
 		},
 
 		/**

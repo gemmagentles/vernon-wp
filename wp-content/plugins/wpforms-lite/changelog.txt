@@ -1,11 +1,33 @@
 == Changelog ==
 
+= 1.5.5.1 =
+- Fixed: Broken reCAPTCHA checkbox in Builder > Settings > General if reCAPTCHA type does not set in WPForms > Settings.
+- Fixed: Email field server-side validation issue.
+- Fixed: Broken "Bulk add" option in Builder in IE 11.
+- Fixed: Broken image choices selection and styling (layout) issue in IE 11.
+- Fixed: Backward compatible filters for some fields when displaying them were missing.
+
+= 1.5.5 =
+- Added: WPForms details inside Site Health Info reports (Tools > Site Health > Info).
+- Added: Filter `wpforms_emails_summaries_is_disabled` to easily disable Email Summaries functionality.
+- Added: New smart tag: `{field_html_id="42"}` - that will postprocess field value and display its HTML representation.
+- Changed: Improve `wpforms_get_ip()` IP detection and related `{user_ip}` smart-tag value.
+- Fixed: Giving access to WPForms for Editors (and other roles) should give access to dashboard widget as well.
+- Fixed: Add 'attr' property to 'input_container' for radio/checkbox-based fields.
+- Fixed: Various typos.
+- Fixed: WP Mail SMTP plugin description on About us page.
+
+= 1.5.4.2 =
+- Changed: Renamed certain actions with typos in their names, backwards-compatible. Added a deprecation text using `do_action_deprecated()`.
+- Fixed: About Us page behaviour when WP Mail SMTP Pro is installed.
+- Fixed: reCAPTCHA settings could be saved without providing reCAPTCHA type.
+
 = 1.5.4.1 =
 - Fixed: Plugin Settings > Misc > 'View Email Summary Example' link errors.
 
 = 1.5.4 =
 - Added: Email Summaries.
-- Added: Form builder hotkey to save changes, CTRL/CMD + S.
+- Added: Form builder hotkey to save changes, CTRL + S.
 - Changed: Team photo under WPForms > About Us. :)
 - Fixed: Dynamic field population populates checkbox and radio fields values but not adding 'wpforms-selected' class to its containers.
 - Fixed: Dropdown field attributes are now accessible with `wpforms_field_properties` filter.

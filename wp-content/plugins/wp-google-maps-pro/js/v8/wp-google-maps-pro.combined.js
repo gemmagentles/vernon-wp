@@ -7,6 +7,18 @@
 jQuery(function($) {
 	
 	var core = {
+		MARKER_PULL_DATABASE:	"0",
+		MARKER_PULL_XML:		"1",
+		
+		PAGE_MAP_LIST: 			"map-list",
+		PAGE_MAP_EDIT:			"map-edit",
+		PAGE_SETTINGS:			"map-settings",
+		PAGE_SUPPORT:			"map-support",
+		
+		PAGE_CATEGORIES:		"categories",
+		PAGE_ADVANCED:			"advanced",
+		PAGE_CUSTOM_FIELDS:		"custom-fields",
+		
 		/**
 		 * Indexed array of map instances
 		 * @constant {array} maps
@@ -43,6 +55,44 @@ jQuery(function($) {
 		localized_strings: null,
 		
 		loadingHTML: '<div class="wpgmza-preloader"><div class="wpgmza-loader">...</div></div>',
+		
+		getCurrentPage: function() {
+			
+			switch(WPGMZA.getQueryParamValue("page"))
+			{
+				case "wp-google-maps-menu":
+					if(window.location.href.match(/action=edit/) && window.location.href.match(/map_id=\d+/))
+						return WPGMZA.PAGE_MAP_EDIT;
+				
+					return WPGMZA.PAGE_MAP_LIST;
+					break;
+					
+				case 'wp-google-maps-menu-settings':
+					return WPGMZA.PAGE_SETTINGS;
+					break;
+					
+				case 'wp-google-maps-menu-support':
+					return WPGMZA.PAGE_SUPPORT;
+					break;
+					
+				case 'wp-google-maps-menu-categories':
+					return WPGMZA.PAGE_CATEGORIES;
+					break;
+					
+				case 'wp-google-maps-menu-advanced':
+					return WPGMZA.PAGE_ADVANCED;
+					break;
+					
+				case 'wp-google-maps-menu-custom-fields':
+					return WPGMZA.PAGE_CUSTOM_FIELDS;
+					break;
+					
+				default:
+					return null;
+					break;
+			}
+			
+		},
 		
 		/**
 		 * Override this method to add a scroll offset when using animated scroll, useful for sites with fixed headers.
@@ -477,7 +527,7 @@ jQuery(function($) {
 			
 			// Workaround for map ID member not set correctly
 			
-			if(WPGMZA.isProVersion())
+			if(WPGMZA.isProVersion() && !(MYMAP.map instanceof WPGMZA.Map))
 				return MYMAP[id].map;
 			
 			return MYMAP.map;
@@ -554,7 +604,7 @@ jQuery(function($) {
 		
 		getQueryParamValue: function(name) {
 			
-			var regex = new RegExp(name + "=([^&]*)");
+			var regex = new RegExp(name + "=([^&#]*)");
 			var m;
 			
 			if(!(m = window.location.href.match(regex)))
@@ -1336,7 +1386,15 @@ jQuery(function($) {
 		for(i = path.length - 1; i >= 0 && !event._cancelled; i--)
 			path[i]._triggerListeners(event);
 		
-		if(this.element)
+		// Native DOM event
+		var topMostElement = this.element;
+		for(var obj = this.parent; obj != null; obj = obj.parent)
+		{
+			if(obj.element)
+				topMostElement = obj.element;
+		}
+		
+		if(topMostElement)
 		{
 			var customEvent = {};
 			
@@ -1350,7 +1408,7 @@ jQuery(function($) {
 				customEvent[key] = value;
 			}
 			
-			$(this.element).trigger(customEvent);
+			$(topMostElement).trigger(customEvent);
 		}
 	}
 
@@ -1776,7 +1834,7 @@ jQuery(function($) {
 			
 			setTimeout(function() {
 				$(el).append(container);
-			}, 100);
+			}, 1000);
 		});
 		
 		$(".gm-err-container").parent().css({"z-index": 1});
@@ -4989,7 +5047,6 @@ jQuery(function($) {
 		}).join("");
 		
 		var base64		= btoa(raw);
-		
 		return base64.replace(/\//g, "-") + suffix;
 	}
 	
@@ -5172,7 +5229,7 @@ jQuery(function($) {
 		
 		nativeCallFunction.apply(this, arguments);
 	}
-	
+
 	$(document.body).on("click", "#wpgmza-rest-api-blocked button.notice-dismiss", function(event) {
 		
 		WPGMZA.restAPI.call("/rest-api/", {
@@ -5377,13 +5434,8 @@ jQuery(function($) {
 	 */
 	WPGMZA.Version.compare = function(v1, v2)
 	{
-		var v1parts = v1.split('.');
-		var v2parts = v2.split('.');
-
-		// First, validate both numbers are true version numbers
-		if (!validateParts(v1parts) || !validateParts(v2parts)) {
-			return NaN;
-		}
+		var v1parts = v1.match(/\d+/g);
+		var v2parts = v2.match(/\d+/g);
 
 		for (var i = 0; i < v1parts.length; ++i) {
 			if (v2parts.length === i) {
@@ -6215,7 +6267,7 @@ jQuery(function($) {
 			left: position.x + "px",
 			top: position.y + "px"
 		});
-		
+
 		var panes = this.getPanes();
 		panes.floatPane.appendChild(this.element[0]);
 	}
@@ -6958,13 +7010,23 @@ jQuery(function($) {
 	
 	WPGMZA.DataTable = function(element)
 	{
+		if(!$.fn.dataTable)
+		{
+			console.warn("The dataTables library is not loaded. Cannot create a dataTable. Did you enable 'Do not enqueue dataTables'?");
+			
+			if(WPGMZA.settings.wpgmza_do_not_enqueue_datatables && WPGMZA.getCurrentPage() == WPGMZA.PAGE_MAP_EDIT)
+				alert("You have selected 'Do not enqueue DataTables' in WP Google Maps' settings. No 3rd party software is loading the DataTables library. Because of this, the marker table cannot load. Please uncheck this option to use the marker table.");
+			
+			return;
+		}
+		
 		if($.fn.dataTable.ext)
 			$.fn.dataTable.ext.errMode = "throw";
 		else
 		{
 			var version = $.fn.dataTable.version ? $.fn.dataTable.version : "unknown";
 			
-			console.log("You appear to be running an outdated or modified version of the dataTables library. This may cause issues with table functionality. This is usually caused by 3rd party software loading an older version of DataTables. The loaded version is " + version + ", we recommend version 1.10.12 or above.");
+			console.warn("You appear to be running an outdated or modified version of the dataTables library. This may cause issues with table functionality. This is usually caused by 3rd party software loading an older version of DataTables. The loaded version is " + version + ", we recommend version 1.10.12 or above.");
 		}
 		
 		this.element = element;
@@ -6982,6 +7044,22 @@ jQuery(function($) {
 		
 		this.dataTable.ajax.reload();
 	}
+	
+	Object.defineProperty(WPGMZA.DataTable.prototype, "canSendCompressedRequests", {
+		
+		"get": function() {
+			
+			return (
+				WPGMZA.serverCanInflate == 1 && 
+				"Uint8Array" in window && 
+				"TextEncoder" in window && 
+				!WPGMZA.settings.forceDatatablesPOST && 
+				WPGMZA.settings.useCompressedDataTablesRequests
+			);
+			
+		}
+		
+	});
 	
 	WPGMZA.DataTable.prototype.getDataTableElement = function()
 	{
@@ -8282,7 +8360,7 @@ jQuery(function($) {
 			case google.maps.DirectionsStatus.REQUEST_DENIED:
 			 
 				var key = status.toLowerCase();
-				var message = wpgmza_localized_strings[key];
+				var message = WPGMZA.localized_strings[key];
 				
 				$(this.element).find(".wpgmza-directions-results").html(
 					'<i class="fa fa-times" aria-hidden="true"></i>' + message
@@ -8372,19 +8450,19 @@ jQuery(function($) {
 				<div class='wpgmza-modern-marker-listing-button wpgmza-link-button'>\
 					<i class='fa fa-link' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.link + "\
+						" + WPGMZA.localized_strings.link + "\
 					</div>\
 				</div>\
 				<div class='wpgmza-modern-marker-listing-button wpgmza-directions-button'>\
 					<i class='fa fa-road' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.directions + "\
+						" + WPGMZA.localized_strings.directions + "\
 					</div>\
 				</div>\
 				<div class='wpgmza-modern-marker-listing-button wpgmza-zoom-button'>\
 					<i class='fa fa-search-plus' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.zoom + "\
+						" + WPGMZA.localized_strings.zoom + "\
 					</div>\
 				</div>\
 			</div>\
@@ -10488,19 +10566,6 @@ jQuery(function($) {
 		nativeBounds.east = bottomRight[0];
 		
 		return nativeBounds;
-		
-		/*return 
-		
-		return {
-			topLeft: {
-				lat: topLeft[1],
-				lng: topLeft[0]
-			},
-			bottomRight: {
-				lat: bottomRight[1],
-				lng: bottomRight[0]
-			}
-		};*/
 	}
 	
 	/**
@@ -10937,7 +11002,7 @@ jQuery(function($) {
 		if(this == this.map.userLocationMarker)
 			return;
 		
-		if(this.map.settings.store_locator_hide_before_search == 1)
+		if(this.map.settings.store_locator_hide_before_search == 1 && WPGMZA.is_admin != 1)
 		{
 			this.isFiltered = true;
 			this.setVisible(false);
@@ -11278,7 +11343,7 @@ jQuery(function($) {
 		img.src = WPGMZA.defaultMarkerIcon;
 		
 		this.element = $("<div class='ol-marker'></div>")[0];
-		this.element.append(img);
+		this.element.appendChild(img);
 		
 		this.element.wpgmzaMarker = this;
 		
@@ -12931,6 +12996,9 @@ jQuery(function($) {
 		var self = this;
 		var icon = this.getIcon();
 		
+		if(icon && icon.url)
+			icon.url = icon.url.replace(/^http(s?):/, "");
+		
 		if(this.settings.retina)
 		{
 			var img = new Image();
@@ -13027,7 +13095,7 @@ jQuery(function($) {
 		
 		this.overrideListingOrderSettings = false;
 		
-		$(this.dataTableElement).on("click", "th.sorting", function(event) {
+		$(this.dataTableElement).on("click", "th", function(event) {
 			
 			self.onUserChangedOrder(event);
 			
@@ -13059,7 +13127,10 @@ jQuery(function($) {
 				return; // Not ready yet
 			
 			if(self.lastResponse.meta.length == 0)
+			{
+				self.map.markerListing.trigger("markerlistingupdated");
 				return; // No results
+			}
 			
 			$(self.element).find("tbody>tr").each(function(index, tr) {
 				
@@ -13078,6 +13149,8 @@ jQuery(function($) {
 				
 			});
 			
+			
+			self.map.markerListing.trigger("markerlistingupdated");
 		};
 		
 		return options;

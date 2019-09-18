@@ -255,7 +255,19 @@ function import_ajax_file_options() {
 
 		}
 		else
-			$extension = 'json';	// Assume JSON
+			switch(strtolower($extension))
+			{
+				case "csv":
+				case "gpx":
+				case "kml":
+					// TODO: Really should fetch the head and test the content-type
+					$extension = strtolower($extension);
+					break;
+				
+				default:
+					$extension = "json";	// Assume JSON
+					break;
+			}
 		
 	}
 	
@@ -345,16 +357,7 @@ function import_ajax_import() {
 			try {
 
 				$notices = array();
-			
-				/*if(!set_time_limit( 1200 ))
-				{
-					
-				}
-				
-				var_dump(ini_get('max_execution_time'));
-				echo "Testing";
-				exit;*/
-				
+
 				$import = new $import_class( $import_file, $import_file_url, $_POST['options'] );
 				$import->import();
 

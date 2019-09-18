@@ -1271,10 +1271,16 @@ ul.wpgmza_marker_list_class {
     display: inline;
 }
 
+.wpgmza-custom-field-filter-widget-checkboxes ul.wpgmza-checkboxes
+{
+	border: 12px solid transparent;
+}
+
 .wpgmza-custom-field-filter-widget-checkboxes.wpgmza-dropdown .wpgmza-placeholder-label > ul.wpgmza-checkboxes {
     position: absolute;
     top: 100%;
-    left: 0;
+    top: calc(100% - 12px);
+    left: -12px;
     display: none;
     z-index: 99;
     list-style: none;

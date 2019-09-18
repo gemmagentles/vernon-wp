@@ -8,7 +8,7 @@ class MarkerLibraryDialog
 	
 	public function __construct()
 	{
-		wp_enqueue_script('remodal', plugin_dir_url(__DIR__) . 'lib/remodal.min.js');
+		wp_enqueue_script('remodal', plugin_dir_url(__DIR__) . 'lib/remodal.min.js', array('jquery'));
 		wp_enqueue_style('remodal', plugin_dir_url(__DIR__) . 'lib/remodal.css');
 		wp_enqueue_style('remodal-default-theme', plugin_dir_url(__DIR__) . 'lib/remodal-default-theme.css');
 		
