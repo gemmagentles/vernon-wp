@@ -18,6 +18,22 @@ if ( function_exists('acf_add_options_page') ) {
     acf_add_options_sub_page('Partner Site Options');
 }
 
+function reset_editor()
+{
+     global $_wp_post_type_features;
+
+     $post_type="page";
+     $feature = "editor";
+     if ( !isset($_wp_post_type_features[$post_type]) )
+     {
+
+     }
+     elseif ( isset($_wp_post_type_features[$post_type][$feature]) )
+     unset($_wp_post_type_features[$post_type][$feature]);
+}
+
+add_action("init","reset_editor");
+
 /*------------------------------------*\
 	Theme Support
 \*------------------------------------*/
