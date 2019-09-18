@@ -55,7 +55,7 @@ class Export {
 			'polygons'     => true,
 			'polylines'    => true,
 			'rectangles'   => true,
-			'datasets'     => true,
+			'datasets'     => true
 		) );
 
 		if ( is_array( $export_args['maps'] ) ) {
@@ -150,7 +150,7 @@ class Export {
 			'polygons'     => $this->get_polygons_data(),
 			'polylines'    => $this->get_polylines_data(),
 			'rectangles'   => $this->get_rectangles_data(),
-			'datasets'     => $this->get_datasets_data(),
+			'datasets'     => $this->get_datasets_data()
 		);
 	}
 

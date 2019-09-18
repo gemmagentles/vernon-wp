@@ -3,7 +3,7 @@ Contributors: WPGMaps, NickDuncan, CodeCabin_, DylanAuty, PerryRylance
 Donate link: https://www.wpgmaps.com
 Tags: google maps, maps, map, map markers, google map, google maps plugin, wp google maps, wp google map, map plugin, directions, google map plugin, map widget
 Requires at least: 3.5
-Tested up to: 5.2.1
+Tested up to: 5.2.3
 Requires PHP: 5.3
 Stable tag: trunk
 License: GPLv2
@@ -220,6 +220,33 @@ Please upgrade your version of WP Google Maps to version 6.0.27 as it includes m
 
 == Changelog ==
 
+= 7.11.50 :- 2019-09-13 :- Medium priority =
+* Fixed markers not visible in Internet Explorer when using OpenLayers (append is not a method)
+
+= 7.11.49 :- 2019-09-10 :- Medium priority =
+* Added warning when "Do not enqueue datatables" is selected, but dataTables library is not loaded
+* Added comment to wpgmza_data.js to fix issues with empty files and Safari
+* Altered "zero-results" message to "No results found for this address"
+* Fixed skipNonceCheck flag being ignored when Live Tracking App is used
+
+= 7.11.48 :- 2019-08-28 :- Low priority =
+* Fixed polygons and polylines not displaying back end before global settings have been saved
+* Increased link column to accept 2083 characters
+
+= 7.11.47 :- 2019-08-09 :- Medium priority =
+* Fixed map engine dialog submission not working
+* Fixed WPGMZA.EventDispatcher not handing some native events over to DOM correctly
+
+= 7.11.46 :- 2019-08-08 :- Medium priority =
+* Fixed conflict with WooCommerce effecting checkout page on installations with debug notices turned on
+* Fixed WPGMZA.getQueryParamValue matching location hash on last parameter
+
+= 7.11.45 :- 2019-08-07 :- Medium priority =
+* Added ABSPATH checks to .html.php files, class.settings.php and backwards_compat_v6.php
+* Fixed add shape buttons disabled for Google when global settings have never been saved
+* Fixed permissions issues when attempting to save global settings (HTTP error 401)
+* Fixed permissions issues preventing users without manage_options capability from logging in
+
 = 7.11.44 :- 2019-08-01 :- Low priority =
 * Added REST API parameter skipNonceCheck for Live Tracking App
 * Fixed map type settings not "live" in map edit page
@@ -264,6 +291,7 @@ Please upgrade your version of WP Google Maps to version 6.0.27 as it includes m
 
 = 7.11.36 :- 2019-07-11 :- Low priority =
 * Re-added admin-ajax fallback for when REST API is blocked
+* Fixed Polyline color issue
 
 = 7.11.35 :- 2019-07-08 :- High priority =
 * Security vulnerabilities fixed (Thank you Plugin Review Team at WordPress.org and pluginvulnerabilities.com)
@@ -1247,6 +1275,22 @@ Please upgrade your version of WP Google Maps to version 6.0.27 as it includes m
 
 
 For more, please view the WP Google Maps site
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

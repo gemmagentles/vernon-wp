@@ -102,7 +102,7 @@ jQuery(function($) {
 			case google.maps.DirectionsStatus.REQUEST_DENIED:
 			 
 				var key = status.toLowerCase();
-				var message = wpgmza_localized_strings[key];
+				var message = WPGMZA.localized_strings[key];
 				
 				$(this.element).find(".wpgmza-directions-results").html(
 					'<i class="fa fa-times" aria-hidden="true"></i>' + message

@@ -13,6 +13,7 @@
 						<?php } else { ?> 
 							<?php html5blank_nav(); ?>
 						<?php } ?>
+							<a href="/site-map">Site Map</a>
 						</nav>
 						<div class="company-info">
 							<div class="mobile-line"></div>

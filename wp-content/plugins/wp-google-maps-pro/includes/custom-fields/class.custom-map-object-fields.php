@@ -149,7 +149,8 @@ class CustomMapObjectFields implements \IteratorAggregate, \JsonSerializable, \C
 		if($name == 'object_id')
 			throw new \Exception('Property is read only');
 		
-		if(is_numeric($name))
+		// TODO: I'm not sure how these 0 key values are creeping in, but they're invalid. We safeguard against it here so notices aren't generated
+		if(is_numeric($name) && $name != '0')
 		{
 			$field_id = (int)$name;
 			$name = CustomMapObjectFields::$field_names_by_id[ (int)$name ];

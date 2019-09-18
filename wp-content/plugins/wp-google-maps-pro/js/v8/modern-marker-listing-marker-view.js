@@ -34,19 +34,19 @@ jQuery(function($) {
 				<div class='wpgmza-modern-marker-listing-button wpgmza-link-button'>\
 					<i class='fa fa-link' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.link + "\
+						" + WPGMZA.localized_strings.link + "\
 					</div>\
 				</div>\
 				<div class='wpgmza-modern-marker-listing-button wpgmza-directions-button'>\
 					<i class='fa fa-road' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.directions + "\
+						" + WPGMZA.localized_strings.directions + "\
 					</div>\
 				</div>\
 				<div class='wpgmza-modern-marker-listing-button wpgmza-zoom-button'>\
 					<i class='fa fa-search-plus' aria-hidden='true'></i>\
 					<div>\
-						" + wpgmza_localized_strings.zoom + "\
+						" + WPGMZA.localized_strings.zoom + "\
 					</div>\
 				</div>\
 			</div>\

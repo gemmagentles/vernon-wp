@@ -284,13 +284,33 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 		return $clauses;
 	}
 	
+	protected function isListingOrderOverridden($input_params)
+	{
+		$useDefaultOrderBy = true;
+		
+		if(isset($input_params['overrideListingOrderSettings']))
+		{
+			switch($input_params['overrideListingOrderSettings'])
+			{
+				case 1:
+				case "1":
+				case true:
+				case "true":
+					$useDefaultOrderBy = false;
+					break;
+			}
+		}
+		
+		return !$useDefaultOrderBy;
+	}
+	
 	protected function getOrderBy($input_params, $column_keys)
 	{
 		global $WPGMZA_TABLE_NAME_MARKERS;
 		global $WPGMZA_TABLE_NAME_CATEGORIES;
 		global $WPGMZA_TABLE_NAME_MARKERS_HAS_CATEGORIES;
 		
-		if(!isset($input_params['overrideListingOrderSettings']) || $input_params['overrideListingOrderSettings'] == 'false')
+		if(!$this->isListingOrderOverridden($input_params))
 		{
 			// Use marker listing setting on initial draw
 			switch($this->map->order_markers_by)
@@ -336,7 +356,7 @@ class AdvancedTable extends \WPGMZA\MarkerDataTable
 	
 	protected function getOrderDirection($input_params)
 	{
-		if(!isset($input_params['overrideListingOrderSettings']) || $input_params['overrideListingOrderSettings'] == 'false')
+		if(!$this->isListingOrderOverridden($input_params))
 		{
 			// Use marker listing setting on initial draw
 			$dir = (empty($this->map->order_markers_choice) ? MarkerListing::ORDER_DESC : $this->map->order_markers_choice);

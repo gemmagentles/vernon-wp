@@ -26,6 +26,9 @@ jQuery(function($) {
 		var self = this;
 		var icon = this.getIcon();
 		
+		if(icon && icon.url)
+			icon.url = icon.url.replace(/^http(s?):/, "");
+		
 		if(this.settings.retina)
 		{
 			var img = new Image();

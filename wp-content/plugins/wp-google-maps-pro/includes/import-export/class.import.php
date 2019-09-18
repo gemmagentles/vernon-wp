@@ -274,12 +274,32 @@ abstract class Import {
 	 */
 	protected function geocode( $location, $type = 'address' ) {
 
-		$api_key = get_option( 'wpgmza_google_maps_api_key' );
+		global $wpgmza;
 
-		if ( empty( $api_key ) || empty( $location ) || ( 'address' !== $type && 'latlng' !== $type ) ) {
+		if(empty($wpgmza->settings->wpgmza_google_maps_api_key))
+			throw new \Exception("Geocode failed, no Google API key present");
+		
+		$api_key = $wpgmza->settings->wpgmza_google_maps_api_key;
+		
+		if(!empty($wpgmza->settings->importer_google_maps_api_key))
+			$api_key = $wpgmza->settings->importer_google_maps_api_key;
 
+		if(empty($api_key))
+		{
+			$this->log("Geocode failed (No API key)");
 			return false;
-
+		}
+			
+		if(empty($location))
+		{
+			$this->log("Geocode failed (Location empty)");
+			return false;
+		}
+		
+		if('address' != $type && 'latlng' != $type)
+		{
+			$this->log("Geocode failed (Invalid type)");
+			return false;
 		}
 
 		$url = add_query_arg( array(

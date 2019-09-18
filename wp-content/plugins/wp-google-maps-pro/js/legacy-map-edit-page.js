@@ -81,7 +81,7 @@
     	var placeSearch, autocomplete, wpgmza_def_i;
 
 		if(!WPGMZA.settings.engine || WPGMZA.settings.engine == "google-maps")
-		$("#wpgmza_map_type").on("change", function(event) {
+		jQuery("#wpgmza_map_type").on("change", function(event) {
 			
 			WPGMZA.maps[0].setOptions({
 				mapTypeId: wpgmza_native_map_type_to_google_map_type(this.value)
@@ -1014,7 +1014,7 @@
             this.bounds = new WPGMZA.LatLngBounds();
 			
 			if(!WPGMZA.settings.engine || WPGMZA.settings.engine == "google-maps")
-				this.map.setOptions({mapTypeId: wpgmza_native_map_type_to_google_map_type($("#wpgmza_map_type").val())});
+				this.map.setOptions({mapTypeId: wpgmza_native_map_type_to_google_map_type(jQuery("#wpgmza_map_type").val())});
 			
 			var theme_data = wpgmza_legacy_map_edit_page_vars.theme_data;
 			if(theme_data && theme_data.length)
@@ -1144,10 +1144,10 @@
 				var zoom = MYMAP.map.getZoom();
 				var $ = jQuery;
 				
-				$("#wpgmza_start_location").val(center.lat + "," + center.lng);
-				$("#wpgmza_start_zoom").val(zoom);
+				jQuery("#wpgmza_start_location").val(center.lat + "," + center.lng);
+				jQuery("#wpgmza_start_zoom").val(zoom);
 				
-				$("#wpgmaps_save_reminder").show();
+				jQuery("#wpgmaps_save_reminder").show();
 				
 			});
 			

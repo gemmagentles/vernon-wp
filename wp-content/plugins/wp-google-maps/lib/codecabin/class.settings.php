@@ -2,13 +2,15 @@
 
 namespace codecabin;
 
+if(!defined('ABSPATH'))
+	return;
+
 class Settings implements \ArrayAccess, \JsonSerializable, \IteratorAggregate
 {
 	private $data;
 	private $overrides;
 	private $option_name;
-	
-	
+		
 	public function __construct($option_name)
 	{
 		if(empty($option_name) || !is_string($option_name))

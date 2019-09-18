@@ -521,7 +521,12 @@
                         
 
                     } else {
-                        alert("Geocode was not successful for the following reason: " + status);
+						var message = status;
+						
+						if(status == WPGMZA.Geocoder.ZERO_RESULTS)
+							message = WPGMZA.localized_strings.zero_results;
+						
+                        alert("Geocode was not successful for the following reason: " + message);
                         enableAddMarkerButton(true);
 
                     }
@@ -604,7 +609,12 @@
                     });
 
                 } else {
-                    alert("Geocode was not successful for the following reason: " + status);
+					var message = status;
+					
+					if(status == WPGMZA.Geocoder.ZERO_RESULTS)
+						message = WPGMZA.localized_strings.zero_results;
+					
+                    alert("Geocode was not successful for the following reason: " + message);
 					enableEditMarkerButton(true);
                 }
             });
@@ -1106,7 +1116,7 @@ function close_infowindows() {
 
 function add_polygon(polygonid) {
 	
-	if(WPGMZA.settings.engine != "google-maps")
+	if(WPGMZA.settings.engine == "open-layers")
 		return;
 	
     var tmp_data = wpgmaps_localize_polygon_settings[polygonid];
@@ -1165,7 +1175,7 @@ function add_polygon(polygonid) {
 }
 function add_polyline(polyline) {
     
-	if(WPGMZA.settings.engine != "google-maps")
+	if(WPGMZA.settings.engine == "open-layers")
 		return;
     
     var tmp_data = wpgmaps_localize_polyline_settings[polyline];

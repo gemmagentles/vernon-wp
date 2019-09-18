@@ -101,6 +101,9 @@
 									case 'select2':
 										$post_value = sanitize_key( $post_value );
 										break;
+									case 'checkbox':
+										$post_value = sanitize_key( $post_value );
+										break;
 									default:
 										do_action( 'wvs_save_term_meta', $term_id, $field, $post_value, $taxonomy );
 										break;
@@ -145,6 +148,7 @@
 					} else {
 						$field[ 'value' ] = get_term_meta( $term->term_id, $field[ 'id' ], true );
 					}
+					
 					
 					$field[ 'size' ]        = isset( $field[ 'size' ] ) ? $field[ 'size' ] : '40';
 					$field[ 'required' ]    = ( isset( $field[ 'required' ] ) and $field[ 'required' ] == true ) ? ' aria-required="true"' : '';
@@ -227,6 +231,21 @@
 							<?php
 							echo ob_get_clean();
 							break;
+						case 'checkbox':
+							
+							ob_start();
+							?>
+                            <label for="<?php echo esc_attr( $field[ 'id' ] ) ?>">
+
+                                <input name="<?php echo $field[ 'id' ] ?>" id="<?php echo $field[ 'id' ] ?>"
+									<?php checked( $field[ 'value' ], 'yes' ) ?>
+                                       type="<?php echo $field[ 'type' ] ?>"
+                                       value="yes" <?php echo $field[ 'required' ] . $field[ 'placeholder' ] ?>>
+								
+								<?php echo $field[ 'label' ] ?></label>
+							<?php
+							echo ob_get_clean();
+							break;
 						default:
 							do_action( 'wvs_term_meta_field', $field, $term );
 							break;
@@ -250,12 +269,16 @@
 				if ( ! $term ) {
 					?>
                     <div <?php echo $depends ?> class="form-field <?php echo esc_attr( $field[ 'id' ] ) ?> <?php echo empty( $field[ 'required' ] ) ? '' : 'form-required' ?>">
-                    <label for="<?php echo esc_attr( $field[ 'id' ] ) ?>"><?php echo $field[ 'label' ] ?></label>
-					<?php
+					<?php if ( $field[ 'type' ] !== 'checkbox' ) { ?>
+                        <label for="<?php echo esc_attr( $field[ 'id' ] ) ?>"><?php echo $field[ 'label' ] ?></label>
+						<?php
+					}
 				} else {
 					?>
                     <tr <?php echo $depends ?> class="form-field  <?php echo esc_attr( $field[ 'id' ] ) ?> <?php echo empty( $field[ 'required' ] ) ? '' : 'form-required' ?>">
-                    <th scope="row"><label for="<?php echo esc_attr( $field[ 'id' ] ) ?>"><?php echo $field[ 'label' ] ?></label></th>
+                    <th scope="row">
+                        <label for="<?php echo esc_attr( $field[ 'id' ] ) ?>"><?php echo $field[ 'label' ] ?></label>
+                    </th>
                     <td>
 					<?php
 				}
