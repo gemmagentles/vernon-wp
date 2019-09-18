@@ -15,7 +15,7 @@ jQuery(function($) {
 		
 		this.overrideListingOrderSettings = false;
 		
-		$(this.dataTableElement).on("click", "th.sorting", function(event) {
+		$(this.dataTableElement).on("click", "th", function(event) {
 			
 			self.onUserChangedOrder(event);
 			
@@ -47,7 +47,10 @@ jQuery(function($) {
 				return; // Not ready yet
 			
 			if(self.lastResponse.meta.length == 0)
+			{
+				self.map.markerListing.trigger("markerlistingupdated");
 				return; // No results
+			}
 			
 			$(self.element).find("tbody>tr").each(function(index, tr) {
 				
@@ -66,6 +69,8 @@ jQuery(function($) {
 				
 			});
 			
+			
+			self.map.markerListing.trigger("markerlistingupdated");
 		};
 		
 		return options;

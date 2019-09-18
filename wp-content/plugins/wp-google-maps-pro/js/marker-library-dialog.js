@@ -3,7 +3,7 @@
  * @module MarkerLibraryDialog
  * @requires WPGMZA
  */
-(function($) {
+jQuery(function($) {
 
 	var searchTimeoutID, lazyLoaded, currentCallback;
 	
@@ -76,7 +76,7 @@
 		$(this.element).remodal().close();
 	}
 	
-	$(document).ready(function(event) {
+	$(window).on("load", function(event) {
 		
 		var el = $(".wpgmza-marker-library-dialog");
 		
@@ -114,4 +114,4 @@
 		
 	});
 	
-})(jQuery);
+});

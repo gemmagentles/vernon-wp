@@ -3,13 +3,43 @@
 Plugin Name: WP Google Maps - Pro Add-on
 Plugin URI: http://www.wpgmaps.com
 Description: This is the Pro add-on for WP Google Maps. The Pro add-on enables you to add descriptions, pictures, links and custom icons to your markers as well as allows you to download your markers to a CSV file for quick editing and re-upload them when complete.
-Version:  7.11.49
+Version:  7.11.54
 Author: WP Google Maps
 Author URI: http://www.wpgmaps.com
 */
 
 /*
- * 7.11.49 :- 2019-07-30 :- Medium priority
+ * 7.11.54 :- 2019-09-13 :- Medium priority
+ * Added markerlistingupdated.wpgmza event to AdvancedTableMarkerListing
+ * Fixed markers not visible in Internet Explorer when using OpenLayers (append is not a method)
+ * Removed try/catch around legacy core marker add code to ease debugging
+ *
+ * 7.11.53 :- 2019-09-10 :- Medium priority
+ * Added more comprehensive logging for CSV imports, including when address empty and no coordinates
+ * Added jQuery dependency for remodal, fixes JS errors in edge cases
+ * Fixed poor desktop user experience with checkbox custom field filter widget
+ * Fixed issue where sort would be ignored with advanced table when overrideListingOrderSettings had been cast to an integer
+ * Removed experimental polygon label function
+ * 
+ * 7.11.52 :- 2019-08-28 :- Medium priority
+ * Added new setting importer_google_maps_api_key
+ * Added additional protocol stripping to WPGMZA.ProMarker.prototype.updateIcon (fixes some icons not loading when migrating to https://)
+ * Adding icons through Marker Library (Mappity.org) now creates media attachments
+ * Changed deprecated references to wpgmza_localized_strings to WPGMZA.localized_strings
+ * WPGMZA.ProInfoWindow now dispatches infowindowopen.wpgmza with modern styles
+ * Fixed all URL imports (except Google Sheets) assumed to be JSON format, now uses extension (will use Content-type in the future)
+ * Fixed mashupIDs not used by ProMarkerFilter
+ * Fixed 0 key custom fields being added to custom field data
+ *
+ * 7.11.51 :- 2019-08-12 :- Medium priority
+ * Fixed $ is undefined in legacy-map-edit-page.js since 7.11.49 on some installations
+ *
+ * 7.11.50 :- 2019-08-09 :- Medium priority
+ * Fixed users below administrator level can't use marker library
+ * Fixed JSON importer not correctly remapping categories
+ * Fixed "hide all markers before a search is done" hiding markers on back end
+ *
+ * 7.11.49 :- 2019-07-31 :- Medium priority
  * Added nonce check to duplicate map function
  * Fixed map type setting not "live" in map editor
  * Fixed map type setting not initially reflected in map editor

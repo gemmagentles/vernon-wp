@@ -75,7 +75,6 @@ class ProAdminMarkerDataTable extends AdminMarkerDataTable
 			{
 				case 'icon':
 					
-					// TODO: Update to use ProMarker::getIconSQL. Need to transmit map_id first
 					$columns[$key] = ProMarker::getIconSQL($map_id, true);
 					
 					break;

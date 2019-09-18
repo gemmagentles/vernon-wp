@@ -65,7 +65,8 @@ class SimpleWpMembership {
         add_action('load-toplevel_page_simple_wp_membership', array(&$this, 'admin_library'));
         add_action('load-wp-membership_page_simple_wp_membership_levels', array(&$this, 'admin_library'));
 
-        add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);        
+        add_action('wp_login', array(&$this, 'wp_login_hook_handler'), 10, 2);
+        add_action('wp_authenticate', array(&$this, 'wp_authenticate_handler'), 1, 2);
         add_action('wp_logout', array(&$this, 'wp_logout'));
         add_action('swpm_logout', array(&$this, 'swpm_do_user_logout'));
         add_action('user_register', array(&$this, 'swpm_handle_wp_user_registration'));
@@ -93,6 +94,13 @@ class SimpleWpMembership {
 
     function wp_password_reset_hook($user, $pass) {
         $swpm_user = SwpmMemberUtils::get_user_by_user_name($user->user_login);
+        
+        //Check if SWPM user entry exists
+        if (empty($swpm_user)) {
+            SwpmLog::log_auth_debug("wp_password_reset_hook() - SWPM user not found for username: '" . $user->user_login ."'. This is OK, assuming that this user was created directly in WP Users menu (not using SWPM).", true);
+            return;
+        }
+        
         $swpm_id = $swpm_user->member_id;
         if (!empty($swpm_id)) {
             $password_hash = SwpmUtils::encrypt_password($pass);
@@ -293,6 +301,17 @@ class SimpleWpMembership {
         $auth->login_to_swpm_using_wp_user($user);
     }
 
+    /* Used to log the user into SWPM system using the wp_login hook. Some social plugins use this hook to handle the login */
+    public function wp_login_hook_handler($user_login, $user){
+        SwpmLog::log_auth_debug('wp_login hook triggered. Username: ' . $user_login, true);
+        $auth = SwpmAuth::get_instance();
+        if ($auth->is_logged_in()) {
+            //User is already logged-in. Nothing to do.
+            return;
+        }        
+        $auth->login_to_swpm_using_wp_user($user);
+    }
+    
     public function wp_authenticate_handler($username, $password) {
 
         $auth = SwpmAuth::get_instance();

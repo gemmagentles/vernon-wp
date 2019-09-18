@@ -1217,48 +1217,44 @@ jQuery(function() {
 						wpgmza_optimized = false;
 					}
 
-					try{
-						var lat = val.lat;
-						var lng = val.lng;
-						var point = new WPGMZA.LatLng(lat, lng);
-						//MYMAP[map_id].bounds.extend(point);
+					var lat = val.lat;
+					var lng = val.lng;
+					var point = new WPGMZA.LatLng(lat, lng);
+					//MYMAP[map_id].bounds.extend(point);
 
-						if (show_marker_radius === true && show_marker_title_string === true) {
-							
-							var options = jQuery.extend(val, {
-								id: val.marker_id,
-								position: point,
-								map: MYMAP[map_id].map,
-								animation: wpmgza_anim,
-								optimized: wpgmza_optimized
-							});
-							
-							if(
-								(wpmgza_mapicon && wpmgza_mapicon != "0" && wpmgza_mapicon.length) 
-								||
-								(window.google && window.google.maps && wpmgza_mapicon && wpmgza_mapicon instanceof google.maps.MarkerImage)
-								)
-								options.icon = wpmgza_mapicon;
-							
-							var map = WPGMZA.getMapByID(map_id);
-							var marker;
-							
-							if(!(marker = map.getMarkerByID(options.id)))
-								marker = WPGMZA.Marker.createInstance(options);
-							
-							marker_array[map_id][wpmgza_marker_id] = marker;
-							marker_array[map_id][wpmgza_marker_id].default_icon = marker.icon;
+					if (show_marker_radius === true && show_marker_title_string === true) {
+						
+						var options = jQuery.extend(val, {
+							id: val.marker_id,
+							position: point,
+							map: MYMAP[map_id].map,
+							animation: wpmgza_anim,
+							optimized: wpgmza_optimized
+						});
+						
+						if(
+							(wpmgza_mapicon && wpmgza_mapicon != "0" && wpmgza_mapicon.length) 
+							||
+							(window.google && window.google.maps && wpmgza_mapicon && wpmgza_mapicon instanceof google.maps.MarkerImage)
+							)
+							options.icon = wpmgza_mapicon;
+						
+						var map = WPGMZA.getMapByID(map_id);
+						var marker;
+						
+						if(!(marker = map.getMarkerByID(options.id)))
+							marker = WPGMZA.Marker.createInstance(options);
+						
+						marker_array[map_id][wpmgza_marker_id] = marker;
+						marker_array[map_id][wpmgza_marker_id].default_icon = marker.icon;
 
-							marker_array2[map_id].push(marker);
-							marker_sl_array[map_id].push(wpmgza_marker_id);
+						marker_array2[map_id].push(marker);
+						marker_sl_array[map_id].push(wpmgza_marker_id);
 
-							
+						
 
-						}
-					}catch(e) {
-						console.warn("Cannot add marker " + val.marker_id + ": " + e.message);
 					}
-
+				
 					
 				});
 				
@@ -1417,7 +1413,7 @@ function add_heatmap(mapid,datasetid) {
        });
        WPGM_Path_Polygon[polygonid].setMap(MYMAP[mapid].map.googleMap);
 	   
-	   addPolygonLabel(WPGM_PathData);
+	   // addPolygonLabel(WPGM_PathData);
 
         polygon_center = bounds.getCenter();
 

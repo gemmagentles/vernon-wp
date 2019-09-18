@@ -516,8 +516,8 @@
 	// Extra Product Option Terms
 	//-------------------------------------------------------------------------------
 	
-	if ( ! function_exists( 'wvs_product_option_terms' ) ) :
-		function wvs_product_option_terms( $attribute_taxonomy, $i ) {
+	if ( ! function_exists( 'wvs_product_option_terms_old' ) ) :
+		function wvs_product_option_terms_old( $attribute_taxonomy, $i ) {
 			// $attribute_taxonomy, $i
 			// $tax, $i
 			global $post, $thepostid, $product_object;
@@ -537,7 +537,7 @@
 				);
 				
 				?>
-                <select multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select terms', 'woo-variation-swatches' ); ?>" class="multiselect attribute_values wc-enhanced-select" name="attribute_values[<?php echo $i; ?>][]">
+                <select multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select terms', 'woo-variation-swatches' ); ?>" class="multiselect attribute_values wc-enhanced-select" name="attribute_values[<?php echo esc_attr( $i ); ?>][]">
 					<?php
 						$all_terms = get_terms( $taxonomy, apply_filters( 'woocommerce_product_attribute_terms', $args ) );
 						if ( $all_terms ) :
@@ -547,7 +547,6 @@
 						endif;
 					?>
                 </select>
-				<?php do_action( 'before_wvs_product_option_terms_button', $attribute_taxonomy, $taxonomy ); ?>
                 <button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'woo-variation-swatches' ); ?></button>
                 <button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'woo-variation-swatches' ); ?></button>
 				
@@ -555,12 +554,96 @@
 				$fields = wvs_taxonomy_meta_fields( $attribute_taxonomy->attribute_type );
 				
 				if ( ! empty( $fields ) ): ?>
-                    <button class="button fr plus wvs_add_new_attribute" data-dialog_title="<?php printf( esc_html__( 'Add new %s', 'woo-variation-swatches' ), esc_attr( $attribute_taxonomy->attribute_label ) ) ?>"><?php esc_html_e( 'Add new', 'woo-variation-swatches' ); ?></button>
+                    <button disabled="disabled" class="button fr plus wvs_add_new_attribute" data-dialog_title="<?php printf( esc_html__( 'Add new %s', 'woo-variation-swatches' ), esc_attr( $attribute_taxonomy->attribute_label ) ) ?>"><?php esc_html_e( 'Add new', 'woo-variation-swatches' ); ?></button>
 				<?php else: ?>
                     <button class="button fr plus add_new_attribute"><?php esc_html_e( 'Add new', 'woo-variation-swatches' ); ?></button>
 				<?php endif; ?>
 				<?php
-				do_action( 'after_wvs_product_option_terms_button', $attribute_taxonomy, $taxonomy, $product_id );
+			}
+		}
+	endif;
+	
+	//-------------------------------------------------------------------------------
+	// Dokan Support - OLD WC Style
+	//-------------------------------------------------------------------------------
+	if ( ! function_exists( 'dokan_support_wvs_product_option_terms' ) ) :
+		function dokan_support_wvs_product_option_terms( $attribute_taxonomy, $i ) {
+			// $attribute_taxonomy, $i
+			// $tax, $i
+			global $post, $thepostid, $product_object;
+			if ( in_array( $attribute_taxonomy->attribute_type, array_keys( wvs_available_attributes_types() ) ) ) {
+				
+				$taxonomy = wc_attribute_taxonomy_name( $attribute_taxonomy->attribute_name );
+				
+				$product_id = $thepostid;
+				
+				if ( is_null( $thepostid ) && isset( $_POST[ 'post_id' ] ) ) {
+					$product_id = absint( $_POST[ 'post_id' ] );
+				}
+				
+				$args = array(
+					'orderby'    => 'name',
+					'hide_empty' => 0,
+				);
+				
+				?>
+                <select multiple="multiple" style="width:100%" data-placeholder="<?php esc_attr_e( 'Select terms', 'woo-variation-swatches' ); ?>" class="dokan_attribute_values dokan-select2" name="attribute_values[<?php echo esc_attr( $i ); ?>][]">
+					<?php
+						$all_terms = get_terms( $taxonomy, apply_filters( 'dokan_product_attribute_terms', $args ) );
+						if ( $all_terms ) :
+							foreach ( $all_terms as $term ) :
+								echo '<option value="' . esc_attr( $term->slug ) . '" ' . selected( has_term( absint( $term->term_id ), $taxonomy, $product_id ), true, false ) . '>' . esc_attr( apply_filters( 'woocommerce_product_attribute_term_name', $term->name, $term ) ) . '</option>';
+							endforeach;
+						endif;
+					?>
+                </select>
+
+                <div class="dokan-pre-defined-attribute-btn-group">
+                    <button class="dokan-btn dokan-btn-default plus dokan-select-all-attributes"><?php esc_html_e( 'Select all', 'woo-variation-swatches' ); ?></button>
+                    <button class="dokan-btn dokan-btn-default minus dokan-select-no-attributes"><?php esc_html_e( 'Select none', 'woo-variation-swatches' ); ?></button>
+                </div>
+				<?php
+			}
+		}
+	endif;
+	
+	//-------------------------------------------------------------------------------
+	// Extra Product Option Terms for WC 3.6+
+	//-------------------------------------------------------------------------------
+	
+	if ( ! function_exists( 'wvs_product_option_terms' ) ) :
+		function wvs_product_option_terms( $attribute_taxonomy, $i, $attribute ) {
+			if ( in_array( $attribute_taxonomy->attribute_type, array_keys( wvs_available_attributes_types() ) ) ) {
+				
+				?>
+                <select multiple="multiple" data-placeholder="<?php esc_attr_e( 'Select terms', 'woo-variation-swatches' ); ?>" class="multiselect attribute_values wc-enhanced-select" name="attribute_values[<?php echo esc_attr( $i ); ?>][]">
+					<?php
+						$args      = array(
+							'orderby'    => 'name',
+							'hide_empty' => 0,
+						);
+						$all_terms = get_terms( $attribute->get_taxonomy(), apply_filters( 'woocommerce_product_attribute_terms', $args ) );
+						if ( $all_terms ) {
+							foreach ( $all_terms as $term ) {
+								$options = $attribute->get_options();
+								$options = ! empty( $options ) ? $options : array();
+								echo '<option value="' . esc_attr( $term->term_id ) . '"' . wc_selected( $term->term_id, $options ) . '>' . esc_attr( apply_filters( 'woocommerce_product_attribute_term_name', $term->name, $term ) ) . '</option>';
+							}
+						}
+					?>
+                </select>
+                <button class="button plus select_all_attributes"><?php esc_html_e( 'Select all', 'woo-variation-swatches' ); ?></button>
+                <button class="button minus select_no_attributes"><?php esc_html_e( 'Select none', 'woo-variation-swatches' ); ?></button>
+				
+				<?php
+				$fields = wvs_taxonomy_meta_fields( $attribute_taxonomy->attribute_type );
+				
+				if ( ! empty( $fields ) ): ?>
+                    <button disabled="disabled" class="button fr plus wvs_add_new_attribute" data-dialog_title="<?php printf( esc_html__( 'Add new %s', 'woo-variation-swatches' ), esc_attr( $attribute_taxonomy->attribute_label ) ) ?>"><?php esc_html_e( 'Add new', 'woo-variation-swatches' ); ?></button>
+				<?php else: ?>
+                    <button class="button fr plus add_new_attribute"><?php esc_html_e( 'Add new', 'woo-variation-swatches' ); ?></button>
+				<?php endif; ?>
+				<?php
 			}
 		}
 	endif;
@@ -1175,4 +1258,3 @@
 			echo ob_get_clean();
 		}
 	endif;
-	

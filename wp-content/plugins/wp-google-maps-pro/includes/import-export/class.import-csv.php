@@ -55,7 +55,8 @@ class ImportCSV extends Import {
 		Import::__construct($file, $file_url, $options);
 		
 		$this->failure_message_by_handle = array(
-			'geocode_failed'	=> __('Failed to geocode address', 'wp-google-maps')
+			'geocode_failed'	=> __('Failed to geocode address', 'wp-google-maps'),
+			'no_address'			=> __('No address specified for geocoding', 'wp-google-maps')
 		);
 		$this->failed_rows_by_handle = array();
 	}
@@ -71,6 +72,7 @@ class ImportCSV extends Import {
 		
 		$this->failed_rows_by_handle[$handle][] = $row_index;
 		
+		$this->log("$handle on $row_index");
 	}
 	
 	/**
@@ -895,7 +897,15 @@ class ImportCSV extends Import {
 				if ( ! empty( $marker[ $this->header_map['address'] ] ) &&
 				     ( empty( $marker[ $this->header_map['lat'] ] ) || empty( $marker[ $this->header_map['lng'] ] ) ) ) {
 
-					$latlng = $this->geocode( $marker[ $this->header_map['address'] ] );
+					$address = $marker[ $this->header_map['address'] ];
+
+					if(empty($address))
+					{
+						$this->failure('no_address', $row_index);
+						continue;
+					}
+
+					$latlng = $this->geocode($address);
 
 					if ( $latlng == false ) {
 

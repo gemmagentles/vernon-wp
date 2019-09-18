@@ -178,18 +178,6 @@ ul.yith-wcan-list {
 }
 
 /* Hierarchical  Order */
-.widget.widget_layered_nav li.yit-wcan-child-terms.level-1 {
-    padding-left: 30px;
-}
-
-.widget.widget_layered_nav li.yit-wcan-child-terms.level-2 {
-    padding-left: 60px;
-}
-
-.widget.widget_layered_nav li.yit-wcan-child-terms.level-3 {
-    padding-left: 90px;
-}
-
 .yith-wcan-select-wrapper ul.yith-wcan-select.yith-wcan li.yit-wcan-child-terms.level-1 {
     padding-left: 30px;
 }
@@ -342,4 +330,27 @@ ul.yith-wcan-list li.chosen a:before{
     margin-right: 5px;
     font-weight: bold;
     font-size: 12px;
+}
+
+/*-------------------------------
+    STOREFRONT SUPPORT
+--------------------------------*/
+
+.theme-storefront .widget_layered_nav .yith-wcan-list li::before{width: 0;content: "" !important;float: none;padding-left: 0 !important;}
+.theme-storefront .widget_layered_nav .yith-wcan-list li{padding-left: 0;}
+
+.theme-storefront .yith-woocommerce-ajax-product-filter ul li.chosen a:before,
+.theme-storefront .yith-woocommerce-ajax-product-filter.yith-wcan-sort-by ul li a.active:before{
+    font-family: 'Font Awesome 5 Free';
+    content: "\f057";
+}
+
+.theme-storefront .yith-woocommerce-ajax-product-filter.with-checkbox ul li.chosen a:before,
+.theme-storefront .yith-woocommerce-ajax-product-filter.yith-wcan-sort-by.with-checkbox ul li a.active:before {
+    content: "";
+}
+
+.theme-storefront .widget-area .yith-woocommerce-ajax-product-filter a:not(.button):before {
+    text-decoration: none;
+    display: inline-block
 }

@@ -167,7 +167,6 @@ var forms = function forms(m, i18n) {
       case 'radio':
       case 'checkbox':
         return forms.choice(config);
-        break;
     } // fallback to good old text field
 
 
@@ -247,7 +246,7 @@ var g = function g(m) {
    * @returns {*}
    */
 
-  generators.select = function (config) {
+  generators['select'] = function (config) {
     var attributes = {
       name: config.name(),
       required: config.required()
@@ -305,7 +304,7 @@ var g = function g(m) {
    */
 
 
-  generators.checkbox = function (config) {
+  generators['checkbox'] = function (config) {
     var fields = config.choices().map(function (choice) {
       var name = config.name() + (config.type() === 'checkbox' ? '[]' : '');
       var required = config.required() && config.type() === 'radio';
@@ -321,7 +320,7 @@ var g = function g(m) {
     return fields;
   };
 
-  generators.radio = generators.checkbox;
+  generators['radio'] = generators['checkbox'];
   /**
    * Generates a default field
    *
@@ -369,18 +368,16 @@ var g = function g(m) {
 
 
   function generate(config) {
-    var label,
-        field,
-        htmlTemplate,
-        html,
-        vdom = document.createElement('div');
-    label = config.label().length > 0 && config.showLabel() ? m("label", {}, config.label()) : '';
-    field = typeof generators[config.type()] === "function" ? generators[config.type()](config) : generators['default'](config);
-    htmlTemplate = config.wrap() ? m('p', [label, field]) : [label, field]; // render in vdom
+    var labelAtts = {}; // let labelAtts = { 'for': config.name() };
 
+    var label = config.label().length > 0 && config.showLabel() ? m("label", labelAtts, config.label()) : '';
+    var field = typeof generators[config.type()] === "function" ? generators[config.type()](config) : generators['default'](config);
+    var htmlTemplate = config.wrap() ? m('p', [label, field]) : [label, field]; // render in vdom
+
+    var vdom = document.createElement('div');
     m.render(vdom, htmlTemplate); // prettify html
 
-    html = htmlutil.prettyPrint(vdom.innerHTML);
+    var html = htmlutil.prettyPrint(vdom.innerHTML);
     return html + "\n";
   }
 
@@ -498,7 +495,7 @@ var FieldHelper = function FieldHelper(m, tabs, editor, fields, events, i18n) {
         onkeydown: function onkeydown(e) {
           e = e || window.event;
 
-          if (e.keyCode == 13) {
+          if (e.keyCode === 13) {
             createFieldHTMLAndAddToForm();
           }
         },
@@ -541,6 +538,7 @@ var FieldFactory = function FieldFactory(fields, i18n) {
   /**
    * Helper function to quickly register a field and store it in local scope
    *
+   * @param {string} category
    * @param {object} data
    * @param {boolean} sticky
    */
@@ -601,32 +599,32 @@ var FieldFactory = function FieldFactory(fields, i18n) {
         type: 'text',
         mailchimpType: 'address',
         title: i18n.streetAddress
-      });
+      }, false);
       register(category, {
         name: data.name + '[city]',
         type: 'text',
         mailchimpType: 'address',
         title: i18n.city
-      });
+      }, false);
       register(category, {
         name: data.name + '[state]',
         type: 'text',
         mailchimpType: 'address',
         title: i18n.state
-      });
+      }, false);
       register(category, {
         name: data.name + '[zip]',
         type: 'text',
         mailchimpType: 'address',
         title: i18n.zip
-      });
+      }, false);
       register(category, {
         name: data.name + '[country]',
         type: 'select',
         mailchimpType: 'address',
         title: i18n.country,
         choices: mc4wp_vars.countries
-      });
+      }, false);
     }
 
     return true;
@@ -688,8 +686,8 @@ var FieldFactory = function FieldFactory(fields, i18n) {
   }
 
   function registerCustomFields(lists) {
-    var choices,
-        category = i18n.formFields; // register submit button
+    var choices;
+    var category = i18n.formFields; // register submit button
 
     register(category, {
       name: '',
@@ -7208,15 +7206,8 @@ window.mc4wp.forms.fields = fields;
     var line = getLine(doc, pos.line);
     if (line.markedSpans) { for (var i = 0; i < line.markedSpans.length; ++i) {
       var sp = line.markedSpans[i], m = sp.marker;
-
-      // Determine if we should prevent the cursor being placed to the left/right of an atomic marker
-      // Historically this was determined using the inclusiveLeft/Right option, but the new way to control it
-      // is with selectLeft/Right
-      var preventCursorLeft = ("selectLeft" in m) ? !m.selectLeft : m.inclusiveLeft;
-      var preventCursorRight = ("selectRight" in m) ? !m.selectRight : m.inclusiveRight;
-
-      if ((sp.from == null || (preventCursorLeft ? sp.from <= pos.ch : sp.from < pos.ch)) &&
-          (sp.to == null || (preventCursorRight ? sp.to >= pos.ch : sp.to > pos.ch))) {
+      if ((sp.from == null || (m.inclusiveLeft ? sp.from <= pos.ch : sp.from < pos.ch)) &&
+          (sp.to == null || (m.inclusiveRight ? sp.to >= pos.ch : sp.to > pos.ch))) {
         if (mayClear) {
           signal(m, "beforeCursorEnter");
           if (m.explicitlyCleared) {
@@ -7228,14 +7219,14 @@ window.mc4wp.forms.fields = fields;
 
         if (oldPos) {
           var near = m.find(dir < 0 ? 1 : -1), diff = (void 0);
-          if (dir < 0 ? preventCursorRight : preventCursorLeft)
+          if (dir < 0 ? m.inclusiveRight : m.inclusiveLeft)
             { near = movePos(doc, near, -dir, near && near.line == pos.line ? line : null); }
           if (near && near.line == pos.line && (diff = cmp(near, oldPos)) && (dir < 0 ? diff < 0 : diff > 0))
             { return skipAtomicInner(doc, near, pos, dir, mayClear) }
         }
 
         var far = m.find(dir < 0 ? -1 : 1);
-        if (dir < 0 ? preventCursorLeft : preventCursorRight)
+        if (dir < 0 ? m.inclusiveLeft : m.inclusiveRight)
           { far = movePos(doc, far, dir, far.line == pos.line ? line : null); }
         return far ? skipAtomicInner(doc, far, pos, dir, mayClear) : null
       }
@@ -9768,7 +9759,7 @@ window.mc4wp.forms.fields = fields;
       for (var i = newBreaks.length - 1; i >= 0; i--)
         { replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length)); }
     });
-    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
+    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028\u2029\ufeff]/g, function (cm, val, old) {
       cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
       if (old != Init) { cm.refresh(); }
     });
@@ -11816,7 +11807,7 @@ window.mc4wp.forms.fields = fields;
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.48.2";
+  CodeMirror.version = "5.47.0";
 
   return CodeMirror;
 
@@ -12879,7 +12870,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     if (ch == '"' || ch == "'") {
       state.tokenize = tokenString(ch);
       return state.tokenize(stream, state);
-    } else if (ch == "." && stream.match(/^\d[\d_]*(?:[eE][+\-]?[\d_]+)?/)) {
+    } else if (ch == "." && stream.match(/^\d+(?:[eE][+\-]?\d+)?/)) {
       return ret("number", "number");
     } else if (ch == "." && stream.match("..")) {
       return ret("spread", "meta");
@@ -12887,10 +12878,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       return ret(ch);
     } else if (ch == "=" && stream.eat(">")) {
       return ret("=>", "operator");
-    } else if (ch == "0" && stream.match(/^(?:x[\dA-Fa-f_]+|o[0-7_]+|b[01_]+)n?/)) {
+    } else if (ch == "0" && stream.match(/^(?:x[\da-f]+|o[0-7]+|b[01]+)n?/i)) {
       return ret("number", "number");
     } else if (/\d/.test(ch)) {
-      stream.match(/^[\d_]*(?:n|(?:\.[\d_]*)?(?:[eE][+\-]?[\d_]+)?)?/);
+      stream.match(/^\d*(?:n|(?:\.\d*)?(?:[eE][+\-]?\d+)?)?/);
       return ret("number", "number");
     } else if (ch == "/") {
       if (stream.eat("*")) {
@@ -13007,12 +12998,8 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
         ++depth;
       } else if (wordRE.test(ch)) {
         sawSomething = true;
-      } else if (/["'\/`]/.test(ch)) {
-        for (;; --pos) {
-          if (pos == 0) return
-          var next = stream.string.charAt(pos - 1)
-          if (next == ch && stream.string.charAt(pos - 2) != "\\") { pos--; break }
-        }
+      } else if (/["'\/]/.test(ch)) {
+        return;
       } else if (sawSomething && !depth) {
         ++pos;
         break;
@@ -13390,12 +13377,9 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
   }
   function maybetype(type, value) {
     if (isTS) {
-      if (type == ":") return cont(typeexpr);
+      if (type == ":" || value == "in") return cont(typeexpr);
       if (value == "?") return cont(maybetype);
     }
-  }
-  function maybetypeOrIn(type, value) {
-    if (isTS && (type == ":" || value == "in")) return cont(typeexpr)
   }
   function mayberettype(type) {
     if (isTS && type == ":") {
@@ -13437,7 +13421,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     } else if (type == ":") {
       return cont(typeexpr)
     } else if (type == "[") {
-      return cont(expect("variable"), maybetypeOrIn, expect("]"), typeprop)
+      return cont(expect("variable"), maybetype, expect("]"), typeprop)
     } else if (type == "(") {
       return pass(functiondecl, typeprop)
     }
