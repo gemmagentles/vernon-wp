@@ -575,8 +575,10 @@ TYPOGRAPHY
   .slider__image {
     width: 100%;
     height: 280px;
-    object-fit: cover;
-    object-position: left;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -o-object-position: left;
+       object-position: left;
     position: relative; }
     @media (min-width: 48em) {
       .slider__image {
@@ -2240,6 +2242,16 @@ a.next.page-numbers:active {
       color: #424445;
       border: 3px solid #DEDEDE;
       padding: 16px; }
+      .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container input:-ms-input-placeholder, .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container textarea:-ms-input-placeholder {
+        color: #767676;
+        font-size: 16px;
+        letter-spacing: 1.14px;
+        line-height: 19px; }
+      .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container input::-ms-input-placeholder, .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container textarea::-ms-input-placeholder {
+        color: #767676;
+        font-size: 16px;
+        letter-spacing: 1.14px;
+        line-height: 19px; }
       .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container input::placeholder, .contact-form__inner-wrapper.form .wpforms-container .wpforms-field-container textarea::placeholder {
         color: #767676;
         font-size: 16px;
@@ -2404,6 +2416,16 @@ a.next.page-numbers:active {
     padding: 22px;
     width: 100% !important;
     max-width: 620px; }
+    .contact-map-wrapper .addressInput:-ms-input-placeholder {
+      color: #767676;
+      font-size: 1em;
+      letter-spacing: 1.14px;
+      line-height: 19px; }
+    .contact-map-wrapper .addressInput::-ms-input-placeholder {
+      color: #767676;
+      font-size: 1em;
+      letter-spacing: 1.14px;
+      line-height: 19px; }
     .contact-map-wrapper .addressInput::placeholder {
       color: #767676;
       font-size: 1em;
@@ -2442,6 +2464,9 @@ a.next.page-numbers:active {
     flex: 0 0 100% !important;
     text-align: center !important;
     padding: 30px !important; }
+  .contact-map-wrapper .wpgmza-not-found-msg {
+    width: 100%;
+    text-align: center; }
   .contact-map-wrapper .wpgmza_sl_reset_button_div {
     display: none;
     visibility: hidden; }
@@ -2655,42 +2680,44 @@ a.next.page-numbers:active {
       .footer__top .mobile-line {
         display: none;
         visibility: hidden; } }
-  @media (min-width: 48em) {
-    .footer__nav {
-      padding-bottom: 0;
-      background: none; } }
-  .footer__nav .nav__list {
-    padding: 28px 10px 7px; }
+  .footer__nav {
+    padding-bottom: 25px; }
     @media (min-width: 48em) {
-      .footer__nav .nav__list {
-        display: block;
-        margin: 0;
-        padding: 0; } }
-  .footer__nav .nav__item {
-    list-style-type: none;
-    margin: 25px 0;
-    position: relative; }
-    .footer__nav .nav__item::after {
-      display: none;
-      visibility: hidden; }
-    @media (min-width: 48em) {
-      .footer__nav .nav__item {
-        margin: 15px 0; }
-        .footer__nav .nav__item:first-child {
-          margin: 0 0 15px 0; } }
-  .footer__nav a {
-    color: #424445;
-    text-decoration: none;
-    position: relative; }
-    @media (min-width: 48em) {
-      .footer__nav a:hover::after, .footer__nav a:focus::after, .footer__nav a:active::after {
-        content: "";
-        position: absolute;
-        height: 5px;
-        border-bottom: 2px solid #EB0029;
-        width: 100%;
-        top: 16px;
-        left: 0; } }
+      .footer__nav {
+        padding-bottom: 0;
+        background: none; } }
+    .footer__nav .nav__list {
+      padding: 28px 10px 0; }
+      @media (min-width: 48em) {
+        .footer__nav .nav__list {
+          display: block;
+          margin: 0;
+          padding: 0; } }
+    .footer__nav .nav__item {
+      list-style-type: none;
+      margin: 25px 0;
+      position: relative; }
+      .footer__nav .nav__item::after {
+        display: none;
+        visibility: hidden; }
+      @media (min-width: 48em) {
+        .footer__nav .nav__item {
+          margin: 15px 0; }
+          .footer__nav .nav__item:first-child {
+            margin: 0 0 15px 0; } }
+    .footer__nav a {
+      color: #424445;
+      text-decoration: none;
+      position: relative; }
+      @media (min-width: 48em) {
+        .footer__nav a:hover::after, .footer__nav a:focus::after, .footer__nav a:active::after {
+          content: "";
+          position: absolute;
+          height: 5px;
+          border-bottom: 2px solid #EB0029;
+          width: 100%;
+          top: 16px;
+          left: 0; } }
   .footer .social {
     margin: 58px 0;
     padding: 0 20px; }
@@ -2985,6 +3012,8 @@ BUTTONS
 input[type=button],
 input[type=submit],
 input[type=reset] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   border-radius: 0px !important;
   background-image: none !important;
@@ -3062,3 +3091,4 @@ a[href^="tel"] {
       .sydney-button__with-icon--icon {
         max-width: 12px;
         right: 26px; } }
+
