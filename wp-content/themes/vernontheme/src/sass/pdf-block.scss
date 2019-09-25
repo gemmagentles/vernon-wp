@@ -47,10 +47,12 @@
         color: $font-color;
         font-family: $primary-font-family;
         font-size: em(16);
-        line-height: 1.6;
+        line-height: 1.4;
         font-weight: 300;
         text-decoration: none;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         border-bottom: 1.5px solid $font-color;
         padding: 25px 0 5px;
 
@@ -58,7 +60,7 @@
             font-size: em(18);
         }
     
-        @include breakpoint(desktop) {
+        @include breakpoint(largedesktop) {
             font-size: em(20);
         }
 
@@ -68,13 +70,22 @@
             border-bottom: 1.5px solid $primary-color;
         }
 
+        &--bluetooth-icon {
+            width: 14px;
+            height: 14px;
+            margin-right: 10px;
+
+            @include breakpoint(desktop) {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
         &--icon {
             height: 16px;
             width: 10px;
-            top: 8px;
             position: relative;
             right: 8px;
-            float: right;
             margin-left: 30px;
 
             @include breakpoint(desktop) {
