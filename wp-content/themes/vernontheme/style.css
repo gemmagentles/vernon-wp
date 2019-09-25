@@ -1614,28 +1614,36 @@ a.next.page-numbers:active {
   color: #424445;
   font-family: "Barlow", sans-serif;
   font-size: 1em;
-  line-height: 1.6;
+  line-height: 1.4;
   font-weight: 300;
   text-decoration: none;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1.5px solid #424445;
   padding: 25px 0 5px; }
   @media (min-width: 64em) {
     .sv-pdf__link {
       font-size: 1.125em; } }
-  @media (min-width: 70em) {
+  @media (min-width: 87em) {
     .sv-pdf__link {
       font-size: 1.25em; } }
   .sv-pdf__link:hover, .sv-pdf__link:focus {
     color: #EB0029;
     border-bottom: 1.5px solid #EB0029; }
+  .sv-pdf__link--bluetooth-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 10px; }
+    @media (min-width: 70em) {
+      .sv-pdf__link--bluetooth-icon {
+        width: 20px;
+        height: 20px; } }
   .sv-pdf__link--icon {
     height: 16px;
     width: 10px;
-    top: 8px;
     position: relative;
     right: 8px;
-    float: right;
     margin-left: 30px; }
     @media (min-width: 70em) {
       .sv-pdf__link--icon {
