@@ -1,0 +1,51 @@
+{
+    "key": "group_5c816741cacaf",
+    "title": "Thumbnail Product Swatches",
+    "fields": [
+        {
+            "key": "field_5c81702d2acaf",
+            "label": "Finish Options",
+            "name": "finish_options",
+            "type": "checkbox",
+            "instructions": "To show swatches on the product thumbnail. This adds images of examples of the types of finish you can get on this product, by checking the relevant checkboxes below.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "polished-chrome": "Polished Chrome",
+                "brushed-nickel": "Brushed Nickel",
+                "oil-rubbed-bronze": "Oil Rubbed Bronze",
+                "matte-black": "Matte Black",
+                "polished-nickel": "Polished Nickel"
+            },
+            "allow_custom": 0,
+            "default_value": [],
+            "layout": "horizontal",
+            "toggle": 1,
+            "return_format": "value",
+            "save_custom": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "product"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1569368108
+}
