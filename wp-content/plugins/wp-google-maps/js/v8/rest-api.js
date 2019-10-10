@@ -40,6 +40,20 @@ jQuery(function($) {
 		
 	});
 	
+	Object.defineProperty(WPGMZA.RestAPI.prototype, "isCompressedPathVariableAllowed", {
+		
+		get: function()
+		{
+			// NB: Pro 7 still has a "disable" setting. So use that if Pro 7 is installed.
+			if(!WPGMZA.pro_version || WPGMZA.Version.compare(WPGMZA.pro_version, "8.0.0") >= WPGMZA.Version.EQUAL_TO)
+				return !WPGMZA.settings.disable_compressed_path_variables;
+			
+			// Running Pro 7 or below
+			return WPGMZA.settings.enable_compressed_path_variables;
+		}
+		
+	});
+	
 	Object.defineProperty(WPGMZA.RestAPI.prototype, "maxURLLength", {
 		
 		get: function()
@@ -221,7 +235,9 @@ jQuery(function($) {
 				throw new Error(message);
 			}
 		
-		if(params.useCompressedPathVariable && this.isCompressedPathVariableSupported && WPGMZA.settings.enable_compressed_path_variables)
+		if(params.useCompressedPathVariable && 
+			this.isCompressedPathVariableSupported && 
+			this.isCompressedPathVariableAllowed)
 		{
 			var compressedParams = $.extend({}, params);
 			var data = params.data;

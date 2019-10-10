@@ -220,6 +220,34 @@ Please upgrade your version of WP Google Maps to version 6.0.27 as it includes m
 
 == Changelog ==
 
+/*
+= 8.0.1 :- 2019-10-08 =
+* Fixed Warning: unserialize() expects parameter 1 to be string, array given
+* Fixed restructured code preventing marker delete and approve buttons from working
+* Fixed markers not being removed from map panel following deletion
+
+= 8.0.0 :- 2019-10-07 :- Medium priority =
+* New theme panel and theme editor
+* New User Interface Style setting and variety of UI styles added
+* Several user experience improvements
+* Significant performance improvements and optimizations
+* Significantly enhanced REST API
+
+= 7.11.53 :- 2019-10-03 :- Low priority =
+* Fixed "All" missing from datatables page size dropdown
+* Fixed bundled translations only loaded on backend since 7.11.45
+* Added polyfill for slice on Uint8Array, fixing issues with compressed path variables and IE
+* Added no-op JS to wpgmza_data.js
+* Added isFilterable property to Marker
+* Removed .gitattributes from production build
+
+= 7.11.52 :- 2019-09-24 :- Medium priority =
+* Added Astra theme compatibilty module, fixes InfoWindows not opening with Astra theme
+* Added fallback for older versions of WordPress where wp_doing_ajax is not present, fixes fatal error on WordPress < 4.7
+
+= 7.11.51 :- 2019-09-19 :- Medium Priority =
+* Fixed Modern Store Locator Radius causing Safari (mobile) to reload page
+
 = 7.11.50 :- 2019-09-13 :- Medium priority =
 * Fixed markers not visible in Internet Explorer when using OpenLayers (append is not a method)
 
@@ -1275,15 +1303,6 @@ Please upgrade your version of WP Google Maps to version 6.0.27 as it includes m
 
 
 For more, please view the WP Google Maps site
-
-
-
-
-
-
-
-
-
 
 
 

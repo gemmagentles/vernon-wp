@@ -5,7 +5,7 @@ namespace WPGMZA;
 if(!defined('ABSPATH'))
 	return;
 
-class Database
+class Database extends Factory
 {
 	public function __construct()
 	{
@@ -15,7 +15,15 @@ class Database
 		$this->version = get_option('wpgmza_db_version');
 		
 		if(version_compare($this->version, $wpgmza_version, '<'))
+		{
+			if(!empty($this->version))
+			{
+				$upgrader = new Upgrader();
+				$upgrader->upgrade($this->version);
+			}
+			
 			$this->install();
+		}
 	}
 	
 	public function install()
@@ -103,6 +111,7 @@ class Database
 			retina tinyint(1) DEFAULT '0',
 			type tinyint(1) DEFAULT '0',
 			did varchar(500) NOT NULL,
+			sticky tinyint(1) DEFAULT '0',
 			other_data LONGTEXT NOT NULL,
 			latlng POINT,
 			PRIMARY KEY  (id)
@@ -119,6 +128,7 @@ class Database
 			id int(11) NOT NULL AUTO_INCREMENT,
 			map_id int(11) NOT NULL,
 			polydata LONGTEXT NOT NULL,
+			description TEXT NOT NULL,
 			innerpolydata LONGTEXT NOT NULL,
 			linecolor VARCHAR(7) NOT NULL,
 			lineopacity VARCHAR(7) NOT NULL,

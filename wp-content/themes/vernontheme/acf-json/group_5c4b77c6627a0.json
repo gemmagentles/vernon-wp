@@ -179,7 +179,7 @@
             "label": "Social Media Information",
             "name": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Note: if you don't have one of the below social media accounts, just leave blank and the icon wont show.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -266,5 +266,5 @@
     "hide_on_screen": "",
     "active": 1,
     "description": "",
-    "modified": 1569368159
+    "modified": 1570667895
 }

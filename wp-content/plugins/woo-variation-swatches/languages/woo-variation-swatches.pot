@@ -24,7 +24,7 @@ msgstr ""
 msgid "WooCommerce Variation Swatches Settings"
 msgstr ""
 
-#: ../includes/class-wvs-settings-api.php:91, ../includes/class-wvs-settings-api.php:104, ../includes/functions.php:1122
+#: ../includes/class-wvs-settings-api.php:91, ../includes/class-wvs-settings-api.php:104, ../includes/functions.php:1495
 msgid "Swatches Settings"
 msgstr ""
 
@@ -60,11 +60,11 @@ msgstr ""
 msgid "Skip &amp; Deactivate"
 msgstr ""
 
-#: ../includes/functions.php:48, ../includes/functions.php:362
+#: ../includes/functions.php:48, ../includes/functions.php:369
 msgid "Color"
 msgstr ""
 
-#: ../includes/functions.php:54, ../includes/functions.php:371
+#: ../includes/functions.php:54, ../includes/functions.php:378
 msgid "Image"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Simple"
 msgstr ""
 
-#: ../includes/functions.php:186, ../includes/functions.php:220, ../includes/functions.php:315
+#: ../includes/functions.php:186, ../includes/functions.php:227, ../includes/functions.php:322
 msgid "Visual Section"
 msgstr ""
 
@@ -128,146 +128,154 @@ msgstr ""
 msgid "Squared Shape"
 msgstr ""
 
+#: ../includes/functions.php:217
+msgid "Auto Dropdowns to Button"
+msgstr ""
+
 #: ../includes/functions.php:218
+msgid "Convert default dropdowns to button type"
+msgstr ""
+
+#: ../includes/functions.php:225
 msgid "Advanced"
 msgstr ""
 
-#: ../includes/functions.php:221
+#: ../includes/functions.php:228
 msgid "Advanced change some visual styles"
 msgstr ""
 
-#: ../includes/functions.php:226
+#: ../includes/functions.php:233
 msgid "Clear on Reselect"
 msgstr ""
 
-#: ../includes/functions.php:227
+#: ../includes/functions.php:234
 msgid "Clear selected attribute on select again"
 msgstr ""
 
-#: ../includes/functions.php:233
+#: ../includes/functions.php:240
 msgid "Ajax variation threshold"
 msgstr ""
 
-#: ../includes/functions.php:234
+#: ../includes/functions.php:241
 msgid "Control the number of enable ajax variation threshold, If you set <code>1</code> all product variation will be load via ajax. Default value is <code>30</code>, <br><span style=\"color: red\">Note: Product variation loaded via ajax doesn't follow attribute behaviour. It's recommended to keep this number between 30 - 40.</span>"
 msgstr ""
 
-#: ../includes/functions.php:242
+#: ../includes/functions.php:249
 msgid "Attribute behavior"
 msgstr ""
 
-#: ../includes/functions.php:243
+#: ../includes/functions.php:250
 msgid "Disabled attribute will be hide / blur. <br><span style=\"color: red\">Note: Product variation loaded via ajax doesn't apply this feature.</span>"
 msgstr ""
 
-#: ../includes/functions.php:245
+#: ../includes/functions.php:252
 msgid "Blur with cross"
 msgstr ""
 
-#: ../includes/functions.php:246
+#: ../includes/functions.php:253
 msgid "Blur without cross"
 msgstr ""
 
-#: ../includes/functions.php:247
+#: ../includes/functions.php:254
 msgid "Hide"
 msgstr ""
 
-#: ../includes/functions.php:254
+#: ../includes/functions.php:261
 msgid "Attribute image size"
 msgstr ""
 
-#: ../includes/functions.php:255
+#: ../includes/functions.php:262
 msgid "<span style=\"color: red\">Attribute image size changed by <code>wvs_product_attribute_image_size</code> hook. So this option will not apply any effect.</span>"
 msgstr ""
 
-#: ../includes/functions.php:255
+#: ../includes/functions.php:262
 msgstr ""
 
-#: ../includes/functions.php:262
+#: ../includes/functions.php:269
 msgid "Width"
 msgstr ""
 
-#: ../includes/functions.php:263
+#: ../includes/functions.php:270
 msgid "Variation item width"
 msgstr ""
 
-#: ../includes/functions.php:272
+#: ../includes/functions.php:279
 msgid "Height"
 msgstr ""
 
-#: ../includes/functions.php:273
+#: ../includes/functions.php:280
 msgid "Variation item height"
 msgstr ""
 
-#: ../includes/functions.php:282
+#: ../includes/functions.php:289
 msgid "Font Size"
 msgstr ""
 
-#: ../includes/functions.php:283
+#: ../includes/functions.php:290
 msgid "Single product variation item font size"
 msgstr ""
 
-#: ../includes/functions.php:294
+#: ../includes/functions.php:301
 msgid "Style"
 msgstr ""
 
-#: ../includes/functions.php:297
+#: ../includes/functions.php:304
 msgid "Visual Styling"
 msgstr ""
 
-#: ../includes/functions.php:298
+#: ../includes/functions.php:305
 msgid "Change some visual styles"
 msgstr ""
 
-#: ../includes/functions.php:312
+#: ../includes/functions.php:319
 msgid "Archive / Shop"
 msgstr ""
 
-#: ../includes/functions.php:316
+#: ../includes/functions.php:323
 msgid "Advanced change some visual styles on shop / archive page"
 msgstr ""
 
-#: ../includes/functions.php:330
+#: ../includes/functions.php:337
 msgid "Special Attribute"
 msgstr ""
 
-#: ../includes/functions.php:333
+#: ../includes/functions.php:340
 msgid "Catalog mode"
 msgstr ""
 
-#: ../includes/functions.php:334
+#: ../includes/functions.php:341
 msgid "Show single attribute as catalog mode on shop / archive pages"
 msgstr ""
 
-#: ../includes/functions.php:363
+#: ../includes/functions.php:370
 msgid "Choose a color"
 msgstr ""
 
-#: ../includes/functions.php:372, ../woo-variation-swatches.php:375
+#: ../includes/functions.php:379, ../woo-variation-swatches.php:375
 msgid "Choose an Image"
 msgstr ""
 
-#: ../includes/functions.php:540, ../includes/functions.php:590, ../includes/functions.php:619
+#: ../includes/functions.php:547, ../includes/functions.php:597, ../includes/functions.php:626
 msgid "Select terms"
 msgstr ""
 
-#: ../includes/functions.php:550, ../includes/functions.php:602, ../includes/functions.php:635
+#: ../includes/functions.php:557, ../includes/functions.php:609, ../includes/functions.php:642
 msgid "Select all"
 msgstr ""
 
-#: ../includes/functions.php:551, ../includes/functions.php:603, ../includes/functions.php:636
+#: ../includes/functions.php:558, ../includes/functions.php:610, ../includes/functions.php:643
 msgid "Select none"
 msgstr ""
 
-#: ../includes/functions.php:557, ../includes/functions.php:642
+#: ../includes/functions.php:564, ../includes/functions.php:649
 msgid "Add new %s"
 msgstr ""
 
-#: ../includes/functions.php:557, ../includes/functions.php:559, ../includes/functions.php:642, ../includes/functions.php:644
+#: ../includes/functions.php:564, ../includes/functions.php:566, ../includes/functions.php:649, ../includes/functions.php:651
 msgid "Add new"
 msgstr ""
 
-#: ../includes/functions.php:802, ../includes/functions.php:874, ../includes/functions.php:947, ../includes/functions.php:1018
+#: ../includes/functions.php:936, ../includes/functions.php:1008, ../includes/functions.php:1081, ../includes/functions.php:1151, ../includes/functions.php:1219, ../includes/functions.php:1301
 msgid "Choose an option"
 msgstr ""
 
