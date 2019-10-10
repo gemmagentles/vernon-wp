@@ -55,6 +55,14 @@ class RestAPI extends Factory
 		return preg_match(RestAPI::CUSTOM_BASE64_REGEX, $_SERVER['REQUEST_URI']);
 	}
 	
+	public static function isDoingAjax()
+	{
+		if(function_exists('wp_doing_ajax'))
+			return wp_doing_ajax();
+		
+		return apply_filters( 'wp_doing_ajax', defined( 'DOING_AJAX' ) && DOING_AJAX );
+	}
+	
 	protected function addRestNonce($route)
 	{
 		$this->nonceTable[$route] = wp_create_nonce('wpgmza_' . $route);
@@ -105,7 +113,7 @@ class RestAPI extends Factory
 			
 			$this->addRestNonce($route);
 			
-			if(!wp_doing_ajax())
+			if(!RestAPI::isDoingAjax())
 				return;
 		}
 		
@@ -185,6 +193,9 @@ class RestAPI extends Factory
 			
 			$eliasFano = new EliasFano();
 			$markerIDs = $eliasFano->decode($compressed, (int)$request['midcbp']);
+			
+			// TODO: Legacy markerIDs was a string, because this was historically more compact than POSTing an array. This can be altered, but the marker listing modules will have to be adjusted to cater for that
+			$request['markerIDs'] = implode(',', $markerIDs);
 		}
 		
 		return $request;
@@ -256,9 +267,9 @@ class RestAPI extends Factory
 		));
 
 		$this->registerRoute('/markers(\/\d+)?/', array(
-			'methods'					=> array('DELETE'),
-			'callback'					=> array($this, 'markers'),
-			'permission_callback'		=> array($wpgmza, 'isUserAllowedToEdit')
+			'methods'				=> array('DELETE', 'POST'),
+			'callback'				=> array($this, 'markers'),
+			'permission_callback'	=> array($wpgmza, 'isUserAllowedToEdit')
 		));
 		
 		$this->registerRoute('/datatables', array(
@@ -462,6 +473,28 @@ class RestAPI extends Factory
 		return $result;
 	}
 	
+	protected function getFilteringParameters($params)
+	{
+		$filteringParameters = array();
+		
+		if(!empty($params['filter']))
+		{
+			if(is_object($params['filter']))
+				$filteringParameters = (array)$params['filter'];
+			else if(is_array($params['filter']))
+				$filteringParameters = $params['filter'];
+			else if(is_string($params['filter']))
+			{
+				if(!($filteringParameters = json_decode( stripslashes($params['filter']) )))
+					throw new \Exception("Invalid JSON in filtering parameters");
+			}
+			else
+				throw new \Exception("Failed to interpret filtering parameters");
+		}
+		
+		return (array)$filteringParameters;
+	}
+	
 	/**
 	 * Callback for the /markers REST API route.
 	 * @param \WP_REST_Request The REST request.
@@ -494,41 +527,81 @@ class RestAPI extends Factory
 				if(!empty($fields))
 					$fields = $this->sanitizeFieldNames($fields, $wpgmza_tblname);
 				
-				if(!empty($params['filter']))
-				{
-					$filteringParameters = json_decode( stripslashes($params['filter']) );
-					
-					$markerFilter = MarkerFilter::createInstance($filteringParameters);
-					
-					foreach($filteringParameters as $key => $value)
-						$markerFilter->{$key} = $value;
-					
-					$results = $markerFilter->getFilteredMarkers($fields);
-				}
-				else if(!empty($fields))
-				{
-					$query = new Query();
-					
-					$query->type = "SELECT";
-					$query->table = $wpgmza_tblname;
-					$query->fields = $fields;
-					
-					$qstr = $query->build();
-					
-					$results = $wpdb->get_results($qstr);
-				}
-				else if(!$fields)
-				{
-					$results = $wpdb->get_results("SELECT * FROM $wpgmza_tblname");
-				}
+				$filteringParameters = $this->getFilteringParameters($params);
 				
+				$markerFilter = MarkerFilter::createInstance($filteringParameters);
+				
+				foreach($filteringParameters as $key => $value)
+					$markerFilter->{$key} = $value;
+					
+				$results = $markerFilter->getFilteredMarkers($fields);
+				$arr = array();
+				
+				// We call this here so that caching doesn't try to serialize markers, resulting in bad characters
+				// NB: A better approach might be to implement serializable, however I didn't have much luck doing that
+				$classImplementsJsonSerializableCache = array();
+				
+				foreach($results as $marker)
+				{
+					if($marker instanceof Marker)
+					{
+						// Convert the marker to a plain array, so that it can be properly cached by REST API cache
+						$json = $marker->jsonSerialize();
+						
+						foreach($json as $key => $value)
+						{
+							if(!is_object($value))
+								continue;
+							
+							if(!isset($classImplementsJsonSerializableCache[$key]))
+							{
+								$reflection = new \ReflectionClass($value);
+								$classImplementsJsonSerializableCache[$key] = $reflection->implementsInterface('JsonSerializable');
+							}
+							
+							if(!$classImplementsJsonSerializableCache[$key])
+								continue;
+							
+							$json[$key] = $value->jsonSerialize();
+						}
+						
+						$arr[] = $json;
+					}
+					else
+						$arr[] = $marker;
+				}
+					
 				// TODO: Select all custom field data too, in one query, and add that to the marker data in the following loop. Ideally we could add a bulk get function to the CRUD classes which takes IDs?
 				// NB: Such a function has been implemented, just need to hook that up
 				
-				foreach($results as $obj)
-					unset($obj->latlng);
+				return $arr;
+				break;
+			
+			case 'POST':
+			
+				if(preg_match('#/wpgmza/v1/markers/(\d+)#', $route, $m))
+					$id = $m[1];
+				else
+					$id = -1;
 				
-				return $results;
+				$marker = Marker::createInstance($id);
+				
+				foreach($_POST as $key => $value)
+				{
+					if($key == 'id')
+						continue;
+					
+					if($key == 'gallery')
+					{
+						$gallery = new MarkerGallery($_POST[$key]);
+						$marker->gallery = $gallery;
+					}
+					else
+						$marker->{$key} = stripslashes($value);
+				}
+				
+				return $marker;
+				
 				break;
 			
 			case 'DELETE':
