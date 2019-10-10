@@ -23,6 +23,9 @@ class Plugin extends Factory
 	const PAGE_ADVANCED			= "advanced";
 	const PAGE_CUSTOM_FIELDS	= "custom-fields";
 	
+	const MARKER_PULL_DATABASE	= "0";
+	const MARKER_PULL_XML		= "1";
+	
 	private static $enqueueScriptActions = array(
 		'wp_enqueue_scripts',
 		'admin_enqueue_scripts',
@@ -30,9 +33,12 @@ class Plugin extends Factory
 	);
 	public static $enqueueScriptsFired = false;
 	
+	private $_database;
 	private $_settings;
 	private $_gdprCompliance;
 	private $_restAPI;
+	private $_gutenbergIntegration;
+	private $_pro7Compatiblity;
 	private $_spatialFunctionPrefix = '';
 	
 	protected $scriptLoader;
@@ -56,6 +62,8 @@ class Plugin extends Factory
 		if(!empty($this->mysqlVersion) && preg_match('/^\d+/', $this->mysqlVersion, $majorVersion) && (int)$majorVersion[0] >= 8)
 			$this->_spatialFunctionPrefix = 'ST_';
 		
+		$this->_database = new Database();
+		
 		$this->legacySettings = get_option('WPGMZA_OTHER_SETTINGS');
 		if(!$this->legacySettings)
 			$this->legacySettings = array();
@@ -64,8 +72,10 @@ class Plugin extends Factory
 		global $wpgmza_pro_version;
 		
 		$this->_settings = new GlobalSettings();
+		$this->_pro7Compatiblity = new Pro7Compatibility();
 		$this->_restAPI = RestAPI::createInstance();
-		$this->gutenbergIntegration = Integration\Gutenberg::createInstance();
+		
+		$this->_gutenbergIntegration = Integration\Gutenberg::createInstance();
 		
 		// TODO: This should be in default settings, this code is duplicaetd
 		if(!empty($wpgmza_pro_version) && version_compare(trim($wpgmza_pro_version), '7.10.00', '<'))
@@ -110,7 +120,6 @@ class Plugin extends Factory
 				echo '<div class="error"><p>' . __('<strong>WP Google Maps:</strong> Cannot find the specified XML folder. This has been switched back to the Database method in Maps -> Settings -> Advanced', 'wp-google-maps') . '</p></div>';
 			});
 		}
-
 	}
 	
 	public function __set($name, $value)
@@ -132,6 +141,7 @@ class Plugin extends Factory
 			case 'gdprCompliance':
 			case 'restAPI':
 			case 'spatialFunctionPrefix':
+			case 'database':
 				return $this->{'_' . $name};
 				break;
 		}
@@ -147,6 +157,7 @@ class Plugin extends Factory
 			case 'gdprCompliance':
 			case 'restAPI':
 			case 'spatialFunctionPrefix':
+			case 'database':
 				return true;
 				break;
 		}
@@ -192,10 +203,14 @@ class Plugin extends Factory
 				});
 			}
 		}
+		
+		do_action('wpgmza_plugin_load_scripts');
 	}
 	
 	public function getLocalizedData()
 	{
+		global $post;
+		
 		$document = new DOMDocument();
 		$document->loadPHPFile(plugin_dir_path(__DIR__) . 'html/google-maps-api-error-dialog.html.php');
 		$googleMapsAPIErrorDialogHTML = $document->saveInnerBody();
@@ -204,11 +219,15 @@ class Plugin extends Factory
 		
 		$settings = clone $this->settings;
 		
+		$resturl = preg_replace('#/$#', '', get_rest_url(null, 'wpgmza/v1'));
+		$resturl = preg_replace('#^http(s?):#', '', $resturl);
+		
 		$result = apply_filters('wpgmza_plugin_get_localized_data', array(
 			'adminurl'				=> admin_url(),
-			
 			'ajaxurl' 				=> admin_url('admin-ajax.php'),
+			
 			'ajaxnonce'				=> wp_create_nonce('wpgmza_ajaxnonce'),
+			'legacyajaxnonce'		=> wp_create_nonce('wpgmza'),
 
 			'html'					=> array(
 				'googleMapsAPIErrorDialog' => $googleMapsAPIErrorDialogHTML
@@ -230,10 +249,14 @@ class Plugin extends Factory
 			'_isProVersion'			=> $this->isProVersion(),
 			
 			'defaultMarkerIcon'		=> Marker::DEFAULT_ICON,
+			'markerXMLPathURL'		=> Map::getMarkerXMLPathURL(),
 
 			'is_admin'				=> (is_admin() ? 1 : 0),
 			'locale'				=> get_locale()
 		));
+		
+		if($post)
+			$result['postID'] = $post->ID;
 		
 		if(!empty($result->settings->wpgmza_settings_ugm_email_address))
 			unset($result->settings->wpgmza_settings_ugm_email_address);
@@ -283,6 +306,24 @@ class Plugin extends Factory
 		return null;
 	}
 	
+	public function updateAllMarkerXMLFiles()
+	{
+		global $wpdb, $WPGMZA_TABLE_NAME_MAPS;
+		
+		$map_ids = $wpdb->get_col("SELECT id FROM $WPGMZA_TABLE_NAME_MAPS");
+		
+		foreach($map_ids as $id)
+		{
+			$map = Map::createInstance($id);
+			$map->updateXMLFile();
+		}
+	}
+	
+	public function isModernComponentStyleAllowed()
+	{
+		return empty($this->settings->user_interface_style) || $this->settings->user_interface_style == "legacy" || $this->settings->user_interface_style == "modern";
+	}
+	
 	/**
 	 * Returns true if we are to be using combined or minified JavaScript
 	 * @return bool True if combined or minified scripts are to be used.
@@ -324,6 +365,19 @@ class Plugin extends Factory
 			return true;	// Pre ProPlugin
 		
 		return false;
+	}
+	
+	public static function getProLink($link)
+	{
+		if(defined('wpgm_aff'))
+		{
+			$id = sanitize_text_field(wpgm_aff);
+			
+			if(!empty($id))
+				return "http://affiliatetracker.io/?aff=".$id."&affuri=".base64_encode($link);    
+		}
+		
+		return $link;
 	}
 	
 	/**

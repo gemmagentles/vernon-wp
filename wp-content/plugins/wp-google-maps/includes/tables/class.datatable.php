@@ -33,7 +33,8 @@ class DataTable extends AjaxTable
 		if(!empty($orderBy))
 			return $orderBy;
 		
-		return "{$this->table_name}.id";
+		// return "{$this->table_name}.id";
+		return "id";
 	}
 	
 	protected function getOrderDirection($input_params)
@@ -63,7 +64,7 @@ class DataTable extends AjaxTable
 		if(isset($input_params['draw']))
 			$result->draw = $input_params['draw'];
 		else
-			$result->draw = $_SERVER['HTTP_X_DATATABLES_DRAW'];
+			$result->draw = (isset($_SERVER['HTTP_X_DATATABLES_DRAW']) ? $_SERVER['HTTP_X_DATATABLES_DRAW'] : 0);
 		
 		return $result;
 	}

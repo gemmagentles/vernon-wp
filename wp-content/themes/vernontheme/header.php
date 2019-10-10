@@ -15,6 +15,17 @@
     <link href="<?php echo get_template_directory_uri(); ?>/img/icons/touch.png" rel="apple-touch-icon-precomposed">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <?php wp_head(); ?>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-148067022-2"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-148067022-2');
+    </script>
+    
 </head>
 <body id="top" <?php body_class(); ?>>
 
@@ -41,15 +52,24 @@
                 </div>
                 <div class ="social">
                     <div class="line"></div>
-                    <a class="nav__link" title="Facebook" href="<?php the_field('facebook_url', 'option'); ?>" target="_blank">
-                    <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook"/></svg>
-                    </a>
-                    <a class="nav__link" title="Twitter" href="<?php the_field('twitter_url', 'option'); ?>" target="_blank">
-                    <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter"/></svg>
-                    </a>
-                    <a class="nav__link" title="Instagram" href="<?php the_field('instagram_url', 'option'); ?>" target="_blank">
-                    <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram"/></svg>
-                    </a>
+                    <?php $facebook = get_field('facebook_url', 'option'); ?>
+                    <?php if ( $facebook ): ?>
+                        <a class="nav__link" title="Facebook" href="<?php echo $facebook; ?>" target="_blank">
+                            <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-facebook"/></svg>
+                        </a>
+                    <?php endif; ?> 
+                    <?php $twitter = get_field('twitter_url', 'option'); ?>
+                    <?php if ( $twitter ): ?>
+                        <a class="nav__link" title="Twitter" href="<?php echo $twitter; ?>" target="_blank">
+                            <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-twitter"/></svg>
+                        </a>
+                    <?php endif; ?> 
+                    <?php $instagram = get_field('instagram_url', 'option'); ?>
+                    <?php if ( $instagram ): ?>
+                        <a class="nav__link" title="Instagram" href="<?php echo $instagram; ?>" target="_blank">
+                            <svg class="nav__icon"><use href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram" xlink:href="<?php echo get_template_directory_uri(); ?>/img/icons/icons.svg#icon-sv-instagram"/></svg>
+                        </a>
+                    <?php endif; ?> 
                 </div>
             </nav>
         </div>

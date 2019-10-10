@@ -92,7 +92,9 @@ function InitMap() {
 	
 	MYMAP.placeMarkers(wpgmaps_markerurl+'?u='+UniqueCode,wpgmaps_localize[wpgmaps_mapid].id,null,null,null);
 	
-	if(wpgmaps_localize[wpgmaps_mapid].other_settings.store_locator_style == 'modern')
+	if((wpgmaps_localize[wpgmaps_mapid].other_settings.store_locator_style == 'modern' && WPGMZA.isModernComponentStyleAllowed())
+		||
+		WPGMZA.settings.user_interface_style == "modern")
 	{
 		if(!MYMAP.map)
 			return;
@@ -287,7 +289,7 @@ MYMAP.init = function(selector, latLng, zoom) {
 	this.map = WPGMZA.Map.createInstance(element, myOptions);
     this.bounds = new WPGMZA.LatLngBounds();
 
-	if(MYMAP.modernStoreLocator)
+	if(MYMAP.modernStoreLocator && MYMAP.modernStoreLocator.element)
 	{
 		MYMAP.modernStoreLocator.element.index = 1;
 		this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(MYMAP.modernStoreLocator.element);
@@ -402,6 +404,8 @@ var wpgmza_last_default_circle = null;
 
 function wpgmza_show_store_locator_radius(map_id, center, radius, distance_type)
 {
+	return; // Deprecated as of 8.0.0
+	
 	var style = wpgmaps_localize[map_id].other_settings.wpgmza_store_locator_radius_style;
 	
 	// Force legacy style on iOS, it appears CanvasLayer crashes some iOS devices
@@ -900,6 +904,16 @@ function searchLocationsNear(mapid,center_searched) {
 	};
 	
 	MYMAP.map.trigger(event);
+	
+	var event = {
+		type:		"filteringcomplete",
+		filteringParams: {
+			center:		center_searched,
+			radius:		radius
+		}
+	};
+	
+	MYMAP.map.markerFilter.trigger(event);
 }
 
 function toRad(Value) {

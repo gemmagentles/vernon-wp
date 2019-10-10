@@ -70,6 +70,7 @@ jQuery(function($) {
 	 */
 	WPGMZA.MapSettings.prototype.toOLViewOptions = function()
 	{
+		var self = this;
 		var options = {
 			center: ol.proj.fromLonLat([-119.4179, 36.7783]),
 			zoom: 4
@@ -101,6 +102,14 @@ jQuery(function($) {
 			options.center = ol.proj.fromLonLat([
 				parseFloat(this.center.lng),
 				parseFloat(this.center.lat)
+			]);
+		}
+		
+		if(!empty("map_start_lat") && !empty("map_start_lng"))
+		{
+			options.center = ol.proj.fromLonLat([
+				parseFloat(this.map_start_lng),
+				parseFloat(this.map_start_lat)
 			]);
 		}
 		
@@ -169,6 +178,15 @@ jQuery(function($) {
 				lng: parseFloat(this.center.lng)
 			});
 		
+		if(!empty("map_start_lat") && !empty("map_start_lng"))
+		{
+			// NB: map_start_lat and map_start_lng are the "real" values. Not sure where start_location comes from
+			options.center = new google.maps.LatLng({
+				lat: parseFloat(this.map_start_lat),
+				lng: parseFloat(this.map_start_lng)
+			});
+		}
+		
 		if(this.map_min_zoom && this.map_max_zoom)
 		{
 			options.minZoom = Math.min(this.map_min_zoom, this.map_max_zoom);
@@ -184,7 +202,10 @@ jQuery(function($) {
         
         options.draggable				= !(this.wpgmza_settings_map_draggable == 'yes');
         options.disableDoubleClickZoom	= (this.wpgmza_settings_map_clickzoom == 'yes');
-        options.scrollwheel				= !(this.wpgmza_settings_map_scroll == 'yes');
+		
+		// NB: This setting is handled differently as setting scrollwheel to true breaks gestureHandling
+		if(this.wpgmza_settings_map_scroll)
+			options.scrollwheel			= false;
 		
 		if(this.wpgmza_force_greedy_gestures == "greedy" || this.wpgmza_force_greedy_gestures == "yes")
 			options.gestureHandling = "greedy";
@@ -210,14 +231,8 @@ jQuery(function($) {
 				break;
 		}
 		
-		if(this.theme_data && this.theme_data.length > 0)
-		{
-			try{
-				options.styles = JSON.parse(this.theme_data);
-			}catch(e) {
-				alert("Your theme data is not valid JSON and has been ignored");
-			}
-		}
+		if(this.wpgmza_theme_data && this.wpgmza_theme_data.length)
+			options.styles = WPGMZA.GoogleMap.parseThemeData(this.wpgmza_theme_data);
 		
 		return options;
 	}
